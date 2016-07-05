@@ -29,6 +29,11 @@ func Verify(t *testing.T, reader io.Reader) error {
 	return state.compare(state.getApprovalFile(".txt"), reader)
 }
 
+func VerifyString(t *testing.T, s string) {
+	reader := strings.NewReader(s)
+	Verify(t, reader)
+}
+
 func (s *approvalName) compare(approvalFile string, reader io.Reader) error {
 	received, err := ioutil.ReadAll(reader)
 	if err != nil {
