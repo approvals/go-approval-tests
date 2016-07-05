@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+	"path"
 )
 
 type testState struct {
@@ -73,7 +74,10 @@ func (s *testState) getFileName(extWithDot string, suffix string) string {
 		extWithDot = fmt.Sprintf(".%s", extWithDot)
 	}
 
-	return fmt.Sprintf("%s.%s.%s%s", s.fileName, s.name, suffix, extWithDot)
+	baseName := path.Base(s.fileName)
+	baseWithoutExt := baseName[:len(baseName) - len(path.Ext(s.fileName))]
+
+	return fmt.Sprintf("%s.%s.%s%s", baseWithoutExt, s.name, suffix, extWithDot)
 }
 
 func (s *testState) getReceivedFile(extWithDot string) string {
