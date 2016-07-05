@@ -12,7 +12,7 @@ import (
 	"path"
 )
 
-type testState struct {
+type approvalName struct {
 	pc       uintptr
 	fullName string
 	name     string
@@ -21,7 +21,7 @@ type testState struct {
 }
 
 func Verify(t *testing.T, reader io.Reader) error {
-	state, err := findTestMethod()
+	state, err := getApprovalName()
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func Verify(t *testing.T, reader io.Reader) error {
 	return state.compare(state.getApprovalFile(".txt"), reader)
 }
 
-func (s *testState) compare(approvalFile string, reader io.Reader) error {
+func (s *approvalName) compare(approvalFile string, reader io.Reader) error {
 	received, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return err
@@ -62,14 +62,14 @@ func (s *testState) compare(approvalFile string, reader io.Reader) error {
 	return fmt.Errorf("failed to approved %s", s.name)
 }
 
-func (s *testState) dumpReceivedTestResult(bs []byte) error {
+func (s *approvalName) dumpReceivedTestResult(bs []byte) error {
 	fn := s.getReceivedFile(".txt")
 	err := ioutil.WriteFile(fn, bs, 0644)
 
 	return err
 }
 
-func (s *testState) getFileName(extWithDot string, suffix string) string {
+func (s *approvalName) getFileName(extWithDot string, suffix string) string {
 	if !strings.HasPrefix(extWithDot, ".") {
 		extWithDot = fmt.Sprintf(".%s", extWithDot)
 	}
@@ -80,16 +80,16 @@ func (s *testState) getFileName(extWithDot string, suffix string) string {
 	return fmt.Sprintf("%s.%s.%s%s", baseWithoutExt, s.name, suffix, extWithDot)
 }
 
-func (s *testState) getReceivedFile(extWithDot string) string {
+func (s *approvalName) getReceivedFile(extWithDot string) string {
 	return s.getFileName(extWithDot, "received")
 }
 
-func (s *testState) getApprovalFile(extWithDot string) string {
+func (s *approvalName) getApprovalFile(extWithDot string) string {
 	return s.getFileName(extWithDot, "approved")
 }
 
-func newTestState(pc uintptr, f *runtime.Func) (*testState, error) {
-	state := &testState{
+func newTestState(pc uintptr, f *runtime.Func) (*approvalName, error) {
+	state := &approvalName{
 		pc:       pc,
 		fullName: f.Name(),
 	}
@@ -107,7 +107,7 @@ func newTestState(pc uintptr, f *runtime.Func) (*testState, error) {
 // *assumed* to be common across all callers.  The test runner has a Name() of
 // 'testing.tRunner'.  The method immediately previous to this is the test
 // method.
-func findTestMethod() (*testState, error) {
+func getApprovalName() (*approvalName, error) {
 	pc := make([]uintptr, 100)
 	count := runtime.Callers(0, pc)
 
