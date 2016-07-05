@@ -1,4 +1,4 @@
-package ApprovalTests
+package ApprovalTests_go
 
 import (
 	"testing"

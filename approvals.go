@@ -1,4 +1,4 @@
-package ApprovalTests
+package ApprovalTests_go
 
 import (
 	"bytes"
@@ -21,12 +21,23 @@ type approvalName struct {
 }
 
 func Verify(t *testing.T, reader io.Reader) error {
-	state, err := getApprovalName()
+	namer, err := getApprovalName()
 	if err != nil {
 		return err
 	}
 
-	return state.compare(state.getApprovalFile(".txt"), reader)
+	reporter := getReporter()
+	err = namer.compare(namer.getApprovalFile(".txt"), reader)
+	if err != nil {
+		reporter.Report(namer.getApprovalFile(".txt"), namer.getReceivedFile(".txt"))
+		t.Fail()
+	}
+
+	return err
+}
+
+func getReporter() *beyondCompare {
+	return NewBeyondCompareReporter()
 }
 
 func VerifyString(t *testing.T, s string) {
