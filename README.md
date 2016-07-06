@@ -5,16 +5,16 @@ ApprovalTests for go
 
 
 # Golden master Verification Library
-ApprovalTests allows for easy testing of larger objects, strings and anytthing else that can be saved to a file (images, sounds, csv,  etc...)
+ApprovalTests allows for easy testing of larger objects, strings and anything else that can be saved to a file (images, sounds, csv,  etc...)
 
 #Examples
 ##In Project
-Note: ApprovalTests uses approvaltests to test itself. Therefore are many examples in the code itself.
+Note: ApprovalTests uses approvaltests to test itself. Therefore there are many examples in the code itself.
 
  * [approvals_test.go](approvals_test.go)
 
 ##JSON
-VerifyJSONBytes - Simple Formatting for easy comparasion. Also uses the .json file extension 
+VerifyJSONBytes - Simple Formatting for easy comparison. Also uses the .json file extension 
 
 ```go
 func TestVerifyJSON(t *testing.T) {
@@ -22,7 +22,7 @@ func TestVerifyJSON(t *testing.T) {
 	VerifyJSONBytes(t, jsonb)
 }
 ```
-Matches file: approvals_test.TestVerifyJSON.recieved.json
+Matches file: approvals_test.TestVerifyJSON.received.json
 
 ```json
 {
