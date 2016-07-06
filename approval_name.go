@@ -64,7 +64,7 @@ func isTestRunner(f *runtime.Func) bool {
 	return f != nil && f.Name() == "testing.tRunner"
 }
 
-func (s *approvalName) compare(approvalFile string, reader io.Reader) error {
+func (s *approvalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
 	received, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (s *approvalName) compare(approvalFile string, reader io.Reader) error {
 	// Ideally, this should only be written if
 	//  1. the approval file does not exist
 	//  2. the results differ
-	err = s.dumpReceivedTestResult(received)
+	err = s.dumpReceivedTestResult(received, receivedFile)
 	if err != nil {
 		return err
 	}
@@ -97,9 +97,8 @@ func (s *approvalName) compare(approvalFile string, reader io.Reader) error {
 	return fmt.Errorf("failed to approved %s", s.name)
 }
 
-func (s *approvalName) dumpReceivedTestResult(bs []byte) error {
-	fn := s.getReceivedFile(".txt")
-	err := ioutil.WriteFile(fn, bs, 0644)
+func (s *approvalName) dumpReceivedTestResult(bs []byte, receivedFile string) error {
+	err := ioutil.WriteFile(receivedFile, bs, 0644)
 
 	return err
 }

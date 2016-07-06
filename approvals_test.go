@@ -23,3 +23,6 @@ func TestVerifyStringApproval(t *testing.T) {
 func TestReporterFromSetup(t *testing.T) {
 	VerifyString(t, "Hello World!")
 }
+
+func TestVerifyJSON(t *testing.T) {
+}

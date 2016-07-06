@@ -1,39 +1,59 @@
 package ApprovalTests_go
 
 import (
+	"encoding/json"
 	"io"
 	"os"
 	"strings"
 	"testing"
 
 	"github.com/Approvals/ApprovalTests_go/reporters"
+	"bytes"
 )
 
 var (
 	defaultReporter *reporters.Reporter = nil
 )
 
-func Verify(t *testing.T, reader io.Reader) error {
+func VerifyWithExtension(t *testing.T, reader io.Reader, extWithDot string) error {
 	namer, err := getApprovalName()
 	if err != nil {
 		return err
 	}
 
 	reporter := getReporter()
-	err = namer.compare(namer.getApprovalFile(".txt"), reader)
+	err = namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
 	if err != nil {
-		reporter.Report(namer.getApprovalFile(".txt"), namer.getReceivedFile(".txt"))
+		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
 		t.Fail()
 	} else {
-		os.Remove(namer.getReceivedFile(".txt"))
+		os.Remove(namer.getReceivedFile(extWithDot))
 	}
 
 	return err
 }
 
+func Verify(t *testing.T, reader io.Reader) error {
+	return VerifyWithExtension(t, reader, ".txt")
+}
+
 func VerifyString(t *testing.T, s string) {
 	reader := strings.NewReader(s)
 	Verify(t, reader)
+}
+
+func VerifyJSONBytes(t *testing.T, bs []byte) error {
+	var obj map[string]interface{}
+	err := json.Unmarshal(bs, &obj)
+	if err != nil {
+		t.Fatalf("err=%s", err)
+	}
+	jsonb, err := json.MarshalIndent(obj, "", "  ")
+	if err != nil {
+		t.Fatalf("err=%s", err)
+	}
+
+	return VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")
 }
 
 type reporterCloser struct {
