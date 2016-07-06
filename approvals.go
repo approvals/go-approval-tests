@@ -9,6 +9,10 @@ import (
 	"github.com/Approvals/ApprovalTests_go/reporters"
 )
 
+var (
+	defaultReporter *reporters.Reporter = nil
+)
+
 func Verify(t *testing.T, reader io.Reader) error {
 	namer, err := getApprovalName()
 	if err != nil {
@@ -32,6 +36,16 @@ func VerifyString(t *testing.T, s string) {
 	Verify(t, reader)
 }
 
+func UseReporter(reporter reporters.Reporter) {
+	defaultReporter = &reporter
+}
+
 func getReporter() reporters.Reporter {
+	if defaultReporter != nil {
+		tmp := defaultReporter
+		defaultReporter = nil
+		return *tmp
+	}
+
 	return reporters.NewDiffReporter()
 }
