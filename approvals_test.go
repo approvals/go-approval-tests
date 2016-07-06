@@ -12,5 +12,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestVerifyStringApproval(t *testing.T) {
-	VerifyString(t, "Hello Wo--rld!")
+	UseReporter(reporters.NewIntelliJ())
+	VerifyString(t, "Hello World!")
 }

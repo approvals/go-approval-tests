@@ -36,6 +36,16 @@ func VerifyString(t *testing.T, s string) {
 	Verify(t, reader)
 }
 
+// Add at the test or method level to configure your reporter.
+//
+// The following examples shows how to use a reporter for all of your test cases
+// through go's setup feature.
+//
+// func TestMain(m *testing.M) {
+// 	UseReporter(reporters.NewBeyondCompareReporter())
+// 	m.Run()
+// }
+//
 func UseReporter(reporter reporters.Reporter) {
 	defaultReporter = &reporter
 }
