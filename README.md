@@ -14,7 +14,7 @@ Note: ApprovalTests uses approvaltests to test itself. Therefore are many exampl
  * [approvals_test.go](approvals_test.go)
 
 ##JSON
-
+VerifyJSONBytes - Simple Formatting for easy comparasion. Also uses the .json file extension 
 
 ```go
 func TestVerifyJSON(t *testing.T) {
@@ -25,7 +25,11 @@ func TestVerifyJSON(t *testing.T) {
 Matches file: approvals_test.TestVerifyJSON.recieved.json
 
 ```json
-{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }
+{
+  "age": 42,
+  "bark": "woof",
+  "foo": "bar"
+}
 ```
 
 ##Reporters
