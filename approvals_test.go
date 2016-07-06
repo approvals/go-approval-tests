@@ -7,11 +7,19 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	UseReporter(reporters.NewBeyondCompareReporter())
+	r := UseReporter(reporters.NewBeyondCompareReporter())
+	defer r.Close()
+
 	m.Run()
 }
 
 func TestVerifyStringApproval(t *testing.T) {
-	UseReporter(reporters.NewIntelliJ())
+	r := UseReporter(reporters.NewIntelliJ())
+	defer r.Close()
+
+	VerifyString(t, "Hello World!")
+}
+
+func TestReporterFromSetup(t *testing.T) {
 	VerifyString(t, "Hello World!")
 }
