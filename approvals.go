@@ -2,11 +2,11 @@ package ApprovalTests_go
 
 import (
 	"io"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/Approvals/ApprovalTests_go/reporters"
-	"os"
 )
 
 func Verify(t *testing.T, reader io.Reader) error {
@@ -33,5 +33,5 @@ func VerifyString(t *testing.T, s string) {
 }
 
 func getReporter() reporters.Reporter {
-	return reporters.NewBeyondCompareReporter()
+	return reporters.NewDiffReporter()
 }

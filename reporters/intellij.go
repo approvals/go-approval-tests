@@ -7,15 +7,15 @@ import (
 	"github.com/Approvals/ApprovalTests_go/utils"
 )
 
-type beyondCompare struct {
+type intellij struct {
 }
 
-func NewBeyondCompareReporter() Reporter {
-	return &beyondCompare{}
+func NewIntelliJ() Reporter {
+	return &intellij{}
 }
 
-func (s *beyondCompare) Report(approved, received string) bool {
-	programName := "C:/Program Files/Beyond Compare 4/BComp.exe"
+func (s *intellij) Report(approved, received string) bool {
+	programName := "C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2016/bin/idea.exe"
 
 	if !utils.DoesFileExist(programName) {
 		return false
@@ -23,7 +23,7 @@ func (s *beyondCompare) Report(approved, received string) bool {
 
 	utils.EnsureExists(approved)
 
-	cmd := exec.Command(programName, received, approved)
+	cmd := exec.Command(programName, "diff", received, approved)
 	cmd.Start()
 
 	err := cmd.Wait()
