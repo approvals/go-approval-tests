@@ -6,10 +6,11 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
 	"runtime"
 	"strings"
 	"testing"
-	"path"
+	"github.com/Approvals/ApprovalTests_go/reporters"
 )
 
 type approvalName struct {
@@ -36,8 +37,8 @@ func Verify(t *testing.T, reader io.Reader) error {
 	return err
 }
 
-func getReporter() *beyondCompare {
-	return NewBeyondCompareReporter()
+func getReporter() reporters.Reporter {
+	return reporters.NewBeyondCompareReporter()
 }
 
 func VerifyString(t *testing.T, s string) {
@@ -91,7 +92,7 @@ func (s *approvalName) getFileName(extWithDot string, suffix string) string {
 	}
 
 	baseName := path.Base(s.fileName)
-	baseWithoutExt := baseName[:len(baseName) - len(path.Ext(s.fileName))]
+	baseWithoutExt := baseName[:len(baseName)-len(path.Ext(s.fileName))]
 
 	return fmt.Sprintf("%s.%s.%s%s", baseWithoutExt, s.name, suffix, extWithDot)
 }
