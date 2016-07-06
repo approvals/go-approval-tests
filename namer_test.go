@@ -18,4 +18,3 @@ func Test00(t *testing.T) {
 		t.Fatalf("expected name to be 'Test00', but got %s", approvalName.getReceivedFile(".txt"))
 	}
 }
-
