@@ -20,6 +20,7 @@ func (s *FirstWorkingReporter) Report(approved, received string) bool {
 }
 
 func NewFirstWorkingReporter(reporters ...Reporter) Reporter {
+	return &FirstWorkingReporter{
 		Reporters: reporters,
 	}
 }
