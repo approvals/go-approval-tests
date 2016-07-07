@@ -1,6 +1,8 @@
 package reporters
 
-import "testing"
+import (
+	"testing"
+)
 
 type testReporter struct {
 	called    bool

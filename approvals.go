@@ -1,14 +1,13 @@
 package ApprovalTests_go
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"strings"
-	"testing"
 
-	"bytes"
-	"fmt"
 	"github.com/Approvals/ApprovalTests_go/reporters"
 )
 
@@ -16,7 +15,11 @@ var (
 	defaultReporter *reporters.Reporter = nil
 )
 
-func VerifyWithExtension(t *testing.T, reader io.Reader, extWithDot string) error {
+type Failable interface {
+	Fail()
+}
+
+func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error {
 	namer, err := getApprovalName()
 	if err != nil {
 		return err
@@ -34,16 +37,16 @@ func VerifyWithExtension(t *testing.T, reader io.Reader, extWithDot string) erro
 	return err
 }
 
-func Verify(t *testing.T, reader io.Reader) error {
+func Verify(t Failable, reader io.Reader) error {
 	return VerifyWithExtension(t, reader, ".txt")
 }
 
-func VerifyString(t *testing.T, s string) {
+func VerifyString(t Failable, s string) {
 	reader := strings.NewReader(s)
 	Verify(t, reader)
 }
 
-func VerifyJSONBytes(t *testing.T, bs []byte) error {
+func VerifyJSONBytes(t Failable, bs []byte) error {
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
@@ -91,9 +94,7 @@ func UseReporter(reporter reporters.Reporter) io.Closer {
 
 func getReporter() reporters.Reporter {
 	if defaultReporter != nil {
-		tmp := defaultReporter
-		defaultReporter = nil
-		return *tmp
+		return *defaultReporter
 	}
 
 	return reporters.NewDiffReporter()
