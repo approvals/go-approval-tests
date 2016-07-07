@@ -33,6 +33,3 @@ func TestVerifyBadJSONBytes(t *testing.T) {
 	jsonb := []byte("{ foo: \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
 }
-
-
-

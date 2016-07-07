@@ -2,6 +2,7 @@ package reporters
 
 import (
 	"testing"
+	"os"
 )
 
 type testReporter struct {
@@ -37,5 +38,25 @@ func TestFirstWorkingReporter(t *testing.T) {
 	}
 	if c.called == true {
 		t.Errorf("c.called")
+	}
+}
+
+func restoreEnv(exists bool, key, value string) {
+	if exists {
+		os.Setenv(key, value)
+	} else {
+		os.Unsetenv(key)
+	}
+}
+
+func TestCIReporter(t *testing.T) {
+	value, exists := os.LookupEnv("CI")
+
+	os.Setenv("CI", "true")
+	defer restoreEnv(exists, "CI", value)
+
+	r := NewContinuousIntegrationReporter()
+	if !r.Report("", "") {
+		t.Fatal("did not detect CI")
 	}
 }

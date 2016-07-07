@@ -25,7 +25,7 @@ func newTestReporter(succeeded bool) *testReporter {
 func (s *testReporter) Report(approved, received string) bool {
 	s.called = true
 	os.Remove(received)
-	
+
 	return s.succeeded
 }
 
