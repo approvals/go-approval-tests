@@ -1,5 +1,5 @@
-{
-  "age": 42,
-  "bark": "woof",
-  "foo": "bar"
-}
+error while parsing JSON
+error:
+  invalid character 'f' looking for beginning of object key string
+JSON:
+  { foo: "bar", "age": 42, "bark": "woof" }

@@ -7,8 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Approvals/ApprovalTests_go/reporters"
 	"bytes"
+	"fmt"
+	"github.com/Approvals/ApprovalTests_go/reporters"
 )
 
 var (
@@ -46,11 +47,13 @@ func VerifyJSONBytes(t *testing.T, bs []byte) error {
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
-		t.Fatalf("err=%s", err)
+		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
+		return VerifyWithExtension(t, strings.NewReader(message), ".json")
 	}
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
-		t.Fatalf("err=%s", err)
+		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
+		return VerifyWithExtension(t, strings.NewReader(message), ".json")
 	}
 
 	return VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")

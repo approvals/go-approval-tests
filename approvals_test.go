@@ -29,4 +29,10 @@ func TestVerifyJSONBytes(t *testing.T) {
 	VerifyJSONBytes(t, jsonb)
 }
 
+func TestVerifyBadJSONBytes(t *testing.T) {
+	jsonb := []byte("{ foo: \"bar\", \"age\": 42, \"bark\": \"woof\" }")
+	VerifyJSONBytes(t, jsonb)
+}
+
+
 
