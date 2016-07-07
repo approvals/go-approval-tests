@@ -1,3 +1,10 @@
-[ ] Arrays
-[ ] JSON objects
-[ ] XML
+- [ ] Arrays
+- [ ] JSON objects
+- [ ] XML
+- [ ] MultiReporters
+- [ ] Quiet & Newbie Reporters
+- [ ] Travis
+- [ ] Reporters have toStrings to display what you can add to your system.
+- [ ] clipboard & allfailingtests reporter
+- [ ] FileLauncher reporter
+- 
