@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	defaultReporter *reporters.Reporter = nil
+	defaultReporter            *reporters.Reporter = reporters.NewDiffReporter()
+	defaultFrontLoadedReporter *reporters.Reporter = reporters.NewFrontLoadedReporter()
 )
 
 type Failable interface {
@@ -71,6 +72,15 @@ func (s *reporterCloser) Close() error {
 	return nil
 }
 
+type frontLoadedReporterCloser struct {
+	reporter *reporters.Reporter
+}
+
+func (s *frontLoadedReporterCloser) Close() error {
+	defaultFrontLoadedReporter = s.reporter
+	return nil
+}
+
 // Add at the test or method level to configure your reporter.
 //
 // The following examples shows how to use a reporter for all of your test cases
@@ -92,10 +102,18 @@ func UseReporter(reporter reporters.Reporter) io.Closer {
 	return closer
 }
 
-func getReporter() reporters.Reporter {
-	if defaultReporter != nil {
-		return *defaultReporter
+func UseFrontLoadedReporter(reporter reporters.Reporter) io.Closer {
+	closer := &frontLoadedReporterCloser{
+		reporter: defaultFrontLoadedReporter,
 	}
 
-	return reporters.NewDiffReporter()
+	defaultFrontLoadedReporter = &reporter
+	return closer
+}
+
+func getReporter() reporters.Reporter {
+	return reporters.NewFirstWorkingReporter(
+		*defaultFrontLoadedReporter,
+		*defaultReporter,
+	)
 }

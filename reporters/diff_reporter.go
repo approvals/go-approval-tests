@@ -6,10 +6,21 @@ import (
 	"github.com/Approvals/ApprovalTests_go/utils"
 )
 
-func NewDiffReporter() Reporter {
-	return NewFirstWorkingReporter(
+func NewFrontLoadedReporter() *Reporter {
+	tmp := NewFirstWorkingReporter(
+		NewContinuousIntegrationReporter(),
+	)
+
+	return &tmp
+}
+
+func NewDiffReporter() *Reporter {
+	tmp := NewFirstWorkingReporter(
 		NewIntelliJ(),
-		NewBeyondCompareReporter())
+		NewBeyondCompareReporter(),
+	)
+
+	return &tmp
 }
 
 func launchProgram(programName, approved string, args ...string) bool {

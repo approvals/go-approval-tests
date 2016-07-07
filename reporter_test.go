@@ -42,7 +42,43 @@ func TestUseReporter(t *testing.T) {
 	r.Close()
 
 	current := getReporter()
-	if old != current {
+
+	oldT, _ := old.(*reporters.FirstWorkingReporter)
+	currentT, _ := current.(*reporters.FirstWorkingReporter)
+
+	if oldT.Reporters[1] != currentT.Reporters[1] {
 		t.Errorf("old=%s != current=%s", old, current)
 	}
 }
+
+func TestFrontLoadedReporter(t *testing.T) {
+	old := getReporter()
+	front := newTestReporter(false)
+	next := newTestReporter(true)
+
+	frontCloser := UseFrontLoadedReporter(reporters.Reporter(front))
+	nextCloser := UseReporter(reporters.Reporter(next))
+	defer nextCloser.Close()
+
+	f := &testFailable{}
+
+	VerifyString(f, "foo")
+
+	if front.called != true {
+		t.Error("front.called")
+	}
+	if next.called != true {
+		t.Error("next.called")
+	}
+
+	frontCloser.Close()
+	current := getReporter()
+
+	oldT, _ := old.(*reporters.FirstWorkingReporter)
+	currentT, _ := current.(*reporters.FirstWorkingReporter)
+
+	if oldT.Reporters[0] != currentT.Reporters[0] {
+		t.Errorf("old[0]=%s != current[0]=%s", oldT.Reporters[0], currentT.Reporters[0])
+	}
+}
+
