@@ -14,7 +14,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestVerifyStringApproval(t *testing.T) {
-	r := UseReporter(reporters.NewIntelliJ())
+	r := UseReporter(reporters.NewIntelliJReporter())
 	defer r.Close()
 
 	VerifyString(t, "Hello World!")

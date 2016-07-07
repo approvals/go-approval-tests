@@ -16,7 +16,7 @@ func NewFrontLoadedReporter() *Reporter {
 
 func NewDiffReporter() *Reporter {
 	tmp := NewFirstWorkingReporter(
-		NewIntelliJ(),
+		NewIntelliJReporter(),
 		NewBeyondCompareReporter(),
 	)
 

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/Approvals/ApprovalTests_go/reporters"
+	"os"
 )
 
 type testFailable struct{}
@@ -23,6 +24,8 @@ func newTestReporter(succeeded bool) *testReporter {
 
 func (s *testReporter) Report(approved, received string) bool {
 	s.called = true
+	os.Remove(received)
+	
 	return s.succeeded
 }
 

@@ -2,7 +2,7 @@ package reporters
 
 type intellij struct{}
 
-func NewIntelliJ() Reporter {
+func NewIntelliJReporter() Reporter {
 	return &intellij{}
 }
 
