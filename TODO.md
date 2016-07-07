@@ -1,3 +1,3 @@
-[ ] Arrays
-[ ] JSON objects
-[ ] XML
+- [ ] Arrays
+- [ ] JSON objects
+- [ ] XML
