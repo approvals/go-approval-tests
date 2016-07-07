@@ -8,6 +8,7 @@ import (
 )
 
 type testFailable struct{}
+
 func (s *testFailable) Fail() {}
 
 type testReporter struct {
@@ -84,4 +85,3 @@ func TestFrontLoadedReporter(t *testing.T) {
 		t.Errorf("old[0]=%s != current[0]=%s", oldT.Reporters[0], currentT.Reporters[0])
 	}
 }
-

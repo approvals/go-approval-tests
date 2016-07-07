@@ -1,8 +1,8 @@
 package reporters
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 type testReporter struct {

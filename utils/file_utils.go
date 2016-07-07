@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"os"
 	"io/ioutil"
+	"os"
 )
 
 func DoesFileExist(fileName string) bool {
@@ -20,4 +20,3 @@ func EnsureExists(fileName string) {
 
 	ioutil.WriteFile(fileName, []byte(""), 0644)
 }
-
