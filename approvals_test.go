@@ -24,7 +24,9 @@ func TestReporterFromSetup(t *testing.T) {
 	VerifyString(t, "Hello World!")
 }
 
-func TestVerifyJSON(t *testing.T) {
+func TestVerifyJSONBytes(t *testing.T) {
 	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
 }
+
+

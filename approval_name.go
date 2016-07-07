@@ -89,12 +89,19 @@ func (s *approvalName) compare(approvalFile, receivedFile string, reader io.Read
 		return err
 	}
 
+	received = s.normalizeLineEndings(received)
+	approved = s.normalizeLineEndings(approved)
+
 	// The two sides are identical, nothing more to do.
 	if bytes.Compare(received, approved) == 0 {
 		return nil
 	}
 
 	return fmt.Errorf("failed to approved %s", s.name)
+}
+
+func (s *approvalName) normalizeLineEndings(bs []byte) []byte {
+	return bytes.Replace(bs, []byte("\r\n"), []byte("\n"), -1)
 }
 
 func (s *approvalName) dumpReceivedTestResult(bs []byte, receivedFile string) error {
