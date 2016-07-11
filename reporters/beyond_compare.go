@@ -2,6 +2,7 @@ package reporters
 
 type beyondCompare struct{}
 
+// NewBeyondCompareReporter creates a new reporter for Beyond Compare 4.
 func NewBeyondCompareReporter() Reporter {
 	return &beyondCompare{}
 }

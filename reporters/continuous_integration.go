@@ -7,6 +7,9 @@ import (
 
 type continuousIntegration struct{}
 
+// NewContinuousIntegrationReporter creates a new reporter for CI.
+//
+// The reporter checks the environment variable CI for a value of true.
 func NewContinuousIntegrationReporter() Reporter {
 	return &continuousIntegration{}
 }

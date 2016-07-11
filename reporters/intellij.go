@@ -2,6 +2,8 @@ package reporters
 
 type intellij struct{}
 
+
+// NewIntelliJReporter creates a new reporter for IntelliJ.
 func NewIntelliJReporter() Reporter {
 	return &intellij{}
 }

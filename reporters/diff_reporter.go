@@ -6,6 +6,7 @@ import (
 	"github.com/approvals/go-approval-tests/utils"
 )
 
+// NewFrontLoadedReporter creates the default front loaded reporter.
 func NewFrontLoadedReporter() *Reporter {
 	tmp := NewFirstWorkingReporter(
 		NewContinuousIntegrationReporter(),
@@ -14,6 +15,7 @@ func NewFrontLoadedReporter() *Reporter {
 	return &tmp
 }
 
+// NewDiffReporter creates the default diff reporter.
 func NewDiffReporter() *Reporter {
 	tmp := NewFirstWorkingReporter(
 		NewIntelliJReporter(),

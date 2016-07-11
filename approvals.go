@@ -16,12 +16,12 @@ var (
 	defaultFrontLoadedReporter = reporters.NewFrontLoadedReporter()
 )
 
-// Interface wrapper around testing.T
+// Failable is an interface wrapper around testing.T
 type Failable interface {
 	Fail()
 }
 
-// Example:
+// VerifyWithExtension Example:
 //   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error {
 	namer, err := getApprovalName()
@@ -41,21 +41,21 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error 
 	return err
 }
 
-// Example:
-//   VerifyWithExtension(t, strings.NewReader("Hello"))
+// Verify Example:
+//   Verify(t, strings.NewReader("Hello"))
 func Verify(t Failable, reader io.Reader) error {
 	return VerifyWithExtension(t, reader, ".txt")
 }
 
-// Example:
-//   VerifyWithExtension(t, "Hello")
+// VerifyString Example:
+//   VerifyString(t, "Hello")
 func VerifyString(t Failable, s string) {
 	reader := strings.NewReader(s)
 	Verify(t, reader)
 }
 
-// Example:
-//   VerifyWithExtension(t, []byte("{ \"Greeting\": \"Hello\" }"))
+// VerifyJSONBytes Example:
+//   VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
 func VerifyJSONBytes(t Failable, bs []byte) error {
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
@@ -90,6 +90,7 @@ func (s *frontLoadedReporterCloser) Close() error {
 	return nil
 }
 
+// UseReporter configures which reporter to use on failure.
 // Add at the test or method level to configure your reporter.
 //
 // The following examples shows how to use a reporter for all of your test cases
@@ -111,6 +112,9 @@ func UseReporter(reporter reporters.Reporter) io.Closer {
 	return closer
 }
 
+// UseFrontLoadedReporter configures reporters ahead of all other reporters to
+// handle situations like CI.  These reporters usually prevent reporting in
+// scenarios that are headless.
 func UseFrontLoadedReporter(reporter reporters.Reporter) io.Closer {
 	closer := &frontLoadedReporterCloser{
 		reporter: defaultFrontLoadedReporter,
