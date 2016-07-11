@@ -3,7 +3,7 @@ package reporters
 import (
 	"os/exec"
 
-	"github.com/approvals/ApprovalTests_go/utils"
+	"github.com/approvals/go-approval-tests/utils"
 )
 
 func NewFrontLoadedReporter() *Reporter {

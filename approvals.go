@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/approvals/ApprovalTests_go/reporters"
+	"github.com/approvals/go-approval-tests/reporters"
 )
 
 var (
