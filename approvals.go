@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	defaultReporter            *reporters.Reporter = reporters.NewDiffReporter()
-	defaultFrontLoadedReporter *reporters.Reporter = reporters.NewFrontLoadedReporter()
+	defaultReporter            = reporters.NewDiffReporter()
+	defaultFrontLoadedReporter = reporters.NewFrontLoadedReporter()
 )
 
 type Failable interface {
