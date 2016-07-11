@@ -16,6 +16,7 @@ var (
 	defaultFrontLoadedReporter = reporters.NewFrontLoadedReporter()
 )
 
+// Interface wrapper around testing.T
 type Failable interface {
 	Fail()
 }
