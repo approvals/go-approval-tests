@@ -2,7 +2,7 @@
 
 ApprovalTests for go
 
-[![Build Status](https://travis-ci.org/approvals/ApprovalTests_go.png?branch=master)](https://travis-ci.org/approvals/ApprovalsTests_go)
+[![Build Status](https://travis-ci.org/approvals/ApprovalTests_go.png?branch=master)](https://travis-ci.org/approvals/ApprovalTests_go)
 
 # Golden master Verification Library
 ApprovalTests allows for easy testing of larger objects, strings and anything else that can be saved to a file (images, sounds, csv,  etc...)
