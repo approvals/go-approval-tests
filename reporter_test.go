@@ -3,7 +3,7 @@ package ApprovalTests_go
 import (
 	"testing"
 
-	"github.com/Approvals/ApprovalTests_go/reporters"
+	"github.com/approvals/ApprovalTests_go/reporters"
 	"os"
 )
 
