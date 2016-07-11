@@ -21,6 +21,8 @@ type Failable interface {
 	Fail()
 }
 
+// Example:
+//   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error {
 	namer, err := getApprovalName()
 	if err != nil {
@@ -39,15 +41,21 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error 
 	return err
 }
 
+// Example:
+//   VerifyWithExtension(t, strings.NewReader("Hello"))
 func Verify(t Failable, reader io.Reader) error {
 	return VerifyWithExtension(t, reader, ".txt")
 }
 
+// Example:
+//   VerifyWithExtension(t, "Hello")
 func VerifyString(t Failable, s string) {
 	reader := strings.NewReader(s)
 	Verify(t, reader)
 }
 
+// Example:
+//   VerifyWithExtension(t, []byte("{ \"Greeting\": \"Hello\" }"))
 func VerifyJSONBytes(t Failable, bs []byte) error {
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
