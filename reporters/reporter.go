@@ -11,6 +11,7 @@ type FirstWorkingReporter struct {
 	Reporters []Reporter
 }
 
+// Report is called when the approved and received file do not match.
 func (s *FirstWorkingReporter) Report(approved, received string) bool {
 	for _, reporter := range s.Reporters {
 		result := reporter.Report(approved, received)
