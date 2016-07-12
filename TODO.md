@@ -1,7 +1,7 @@
 - [ ] Arrays
 - [X] JSON objects
 - [ ] XML
-- [ ] MultiReporters
+- [X] MultiReporters
 - [ ] Quiet & Newbie Reporters
 - [X] Travis
 - [ ] Reporters have toStrings to display what you can add to your system.

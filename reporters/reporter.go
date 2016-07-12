@@ -29,3 +29,25 @@ func NewFirstWorkingReporter(reporters ...Reporter) Reporter {
 		Reporters: reporters,
 	}
 }
+
+// MultiReporter reports all reporters.
+type MultiReporter struct {
+	Reporters []Reporter
+}
+
+// Report is called when the approved and received file do not match.
+func (s *MultiReporter) Report(approved, received string) bool {
+	result := false
+	for _, reporter := range s.Reporters {
+		result = reporter.Report(approved, received) || result
+	}
+
+	return result
+}
+
+// NewMultiReporter calls all reporters.
+func NewMultiReporter(reporters ...Reporter) Reporter {
+	return &MultiReporter{
+		Reporters: reporters,
+	}
+}

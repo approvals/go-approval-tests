@@ -41,6 +41,42 @@ func TestFirstWorkingReporter(t *testing.T) {
 	}
 }
 
+func TestMultiReporter(t *testing.T) {
+	a := newTestReporter(true)
+	b := newTestReporter(true)
+
+	testSubject := NewMultiReporter(Reporter(a), Reporter(b))
+	result := testSubject.Report("a.txt", "b.txt")
+
+	if a.called != true {
+		t.Error("a.called")
+	}
+	if b.called != true {
+		t.Errorf("b.called")
+	}
+	if result != true {
+		t.Errorf("result")
+	}
+}
+
+func TestMultiReporterWithNoWorkingReporters(t *testing.T) {
+	a := newTestReporter(false)
+	b := newTestReporter(false)
+
+	testSubject := NewMultiReporter(Reporter(a), Reporter(b))
+	result := testSubject.Report("a.txt", "b.txt")
+
+	if a.called != true {
+		t.Error("a.called")
+	}
+	if b.called != true {
+		t.Errorf("b.called")
+	}
+	if result != false {
+		t.Errorf("result")
+	}
+}
+
 func restoreEnv(exists bool, key, value string) {
 	if exists {
 		os.Setenv(key, value)
