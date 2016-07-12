@@ -26,8 +26,6 @@ func (s *clipboard) Report(approved, received string) bool {
 		move := fmt.Sprintf("mv %s %s", receivedFull, approvedFull)
 		return copyToDarwinClipboard(move)
 	}
-
-	return false
 }
 
 func copyToWindowsClipboard(text string) bool {
