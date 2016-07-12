@@ -94,13 +94,14 @@ func (s *frontLoadedReporterCloser) Close() error {
 // Add at the test or method level to configure your reporter.
 //
 // The following examples shows how to use a reporter for all of your test cases
-// through go's setup feature.
+// in a package directory through go's setup feature.
+//
 //
 // func TestMain(m *testing.M) {
 // 	r := UseReporter(reporters.NewBeyondCompareReporter())
 //      defer r.Close()
 //
-// 	m.Run()
+//      os.Exit(m.Run())
 // }
 //
 func UseReporter(reporter reporters.Reporter) io.Closer {

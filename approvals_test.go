@@ -1,6 +1,7 @@
 package approvaltests
 
 import (
+	"os"
 	"testing"
 
 	"github.com/approvals/go-approval-tests/reporters"
@@ -10,7 +11,7 @@ func TestMain(m *testing.M) {
 	r := UseReporter(reporters.NewBeyondCompareReporter())
 	defer r.Close()
 
-	m.Run()
+	os.Exit(m.Run())
 }
 
 func TestVerifyStringApproval(t *testing.T) {

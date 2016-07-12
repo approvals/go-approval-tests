@@ -1,8 +1,8 @@
 package approvaltests
 
 import (
-	"testing"
 	"os"
+	"testing"
 
 	"github.com/approvals/go-approval-tests/reporters"
 )
