@@ -2,9 +2,9 @@ package approvaltests
 
 import (
 	"testing"
+	"os"
 
 	"github.com/approvals/go-approval-tests/reporters"
-	"os"
 )
 
 type testFailable struct{}
@@ -40,7 +40,7 @@ func TestUseReporter(t *testing.T) {
 	VerifyString(f, "foo")
 
 	if a.called != true {
-		t.Error("a.called")
+		t.Fatalf("a.called")
 	}
 
 	r.Close()
@@ -51,7 +51,7 @@ func TestUseReporter(t *testing.T) {
 	currentT, _ := current.(*reporters.FirstWorkingReporter)
 
 	if oldT.Reporters[1] != currentT.Reporters[1] {
-		t.Errorf("old=%s != current=%s", old, current)
+		t.Fatalf("old=%s != current=%s", old, current)
 	}
 }
 
