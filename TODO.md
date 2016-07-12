@@ -5,6 +5,7 @@
 - [ ] Quiet & Newbie Reporters
 - [X] Travis
 - [ ] Reporters have toStrings to display what you can add to your system.
-- [ ] clipboard & allfailingtests reporter
+- [X] clipboard reporter
+- [ ] allfailingtests reporter
 - [X] FileLauncher reporter
 - [ ] Maps

@@ -7,8 +7,8 @@ import (
 
 type fileLauncher struct{}
 
-// NewFileLauncher launches registered application of the received file's type only.
-func NewFileLauncher() Reporter {
+// NewFileLauncherReporter launches registered application of the received file's type only.
+func NewFileLauncherReporter() Reporter {
 	return &fileLauncher{}
 }
 
