@@ -31,6 +31,9 @@ func (s *testReporter) Report(approved, received string) bool {
 }
 
 func TestUseReporter(t *testing.T) {
+	front := UseFrontLoadedReporter(newTestReporter(false))
+	defer front.Close()
+
 	old := getReporter()
 	a := newTestReporter(true)
 	r := UseReporter(reporters.Reporter(a))
