@@ -54,6 +54,18 @@ func VerifyString(t Failable, s string) {
 	Verify(t, reader)
 }
 
+// VerifyJSONStruct Example:
+//   VerifyJSONStruct(t, json)
+func VerifyJSONStruct(t Failable, obj interface{}) error {
+	jsonb, err := json.MarshalIndent(obj, "", "  ")
+	if err != nil {
+		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
+		return VerifyWithExtension(t, strings.NewReader(message), ".json")
+	}
+
+	return VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")
+}
+
 // VerifyJSONBytes Example:
 //   VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
 func VerifyJSONBytes(t Failable, bs []byte) error {
@@ -63,13 +75,8 @@ func VerifyJSONBytes(t Failable, bs []byte) error {
 		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
 		return VerifyWithExtension(t, strings.NewReader(message), ".json")
 	}
-	jsonb, err := json.MarshalIndent(obj, "", "  ")
-	if err != nil {
-		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
-		return VerifyWithExtension(t, strings.NewReader(message), ".json")
-	}
 
-	return VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")
+	return VerifyJSONStruct(t, obj)
 }
 
 type reporterCloser struct {

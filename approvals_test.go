@@ -25,6 +25,20 @@ func TestReporterFromSetup(t *testing.T) {
 	VerifyString(t, "Hello World!")
 }
 
+func TestVerifyJSONStruct(t *testing.T) {
+	json := struct {
+		Title string
+		Name  string
+		Age   int
+	}{
+		Title: "Hello World!",
+		Name:  "Peter Pan",
+		Age:   100,
+	}
+
+	VerifyJSONStruct(t, json)
+}
+
 func TestVerifyJSONBytes(t *testing.T) {
 	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
