@@ -3,6 +3,8 @@ package reporters
 import (
 	"os"
 	"testing"
+
+	"github.com/approvals/go-approval-tests/utils"
 )
 
 type testReporter struct {
@@ -30,15 +32,9 @@ func TestFirstWorkingReporter(t *testing.T) {
 	testSubject := NewFirstWorkingReporter(Reporter(a), Reporter(b), Reporter(c))
 	testSubject.Report("a.txt", "b.txt")
 
-	if a.called != true {
-		t.Error("a.called")
-	}
-	if b.called != true {
-		t.Errorf("b.called")
-	}
-	if c.called == true {
-		t.Errorf("c.called")
-	}
+	utils.AssertEqual(t, true, a.called, "a.called")
+	utils.AssertEqual(t, true, b.called, "b.called")
+	utils.AssertEqual(t, false, c.called, "c.called")
 }
 
 func TestMultiReporter(t *testing.T) {
@@ -48,15 +44,9 @@ func TestMultiReporter(t *testing.T) {
 	testSubject := NewMultiReporter(Reporter(a), Reporter(b))
 	result := testSubject.Report("a.txt", "b.txt")
 
-	if a.called != true {
-		t.Error("a.called")
-	}
-	if b.called != true {
-		t.Errorf("b.called")
-	}
-	if result != true {
-		t.Errorf("result")
-	}
+	utils.AssertEqual(t, true, a.called, "a.called")
+	utils.AssertEqual(t, true, b.called, "b.called")
+	utils.AssertEqual(t, true, result, "result")
 }
 
 func TestMultiReporterWithNoWorkingReporters(t *testing.T) {
@@ -66,15 +56,9 @@ func TestMultiReporterWithNoWorkingReporters(t *testing.T) {
 	testSubject := NewMultiReporter(Reporter(a), Reporter(b))
 	result := testSubject.Report("a.txt", "b.txt")
 
-	if a.called != true {
-		t.Error("a.called")
-	}
-	if b.called != true {
-		t.Errorf("b.called")
-	}
-	if result != false {
-		t.Errorf("result")
-	}
+	utils.AssertEqual(t, true, a.called, "a.called")
+	utils.AssertEqual(t, true, b.called, "b.called")
+	utils.AssertEqual(t, false, result, "result")
 }
 
 func restoreEnv(exists bool, key, value string) {
@@ -92,7 +76,5 @@ func TestCIReporter(t *testing.T) {
 	defer restoreEnv(exists, "CI", value)
 
 	r := NewContinuousIntegrationReporter()
-	if !r.Report("", "") {
-		t.Fatal("did not detect CI")
-	}
+	utils.AssertEqual(t, true, r.Report("", ""), "did not detect CI")
 }

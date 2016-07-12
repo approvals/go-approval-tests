@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/approvals/go-approval-tests/reporters"
+	"github.com/approvals/go-approval-tests/utils"
 )
 
 type testFailable struct{}
@@ -42,10 +43,7 @@ func TestUseReporter(t *testing.T) {
 
 	VerifyString(f, "foo")
 
-	if a.called != true {
-		t.Fatalf("a.called")
-	}
-
+	utils.AssertEqual(t, true, a.called, "a.called")
 	r.Close()
 
 	current := getReporter()
@@ -53,9 +51,7 @@ func TestUseReporter(t *testing.T) {
 	oldT, _ := old.(*reporters.FirstWorkingReporter)
 	currentT, _ := current.(*reporters.FirstWorkingReporter)
 
-	if oldT.Reporters[1] != currentT.Reporters[1] {
-		t.Fatalf("old=%s != current=%s", old, current)
-	}
+	utils.AssertEqual(t, oldT.Reporters[1], currentT.Reporters[1], "reporters[1]")
 }
 
 func TestFrontLoadedReporter(t *testing.T) {
@@ -71,12 +67,8 @@ func TestFrontLoadedReporter(t *testing.T) {
 
 	VerifyString(f, "foo")
 
-	if front.called != true {
-		t.Error("front.called")
-	}
-	if next.called != true {
-		t.Error("next.called")
-	}
+	utils.AssertEqual(t, true, front.called, "front.called")
+	utils.AssertEqual(t, true, next.called, "next.called")
 
 	frontCloser.Close()
 	current := getReporter()
@@ -84,7 +76,5 @@ func TestFrontLoadedReporter(t *testing.T) {
 	oldT, _ := old.(*reporters.FirstWorkingReporter)
 	currentT, _ := current.(*reporters.FirstWorkingReporter)
 
-	if oldT.Reporters[0] != currentT.Reporters[0] {
-		t.Errorf("old[0]=%s != current[0]=%s", oldT.Reporters[0], currentT.Reporters[0])
-	}
+	utils.AssertEqual(t, oldT.Reporters[0], currentT.Reporters[0], "reporters[0]")
 }
