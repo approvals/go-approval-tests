@@ -94,6 +94,29 @@ func VerifyArray(t Failable, array interface{}) error {
 	return VerifyString(t, outputText)
 }
 
+// VerifyAll Example:
+//   VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
+func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string) error {
+	if len(header) != 0 {
+		header = fmt.Sprintf("%s\n\n\n", header)
+	}
+
+	outputText := header + strings.Join(utils.MapToString(collection, transform), "\n")
+	return VerifyString(t, outputText)
+}
+
+// VerifyAllCombinationsFor1 Example:
+//   VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"})
+func VerifyAllCombinationsFor1(t Failable, header string, transform func(interface{}) string, collection interface{}) error {
+	if len(header) != 0 {
+		header = fmt.Sprintf("%s\n\n\n", header)
+	}
+
+	mapped := utils.MapToString(collection, func(x interface{}) string { return fmt.Sprintf("[%s] => %s", x, transform(x)) })
+	outputText := header + strings.Join(mapped, "\n")
+	return VerifyString(t, outputText)
+}
+
 type reporterCloser struct {
 	reporter *reporters.Reporter
 }

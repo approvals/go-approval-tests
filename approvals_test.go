@@ -4,7 +4,9 @@ import (
 	"os"
 	"testing"
 
+	"fmt"
 	"github.com/approvals/go-approval-tests/reporters"
+	"strings"
 )
 
 func TestMain(m *testing.M) {
@@ -81,4 +83,15 @@ func TestVerifyArrayBadArray(t *testing.T) {
 func TestVerifyArrayEmptyArray(t *testing.T) {
 	var xs []string
 	VerifyArray(t, xs)
+}
+
+func TestVerifyArrayTransformation(t *testing.T) {
+	xs := []string{"Christopher", "Llewellyn"}
+	VerifyAll(t, "uppercase", xs, func(x interface{}) string { return fmt.Sprintf("%s => %s", x, strings.ToUpper(x.(string))) })
+}
+
+func TestVerifyArrayTransformation2(t *testing.T) {
+	xs := []string{"Christopher", "Llewellyn"}
+	//VerifyAll(t, "uppercase", xs, func(x interface{}) string { return strings.ToUpper(x.(string)) })
+	VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, xs)
 }

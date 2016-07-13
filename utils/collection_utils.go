@@ -58,3 +58,20 @@ func PrintArray(m interface{}) string {
 
 	return outputText
 }
+
+// MapToString maps a collection to a string collection
+func MapToString(collection interface{}, transform func(x interface{}) string) []string {
+	switch reflect.TypeOf(collection).Kind() {
+	case reflect.Slice:
+		var xs []string
+
+		slice := reflect.ValueOf(collection)
+		for i := 0; i < slice.Len(); i++ {
+			xs = append(xs, transform(slice.Index(i).Interface()))
+		}
+
+		return xs
+	default:
+		panic(fmt.Sprintf("error while mapping array to string\nreceived a %T\n  %s\n", collection, collection))
+	}
+}
