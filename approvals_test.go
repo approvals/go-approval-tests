@@ -72,3 +72,13 @@ func TestVerifyArray(t *testing.T) {
 	xs := []string{"dog", "cat", "bird"}
 	VerifyArray(t, xs)
 }
+
+func TestVerifyArrayBadArray(t *testing.T) {
+	xs := "string"
+	VerifyArray(t, xs)
+}
+
+func TestVerifyArrayEmptyArray(t *testing.T) {
+	var xs []string
+	VerifyArray(t, xs)
+}
