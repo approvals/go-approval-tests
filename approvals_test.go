@@ -48,3 +48,12 @@ func TestVerifyBadJSONBytes(t *testing.T) {
 	jsonb := []byte("{ foo: \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
 }
+
+func TestVerifyMap(t *testing.T) {
+	m := map[string]string{
+		"dog": "bark",
+		"cat": "meow",
+	}
+
+	VerifyMap(t, m)
+}

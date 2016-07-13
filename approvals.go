@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	"github.com/approvals/go-approval-tests/reporters"
+	"reflect"
+	"sort"
 )
 
 var (
@@ -49,9 +51,9 @@ func Verify(t Failable, reader io.Reader) error {
 
 // VerifyString Example:
 //   VerifyString(t, "Hello")
-func VerifyString(t Failable, s string) {
+func VerifyString(t Failable, s string) error {
 	reader := strings.NewReader(s)
-	Verify(t, reader)
+	return Verify(t, reader)
 }
 
 // VerifyJSONStruct Example:
@@ -77,6 +79,27 @@ func VerifyJSONBytes(t Failable, bs []byte) error {
 	}
 
 	return VerifyJSONStruct(t, obj)
+}
+
+// VerifyMap Example:
+//   VerifyMap(t, map[string][string] { "dog": "bark" })
+func VerifyMap(t Failable, m interface{}) error {
+	v := reflect.ValueOf(m)
+	if v.Kind() != reflect.Map {
+		message := fmt.Sprintf("error while verifying map\nreceived a %T\n  %s\n", m, m)
+		return VerifyString(t, message)
+	}
+
+	keys := v.MapKeys()
+	var xs []string
+
+	for _, k := range keys {
+		xs = append(xs, fmt.Sprintf("[%s]=%s", k, v.MapIndex(k)))
+	}
+
+	sort.Strings(xs)
+	result := strings.Join(xs, "\n")
+	return VerifyString(t, result)
 }
 
 type reporterCloser struct {
