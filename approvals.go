@@ -10,6 +10,7 @@ import (
 
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
+	"reflect"
 )
 
 var (
@@ -112,7 +113,31 @@ func VerifyAllCombinationsFor1(t Failable, header string, transform func(interfa
 		header = fmt.Sprintf("%s\n\n\n", header)
 	}
 
-	mapped := utils.MapToString(collection, func(x interface{}) string { return fmt.Sprintf("[%s] => %s", x, transform(x)) })
+	mapped := utils.MapToString(collection, func(x interface{}) string { return fmt.Sprintf("[%v] => %v", x, transform(x)) })
+	outputText := header + strings.Join(mapped, "\n")
+	return VerifyString(t, outputText)
+}
+
+// VerifyAllCombinationsFor2 Example:
+//   VerifyAllCombinationsFor2(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"}, []int{1,2)
+func VerifyAllCombinationsFor2(t Failable, header string, transform func(interface{}, interface{}) string, collection1 interface{}, collection2 interface{}) error {
+	if len(header) != 0 {
+		header = fmt.Sprintf("%s\n\n\n", header)
+	}
+
+	var mapped []string
+
+	slice1 := reflect.ValueOf(collection1)
+	slice2 := reflect.ValueOf(collection2)
+	for i1 := 0; i1 < slice1.Len(); i1++ {
+		p1 := slice1.Index(i1).Interface()
+
+		for i2 := 0; i2 < slice2.Len(); i2++ {
+			p2 := slice2.Index(i2).Interface()
+			mapped = append(mapped, fmt.Sprintf("[%v,%v] => %s", p1, p2, transform(p1, p2)))
+		}
+	}
+
 	outputText := header + strings.Join(mapped, "\n")
 	return VerifyString(t, outputText)
 }

@@ -1,4 +1,4 @@
-- [ ] Arrays
+- [X] Arrays
 - [ ] XML
 - [ ] Quiet & Newbie Reporters
 - [ ] Reporters have toStrings to display what you can add to your system.

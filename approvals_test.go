@@ -90,8 +90,18 @@ func TestVerifyArrayTransformation(t *testing.T) {
 	VerifyAll(t, "uppercase", xs, func(x interface{}) string { return fmt.Sprintf("%s => %s", x, strings.ToUpper(x.(string))) })
 }
 
-func TestVerifyArrayTransformation2(t *testing.T) {
+func TestVerifyAllCombinationsFor1(t *testing.T) {
 	xs := []string{"Christopher", "Llewellyn"}
-	//VerifyAll(t, "uppercase", xs, func(x interface{}) string { return strings.ToUpper(x.(string)) })
 	VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, xs)
+}
+
+func TestVerifyAllCombinationsFor2(t *testing.T) {
+	xs1 := []string{"Christopher", "Llewellyn"}
+	xs2 := []int{0, 1}
+	VerifyAllCombinationsFor2(
+		t,
+		"character at",
+		func(s interface{}, i interface{}) string { return fmt.Sprintf("%c", s.(string)[i.(int)]) },
+		xs1,
+		xs2)
 }
