@@ -4,12 +4,13 @@ language: go
 
 go:
   - 1.6
+
 install:
   - go get -u github.com/golang/lint/golint
 
 script:
   - test -z "$(gofmt -s -l -w ./... | tee /dev/stderr)"
-  - test -z "$(golint ./... |  tee /dev/stderr)"
+  - golint -set_exit_status ./...
   - go vet ./...
   - go build -v ./...
   - go test -v ./...
