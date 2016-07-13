@@ -57,3 +57,18 @@ func TestVerifyMap(t *testing.T) {
 
 	VerifyMap(t, m)
 }
+
+func TestVerifyMapBadMap(t *testing.T) {
+	m := "foo"
+	VerifyMap(t, m)
+}
+
+func TestVerifyMapEmptyMap(t *testing.T) {
+	m := map[string]string{}
+	VerifyMap(t, m)
+}
+
+func TestVerifyArray(t *testing.T) {
+	xs := []string{"dog", "cat", "bird"}
+	VerifyArray(t, xs)
+}

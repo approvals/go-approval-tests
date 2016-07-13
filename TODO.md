@@ -3,4 +3,4 @@
 - [ ] Quiet & Newbie Reporters
 - [ ] Reporters have toStrings to display what you can add to your system.
 - [ ] allfailingtests reporter
-- [ ] Maps
+- [X] Maps

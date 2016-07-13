@@ -9,8 +9,7 @@ import (
 	"strings"
 
 	"github.com/approvals/go-approval-tests/reporters"
-	"reflect"
-	"sort"
+	"github.com/approvals/go-approval-tests/utils"
 )
 
 var (
@@ -84,22 +83,15 @@ func VerifyJSONBytes(t Failable, bs []byte) error {
 // VerifyMap Example:
 //   VerifyMap(t, map[string][string] { "dog": "bark" })
 func VerifyMap(t Failable, m interface{}) error {
-	v := reflect.ValueOf(m)
-	if v.Kind() != reflect.Map {
-		message := fmt.Sprintf("error while verifying map\nreceived a %T\n  %s\n", m, m)
-		return VerifyString(t, message)
-	}
+	outputText := utils.PrintMap(m)
+	return VerifyString(t, outputText)
+}
 
-	keys := v.MapKeys()
-	var xs []string
-
-	for _, k := range keys {
-		xs = append(xs, fmt.Sprintf("[%s]=%s", k, v.MapIndex(k)))
-	}
-
-	sort.Strings(xs)
-	result := strings.Join(xs, "\n")
-	return VerifyString(t, result)
+// VerifyArray Example:
+//   VerifyArray(t, []string{"dog", "cat"})
+func VerifyArray(t Failable, array interface{}) error {
+	outputText := utils.PrintArray(array)
+	return VerifyString(t, outputText)
 }
 
 type reporterCloser struct {
