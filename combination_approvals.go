@@ -50,7 +50,145 @@ func VerifyAllCombinationsFor2(t Failable, header string, transform func(interfa
 		emptyCollection)
 }
 
-// VerifyAllCombinationsFor9 Example:
+// VerifyAllCombinationsFor3 is for combinations of 3.
+func VerifyAllCombinationsFor3(
+	t Failable,
+	header string,
+	transform func(p1, p2, p3 interface{}) string,
+	collection1, collection2, collection3 interface{}) error {
+
+	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
+		return transform(p1, p2, p3)
+	}
+
+	return VerifyAllCombinationsFor9(t, header, kerning,
+		collection1,
+		collection2,
+		collection3,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection)
+}
+
+// VerifyAllCombinationsFor4 is for combinations of 4.
+func VerifyAllCombinationsFor4(
+	t Failable,
+	header string,
+	transform func(p1, p2, p3, p4 interface{}) string,
+	collection1, collection2, collection3, collection4 interface{}) error {
+
+	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
+		return transform(p1, p2, p3, p4)
+	}
+
+	return VerifyAllCombinationsFor9(t, header, kerning,
+		collection1,
+		collection2,
+		collection3,
+		collection4,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection)
+}
+
+// VerifyAllCombinationsFor5 is for combinations of 5.
+func VerifyAllCombinationsFor5(
+	t Failable,
+	header string,
+	transform func(p1, p2, p3, p4, p5 interface{}) string,
+	collection1, collection2, collection3, collection4, collection5 interface{}) error {
+
+	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
+		return transform(p1, p2, p3, p4, p5)
+	}
+
+	return VerifyAllCombinationsFor9(t, header, kerning,
+		collection1,
+		collection2,
+		collection3,
+		collection4,
+		collection5,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection)
+}
+
+// VerifyAllCombinationsFor6 is for combinations of 6.
+func VerifyAllCombinationsFor6(
+	t Failable,
+	header string,
+	transform func(p1, p2, p3, p4, p5, p6 interface{}) string,
+	collection1, collection2, collection3, collection4, collection5, collection6 interface{}) error {
+
+	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
+		return transform(p1, p2, p3, p4, p5, p6)
+	}
+
+	return VerifyAllCombinationsFor9(t, header, kerning,
+		collection1,
+		collection2,
+		collection3,
+		collection4,
+		collection5,
+		collection6,
+		emptyCollection,
+		emptyCollection,
+		emptyCollection)
+}
+
+// VerifyAllCombinationsFor7 is for combinations of 7.
+func VerifyAllCombinationsFor7(
+	t Failable,
+	header string,
+	transform func(p1, p2, p3, p4, p5, p6, p7 interface{}) string,
+	collection1, collection2, collection3, collection4, collection5, collection6, collection7 interface{}) error {
+
+	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
+		return transform(p1, p2, p3, p4, p5, p6, p7)
+	}
+
+	return VerifyAllCombinationsFor9(t, header, kerning,
+		collection1,
+		collection2,
+		collection3,
+		collection4,
+		collection5,
+		collection6,
+		collection7,
+		emptyCollection,
+		emptyCollection)
+}
+
+// VerifyAllCombinationsFor8 is for combinations of 8.
+func VerifyAllCombinationsFor8(
+	t Failable,
+	header string,
+	transform func(p1, p2, p3, p4, p5, p6, p7, p8 interface{}) string,
+	collection1, collection2, collection3, collection4, collection5, collection6, collection7, collection8 interface{}) error {
+
+	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
+		return transform(p1, p2, p3, p4, p5, p6, p7, p8)
+	}
+
+	return VerifyAllCombinationsFor9(t, header, kerning,
+		collection1,
+		collection2,
+		collection3,
+		collection4,
+		collection5,
+		collection6,
+		collection7,
+		collection8,
+		emptyCollection)
+}
+
+// VerifyAllCombinationsFor9 is for combinations of 9.
 func VerifyAllCombinationsFor9(
 	t Failable,
 	header string,
