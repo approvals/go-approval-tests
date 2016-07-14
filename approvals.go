@@ -8,9 +8,9 @@ import (
 	"os"
 	"strings"
 
+	"encoding/xml"
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
-	"encoding/xml"
 	"reflect"
 )
 
@@ -71,6 +71,26 @@ func VerifyXMLStruct(t Failable, obj interface{}) error {
 	}
 
 	return VerifyWithExtension(t, bytes.NewReader(xmlb), ".xml")
+}
+
+// VerifyXMLBytes Example:
+//   VerifyXMLBytes(t, []byte("<Test/>"))
+func VerifyXMLBytes(t Failable, bs []byte) error {
+	type node struct {
+		Attr     []xml.Attr
+		XMLName  xml.Name
+		Children []node `xml:",any"`
+		Text     string `xml:",chardata"`
+	}
+	x := node{}
+
+	err := xml.Unmarshal(bs, &x)
+	if err != nil {
+		message := fmt.Sprintf("error while parsing XML\nerror:\n  %s\nXML:\n  %s\n", err, string(bs))
+		return VerifyWithExtension(t, strings.NewReader(message), ".xml")
+	}
+
+	return VerifyXMLStruct(t, x)
 }
 
 // VerifyJSONStruct Example:

@@ -1,14 +1,14 @@
 package approvaltests
 
 import (
-	"os"
-	"testing"
 	"fmt"
+	"os"
 	"strings"
+	"testing"
 	//"encoding/xml"
 
-	"github.com/approvals/go-approval-tests/reporters"
 	"encoding/xml"
+	"github.com/approvals/go-approval-tests/reporters"
 )
 
 func TestMain(m *testing.M) {
@@ -32,9 +32,9 @@ func TestReporterFromSetup(t *testing.T) {
 func TestVerifyXMLStruct(t *testing.T) {
 	json := struct {
 		XMLName xml.Name `xml:"Test"`
-		Title string
-		Name  string
-		Age   int
+		Title   string
+		Name    string
+		Age     int
 	}{
 		Title: "Hello World!",
 		Name:  "Peter Pan",
@@ -45,13 +45,23 @@ func TestVerifyXMLStruct(t *testing.T) {
 }
 
 func TestVerifyBadXMLStruct(t *testing.T) {
-	json := struct {
+	xml := struct {
 		Title string
 	}{
 		Title: "Hello World!",
 	}
 
-	VerifyXMLStruct(t, json)
+	VerifyXMLStruct(t, xml)
+}
+
+func TestVerifyXMLBytes(t *testing.T) {
+	xmlb := []byte("<Test><Title>Hello World!</Title><Name>Peter Pan</Name><Age>100</Age></Test>")
+	VerifyXMLBytes(t, xmlb)
+}
+
+func TestVerifyBadXMLBytes(t *testing.T) {
+	xmlb := []byte("Test></Test>")
+	VerifyXMLBytes(t, xmlb)
 }
 
 func TestVerifyJSONStruct(t *testing.T) {
