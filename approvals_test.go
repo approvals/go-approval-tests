@@ -3,10 +3,12 @@ package approvaltests
 import (
 	"os"
 	"testing"
-
 	"fmt"
-	"github.com/approvals/go-approval-tests/reporters"
 	"strings"
+	//"encoding/xml"
+
+	"github.com/approvals/go-approval-tests/reporters"
+	"encoding/xml"
 )
 
 func TestMain(m *testing.M) {
@@ -25,6 +27,31 @@ func TestVerifyStringApproval(t *testing.T) {
 
 func TestReporterFromSetup(t *testing.T) {
 	VerifyString(t, "Hello World!")
+}
+
+func TestVerifyXMLStruct(t *testing.T) {
+	json := struct {
+		XMLName xml.Name `xml:"Test"`
+		Title string
+		Name  string
+		Age   int
+	}{
+		Title: "Hello World!",
+		Name:  "Peter Pan",
+		Age:   100,
+	}
+
+	VerifyXMLStruct(t, json)
+}
+
+func TestVerifyBadXMLStruct(t *testing.T) {
+	json := struct {
+		Title string
+	}{
+		Title: "Hello World!",
+	}
+
+	VerifyXMLStruct(t, json)
 }
 
 func TestVerifyJSONStruct(t *testing.T) {

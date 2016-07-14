@@ -10,6 +10,8 @@ import (
 
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
+	"encoding/xml"
+	"reflect"
 )
 
 var (
@@ -53,6 +55,22 @@ func Verify(t Failable, reader io.Reader) error {
 func VerifyString(t Failable, s string) error {
 	reader := strings.NewReader(s)
 	return Verify(t, reader)
+}
+
+// VerifyXMLStruct Example:
+//   VerifyXMLStruct(t, xml)
+func VerifyXMLStruct(t Failable, obj interface{}) error {
+	xmlb, err := xml.MarshalIndent(obj, "", "  ")
+	if err != nil {
+		tip := ""
+		if reflect.TypeOf(obj).Name() == "" {
+			tip = "when using anonymous types be sure to include\n  XMLName xml.Name `xml:\"Your_Name_Here\"`\n"
+		}
+		message := fmt.Sprintf("error while pretty printing XML\n%verror:\n  %v\nXML:\n  %v\n", tip, err, obj)
+		return VerifyWithExtension(t, strings.NewReader(message), ".xml")
+	}
+
+	return VerifyWithExtension(t, bytes.NewReader(xmlb), ".xml")
 }
 
 // VerifyJSONStruct Example:
