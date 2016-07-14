@@ -95,6 +95,20 @@ func TestVerifyAllCombinationsFor1(t *testing.T) {
 	VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, xs)
 }
 
+func TestVerifyAllCombinationsForSkipped(t *testing.T) {
+	xs := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	VerifyAllCombinationsFor1(
+		t,
+		"skipped divisible by 3",
+		func(x interface{}) string {
+			if x.(int)%3 == 0 {
+				return SkipThisCombination
+			}
+			return fmt.Sprintf("%v", x)
+		},
+		xs)
+}
+
 func TestVerifyAllCombinationsFor2(t *testing.T) {
 	xs1 := []string{"Christopher", "Llewellyn"}
 	xs2 := []int{0, 1}

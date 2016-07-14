@@ -10,6 +10,9 @@ import (
 type emptyType struct{}
 
 var (
+	// SkipThisCombination should be returned if you do not want to process a particular combination
+	SkipThisCombination = "♬ SKIP THIS COMBINATION ♬"
+
 	empty           = emptyType{}
 	emptyCollection = []emptyType{empty}
 )
@@ -240,7 +243,9 @@ func VerifyAllCombinationsFor9(
 
 										parameterText := getParameterText(p1, p2, p3, p4, p5, p6, p7, p8, p9)
 										transformText := getTransformText(transform, p1, p2, p3, p4, p5, p6, p7, p8, p9)
-										mapped = append(mapped, fmt.Sprintf("%s => %s", parameterText, transformText))
+										if transformText != SkipThisCombination {
+											mapped = append(mapped, fmt.Sprintf("%s => %s", parameterText, transformText))
+										}
 									}
 								}
 							}
