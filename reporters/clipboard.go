@@ -15,19 +15,34 @@ func NewClipboardReporter() Reporter {
 }
 
 func (s *clipboard) Report(approved, received string) bool {
-	receivedFull, _ := filepath.Abs(received)
-	approvedFull, _ := filepath.Abs(approved)
+	move := getMoveCommandText(approved, received)
+	return copyToClipboard(move)
+}
 
+func copyToClipboard(move string) bool {
 	switch runtime.GOOS {
 	case "windows":
-		move := fmt.Sprintf("move /Y \"%s\" \"%s\"", receivedFull, approvedFull)
 		return copyToWindowsClipboard(move)
 	default:
-		move := fmt.Sprintf("mv %s %s", receivedFull, approvedFull)
 		return copyToDarwinClipboard(move)
 	}
 }
 
+func getMoveCommandText(approved, received string) string {
+	receivedFull, _ := filepath.Abs(received)
+	approvedFull, _ := filepath.Abs(approved)
+
+	var move string
+
+	switch runtime.GOOS {
+	case "windows":
+		move = fmt.Sprintf("move /Y \"%s\" \"%s\"", receivedFull, approvedFull)
+	default:
+		move = fmt.Sprintf("mv %s %s", receivedFull, approvedFull)
+	}
+
+	return move
+}
 func copyToWindowsClipboard(text string) bool {
 	return pipeToProgram("clip", text)
 }
