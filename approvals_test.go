@@ -105,3 +105,25 @@ func TestVerifyAllCombinationsFor2(t *testing.T) {
 		xs1,
 		xs2)
 }
+
+func TestVerifyAllCombinationsFor9(t *testing.T) {
+	xs1 := []string{"Christopher"}
+	xs2 := []int{0, 1}
+
+	VerifyAllCombinationsFor9(
+		t,
+		"sum numbers",
+		func(s, i2, i3, i4, i5, i6, i7, i8, i9 interface{}) string {
+			sum := i2.(int) + i3.(int) + i4.(int) + i5.(int) + i6.(int) + i7.(int) + i8.(int) + i9.(int)
+			return fmt.Sprintf("%v[%v]", s, sum)
+		},
+		xs1,
+		xs2,
+		xs2,
+		xs2,
+		xs2,
+		xs2,
+		xs2,
+		xs2,
+		xs2)
+}
