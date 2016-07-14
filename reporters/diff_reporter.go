@@ -20,6 +20,7 @@ func NewDiffReporter() *Reporter {
 	tmp := NewFirstWorkingReporter(
 		NewIntelliJReporter(),
 		NewBeyondCompareReporter(),
+		NewQuietReporter(),
 	)
 
 	return &tmp
