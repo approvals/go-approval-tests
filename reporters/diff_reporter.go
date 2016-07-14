@@ -18,8 +18,9 @@ func NewFrontLoadedReporter() *Reporter {
 // NewDiffReporter creates the default diff reporter.
 func NewDiffReporter() *Reporter {
 	tmp := NewFirstWorkingReporter(
-		NewIntelliJReporter(),
 		NewBeyondCompareReporter(),
+		NewIntelliJReporter(),
+		NewPrintSupportedDiffProgramsReporter(),
 		NewQuietReporter(),
 	)
 
