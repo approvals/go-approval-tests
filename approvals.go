@@ -13,9 +13,13 @@ import (
 	"reflect"
 )
 
+type emptyType struct{}
+
 var (
 	defaultReporter            = reporters.NewDiffReporter()
 	defaultFrontLoadedReporter = reporters.NewFrontLoadedReporter()
+	empty                      = emptyType{}
+	emptyCollection            = []emptyType{empty}
 )
 
 // Failable is an interface wrapper around testing.T
@@ -108,14 +112,12 @@ func VerifyAll(t Failable, header string, collection interface{}, transform func
 
 // VerifyAllCombinationsFor1 Example:
 //   VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"})
-func VerifyAllCombinationsFor1(t Failable, header string, transform func(interface{}) string, collection interface{}) error {
-	if len(header) != 0 {
-		header = fmt.Sprintf("%s\n\n\n", header)
+func VerifyAllCombinationsFor1(t Failable, header string, transform func(interface{}) string, collection1 interface{}) error {
+	transform2 := func(a, b interface{}) string {
+		return transform(a)
 	}
 
-	mapped := utils.MapToString(collection, func(x interface{}) string { return fmt.Sprintf("[%v] => %v", x, transform(x)) })
-	outputText := header + strings.Join(mapped, "\n")
-	return VerifyString(t, outputText)
+	return VerifyAllCombinationsFor2(t, header, transform2, collection1, emptyCollection)
 }
 
 // VerifyAllCombinationsFor2 Example:
@@ -134,12 +136,26 @@ func VerifyAllCombinationsFor2(t Failable, header string, transform func(interfa
 
 		for i2 := 0; i2 < slice2.Len(); i2++ {
 			p2 := slice2.Index(i2).Interface()
-			mapped = append(mapped, fmt.Sprintf("[%v,%v] => %s", p1, p2, transform(p1, p2)))
+			mapped = append(mapped, fmt.Sprintf("%s => %s", getParameterText(p1, p2), transform(p1, p2)))
 		}
 	}
 
 	outputText := header + strings.Join(mapped, "\n")
 	return VerifyString(t, outputText)
+}
+
+func getParameterText(args ...interface{}) string {
+	parameterText := "["
+	for _, x := range args {
+		if x != empty {
+			parameterText += fmt.Sprintf("%v,", x)
+		}
+	}
+
+	parameterText = parameterText[0 : len(parameterText)-1]
+	parameterText += "]"
+
+	return parameterText
 }
 
 type reporterCloser struct {
