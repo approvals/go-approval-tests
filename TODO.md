@@ -1,5 +1,1 @@
-- [X] Combinations
-- [X] XML from string
-- [ ] Newbie Reporters
-- [X] Reporters have toStrings to display what you can add to your system.
-- [X] allfailingtests reporter
+- [ ] Newbie Reporters ?
