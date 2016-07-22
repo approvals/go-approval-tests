@@ -48,6 +48,6 @@ func TestMain(m *testing.M) {
 	r := UseReporter(reporters.NewBeyondCompareReporter())
 	defer r.Close()
 
-	m.Run()
+	os.Exit(m.Run())
 }
 ```
