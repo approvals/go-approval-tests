@@ -1,6 +1,7 @@
 package approvaltests
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -10,11 +11,14 @@ func Test00(t *testing.T) {
 		t.Fatalf("%s", err)
 	}
 
-	if approvalName.getApprovalFile(".txt") != "namer_test.Test00.approved.txt" {
-		t.Fatalf("expected name to be 'Test00', but got %s", approvalName.getApprovalFile(".txt"))
-	}
+	approvalFile := approvalName.getApprovalFile(".txt")
+	assertEndsWith(approvalFile, "namer_test.Test00.approved.txt", t)
 
-	if approvalName.getReceivedFile(".txt") != "namer_test.Test00.received.txt" {
-		t.Fatalf("expected name to be 'Test00', but got %s", approvalName.getReceivedFile(".txt"))
+	receivedFile := approvalName.getReceivedFile(".txt")
+	assertEndsWith(receivedFile, "namer_test.Test00.received.txt", t)
+}
+func assertEndsWith(s string, ending string, t *testing.T) {
+	if !strings.HasSuffix(s, ending) {
+		t.Fatalf("expected name to be '%s', but got %s", ending, s)
 	}
 }
