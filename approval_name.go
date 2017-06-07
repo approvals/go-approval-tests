@@ -115,7 +115,7 @@ func (s *approvalName) getFileName(extWithDot string, suffix string) string {
 		extWithDot = fmt.Sprintf(".%s", extWithDot)
 	}
 
-	baseName := path.Base(s.fileName)
+	baseName := s.fileName
 	baseWithoutExt := baseName[:len(baseName)-len(path.Ext(s.fileName))]
 
 	return fmt.Sprintf("%s.%s.%s%s", baseWithoutExt, s.name, suffix, extWithDot)
