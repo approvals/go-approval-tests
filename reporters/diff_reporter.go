@@ -20,9 +20,9 @@ func NewDiffReporter() *Reporter {
 	tmp := NewFirstWorkingReporter(
 		NewBeyondCompareReporter(),
 		NewIntelliJReporter(),
+		NewGoGlandReporter(),
 		NewPrintSupportedDiffProgramsReporter(),
 		NewQuietReporter(),
-		NewGoGlandReporter(),
 	)
 
 	return &tmp
