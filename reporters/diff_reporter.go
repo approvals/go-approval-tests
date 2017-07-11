@@ -22,6 +22,7 @@ func NewDiffReporter() *Reporter {
 		NewIntelliJReporter(),
 		NewPrintSupportedDiffProgramsReporter(),
 		NewQuietReporter(),
+		NewGoGlandReporter(),
 	)
 
 	return &tmp
