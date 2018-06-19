@@ -3,7 +3,11 @@ sudo: false
 language: go
 
 go:
-  - 1.6
+  - '1.6.x'
+  - '1.7.x'
+  - '1.8.x'
+  - '1.9.x'
+  - '1.10.x'
 
 install:
   - go get -u github.com/golang/lint/golint
@@ -11,6 +15,8 @@ install:
 script:
   - test -z "$(go fmt -s -l -w ./... | tee /dev/stderr)"
   - golint -set_exit_status ./...
-  - go vet ./...
   - go build -v ./...
-  - go test -v ./...
+  - go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
