@@ -1,8 +1,6 @@
 # ApprovalTests.go
 
-ApprovalTests for go
-
-[![Build Status](https://travis-ci.org/approvals/go-approval-tests.png?branch=master)](https://travis-ci.org/approvals/go-approval-tests)
+ApprovalTests for [go](https://golang.org/)
 
 [![GoDoc](https://godoc.org/github.com/approvals/go-approval-tests?status.svg)](https://godoc.org/github.com/approvals/go-approval-tests)
 [![Go Report Card](https://goreportcard.com/badge/github.com/approvals/go-approval-tests)](https://goreportcard.com/report/github.com/approvals/go-approval-tests)
