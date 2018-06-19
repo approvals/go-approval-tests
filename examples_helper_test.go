@@ -30,5 +30,6 @@ func printFileContent(path string) {
 	fmt.Printf("It will be compared against the %s file\n", strings.Replace(path, ".received.", ".approved.", 1))
 	fmt.Println("and contains the text:")
 	fmt.Println()
-	fmt.Println(string(content))
+	// sad sad hack because go examples trim blank middle lines
+	fmt.Println(strings.Replace(string(content), "\n\n", "\n", -1))
 }

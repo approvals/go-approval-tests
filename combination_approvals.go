@@ -35,8 +35,11 @@ func VerifyAllCombinationsFor1(t Failable, header string, transform func(interfa
 		emptyCollection)
 }
 
-// VerifyAllCombinationsFor2 Example:
-//   VerifyAllCombinationsFor2(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"}, []int{1,2)
+// VerifyAllCombinationsFor2 calls the transform function with all combinations
+// from collection 1 and collection 2. The resulting received file contains all
+// inputs and the resulting outputs. The received file is then compared to the
+// approved version. If the transform function returns SkipThisCombination the
+// output of this combination won't be displayed inside the received file.
 func VerifyAllCombinationsFor2(t Failable, header string, transform func(interface{}, interface{}) string, collection1 interface{}, collection2 interface{}) error {
 	transform2 := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2)
