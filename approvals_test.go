@@ -1,13 +1,12 @@
 package approvaltests
 
 import (
+	"encoding/xml"
 	"fmt"
 	"os"
 	"strings"
 	"testing"
-	//"encoding/xml"
 
-	"encoding/xml"
 	"github.com/approvals/go-approval-tests/reporters"
 )
 

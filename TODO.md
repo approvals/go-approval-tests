@@ -2,8 +2,8 @@
 - [ ] VScode reporter
 - [ ] Move fixtures to their own folder
 - [ ] Add support for an image reporter
-- [ ] README link to go doc
-- [ ] setup codecov.io + link in README
+- [x] README link to go doc
+- [x] setup codecov.io + link in README
 - [ ] clean up the func VerifyAllCombinationsForX calls
 - [ ] move examples to testable examples
 - [ ] revisit documentation
