@@ -9,9 +9,10 @@ import (
 	"strings"
 
 	"encoding/xml"
+	"reflect"
+
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
-	"reflect"
 )
 
 var (
@@ -50,8 +51,8 @@ func Verify(t Failable, reader io.Reader) error {
 	return VerifyWithExtension(t, reader, ".txt")
 }
 
-// VerifyString Example:
-//   VerifyString(t, "Hello")
+// VerifyString stores the passed string into the received file and confirms
+// that it matches the approved local file. On failure, it will launch a reporter.
 func VerifyString(t Failable, s string) error {
 	reader := strings.NewReader(s)
 	return Verify(t, reader)
