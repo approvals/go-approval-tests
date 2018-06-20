@@ -6,11 +6,11 @@ import (
 
 func ExampleVerifyString() {
 	approvaltests.VerifyString(t, "Hello World!")
-	printFileContent("examples_test.TestExampleVerifyString.received.txt")
+	printFileContent("examples_test.ExampleVerifyString.received.txt")
 
 	// Output:
-	// This produced the file examples_test.TestExampleVerifyString.received.txt
-	// It will be compared against the examples_test.TestExampleVerifyString.approved.txt file
+	// This produced the file examples_test.ExampleVerifyString.received.txt
+	// It will be compared against the examples_test.ExampleVerifyString.approved.txt file
 	// and contains the text:
 	//
 	// Hello World!
@@ -25,10 +25,10 @@ func ExampleVerifyAllCombinationsFor2() {
 	}
 
 	approvaltests.VerifyAllCombinationsFor2(t, "substring", functionToTest, letters, numbers)
-	printFileContent("examples_test.TestExampleVerifyAllCombinationsFor2.received.txt")
+	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2.received.txt")
 	// Output:
-	// This produced the file examples_test.TestExampleVerifyAllCombinationsFor2.received.txt
-	// It will be compared against the examples_test.TestExampleVerifyAllCombinationsFor2.approved.txt file
+	// This produced the file examples_test.ExampleVerifyAllCombinationsFor2.received.txt
+	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2.approved.txt file
 	// and contains the text:
 	//
 	// substring
@@ -56,14 +56,14 @@ func ExampleVerifyAllCombinationsFor2WithSkip() {
 	}
 
 	approvaltests.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
-	printFileContent("examples_test.TestExampleVerifyAllCombinationsFor2WithSkip.received.txt")
+	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2WithSkip.received.txt")
 	// Output:
-	// 	This produced the file examples_test.TestExampleVerifyAllCombinationsFor2WithSkip.received.txt
-	// It will be compared against the examples_test.TestExampleVerifyAllCombinationsFor2WithSkip.approved.txt file
+	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2WithSkip.received.txt
+	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2WithSkip.approved.txt file
 	// and contains the text:
-
+	//
 	// combineWords
-
+	//
 	// [stack,trickle] => stacktrickle
 	// [fold,overflow] => foldoverflow
 	// [fold,trickle] => foldtrickle

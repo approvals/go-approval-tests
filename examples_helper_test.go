@@ -22,12 +22,13 @@ func (f *failing) Fail() {}
 
 // documentation helper just for the example
 func printFileContent(path string) {
-	content, err := ioutil.ReadFile(path)
+	approvedPath := strings.Replace(path, ".received.", ".approved.", 1)
+	content, err := ioutil.ReadFile(approvedPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("This produced the file %s\n", path)
-	fmt.Printf("It will be compared against the %s file\n", strings.Replace(path, ".received.", ".approved.", 1))
+	fmt.Printf("It will be compared against the %s file\n", approvedPath)
 	fmt.Println("and contains the text:")
 	fmt.Println()
 	// sad sad hack because go examples trim blank middle lines
