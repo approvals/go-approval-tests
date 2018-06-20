@@ -11,13 +11,13 @@ ApprovalTests for [go](https://golang.org/)
 
 ApprovalTests allows for easy testing of larger objects, strings and anything else that can be saved to a file (images, sounds, csv, etc...)
 
-#Examples
-##In Project
+# Examples
+## In Project
 Note: ApprovalTests uses approvaltests to test itself. Therefore there are many examples in the code itself.
 
 - [approvals_test.go](approvals_test.go)
 
-##JSON
+## JSON
 VerifyJSONBytes - Simple Formatting for easy comparison. Also uses the .json file extension
 
 ```go
@@ -37,7 +37,7 @@ Matches file: approvals_test.TestVerifyJSON.received.json
 }
 ```
 
-##Reporters
+## Reporters
 ApprovalTests becomes _much_ more powerful with reporters. Reporters launch programs on failure to help you understand, fix and approve results.
 
 You can make your own easily, [here's an example](reporters/beyond_compare.go)
