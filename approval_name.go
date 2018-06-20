@@ -61,7 +61,7 @@ func getApprovalName() (*approvalName, error) {
 }
 
 func isTestRunner(f *runtime.Func) bool {
-	return f != nil && f.Name() == "testing.tRunner"
+	return f != nil && f.Name() == "testing.tRunner" || f.Name() == "testing.runExample"
 }
 
 func (s *approvalName) compare(approvalFile, receivedFile string, reader io.Reader) error {

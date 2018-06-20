@@ -1,0 +1,6 @@
+combineWords
+
+
+[stack,trickle] => stacktrickle
+[fold,overflow] => foldoverflow
+[fold,trickle] => foldtrickle

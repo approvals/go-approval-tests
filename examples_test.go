@@ -1,48 +1,70 @@
 package approvaltests_test
 
 import (
-	"fmt"
-	"io/ioutil"
-	"log"
-	"strings"
-
 	"github.com/approvals/go-approval-tests"
 )
 
 func ExampleVerifyString() {
 	approvaltests.VerifyString(t, "Hello World!")
-	printFileContent("examples_test.TestExampleVerifyString.received.txt")
+	printFileContent("examples_test.ExampleVerifyString.received.txt")
 
 	// Output:
-	// This produced the file examples_test.TestExampleVerifyString.received.txt
-	// It will be compared against the examples_test.TestExampleVerifyString.approved.txt file
+	// This produced the file examples_test.ExampleVerifyString.received.txt
+	// It will be compared against the examples_test.ExampleVerifyString.approved.txt file
 	// and contains the text:
 	//
 	// Hello World!
 }
 
-var (
-	// this is a mock testing.T for documentation purposes
-	t = &failing{}
-)
+func ExampleVerifyAllCombinationsFor2() {
+	letters := []string{"aaaaa", "bbbbb", "ccccc"}
+	numbers := []int{2, 3}
 
-// failing is a mock struct that is only there for documentation conveniance,
-// showing the developer how they would be passing a *testing.T pointer in their
-// normal tests.
-type failing struct{}
-
-// Fail implements approvaltest.Fail
-func (f *failing) Fail() {}
-
-// documentation helper just for the example
-func printFileContent(path string) {
-	content, err := ioutil.ReadFile(path)
-	if err != nil {
-		log.Fatal(err)
+	functionToTest := func(text interface{}, length interface{}) string {
+		return text.(string)[:length.(int)]
 	}
-	fmt.Printf("This produced the file %s\n", path)
-	fmt.Printf("It will be compared against the %s file\n", strings.Replace(path, ".received.", ".approved.", 1))
-	fmt.Println("and contains the text:")
-	fmt.Println()
-	fmt.Println(string(content))
+
+	approvaltests.VerifyAllCombinationsFor2(t, "substring", functionToTest, letters, numbers)
+	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2.received.txt")
+	// Output:
+	// This produced the file examples_test.ExampleVerifyAllCombinationsFor2.received.txt
+	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2.approved.txt file
+	// and contains the text:
+	//
+	// substring
+	//
+	//
+	// [aaaaa,2] => aa
+	// [aaaaa,3] => aaa
+	// [bbbbb,2] => bb
+	// [bbbbb,3] => bbb
+	// [ccccc,2] => cc
+	// [ccccc,3] => ccc
+}
+
+func ExampleVerifyAllCombinationsFor2WithSkip() {
+	words := []string{"stack", "fold"}
+	otherWords := []string{"overflow", "trickle"}
+
+	functionToTest := func(firstWord interface{}, secondWord interface{}) string {
+		first := firstWord.(string)
+		second := secondWord.(string)
+		if first+second == "stackoverflow" {
+			return approvaltests.SkipThisCombination
+		}
+		return first + second
+	}
+
+	approvaltests.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
+	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2WithSkip.received.txt")
+	// Output:
+	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2WithSkip.received.txt
+	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2WithSkip.approved.txt file
+	// and contains the text:
+	//
+	// combineWords
+	//
+	// [stack,trickle] => stacktrickle
+	// [fold,overflow] => foldoverflow
+	// [fold,trickle] => foldtrickle
 }

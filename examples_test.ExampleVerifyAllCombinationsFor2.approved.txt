@@ -1,0 +1,9 @@
+substring
+
+
+[aaaaa,2] => aa
+[aaaaa,3] => aaa
+[bbbbb,2] => bb
+[bbbbb,3] => bbb
+[ccccc,2] => cc
+[ccccc,3] => ccc
