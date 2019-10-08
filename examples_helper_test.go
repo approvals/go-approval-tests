@@ -12,7 +12,7 @@ var (
 	t = &failing{}
 )
 
-// failing is a mock struct that is only there for documentation conveniance,
+// failing is a mock struct that is only there for documentation convenience,
 // showing the developer how they would be passing a *testing.T pointer in their
 // normal tests.
 type failing struct{}
