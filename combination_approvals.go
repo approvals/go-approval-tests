@@ -2,9 +2,8 @@ package approvaltests
 
 import (
 	"fmt"
-	"strings"
-
 	"reflect"
+	"strings"
 )
 
 type emptyType struct{}
