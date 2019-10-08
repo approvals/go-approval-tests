@@ -65,7 +65,6 @@ func VerifyAllCombinationsFor3(
 	header string,
 	transform func(p1, p2, p3 interface{}) string,
 	collection1, collection2, collection3 interface{}) error {
-
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3)
 	}
@@ -88,7 +87,6 @@ func VerifyAllCombinationsFor4(
 	header string,
 	transform func(p1, p2, p3, p4 interface{}) string,
 	collection1, collection2, collection3, collection4 interface{}) error {
-
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4)
 	}
@@ -111,7 +109,6 @@ func VerifyAllCombinationsFor5(
 	header string,
 	transform func(p1, p2, p3, p4, p5 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5 interface{}) error {
-
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5)
 	}
@@ -134,7 +131,6 @@ func VerifyAllCombinationsFor6(
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5, collection6 interface{}) error {
-
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5, p6)
 	}
@@ -157,7 +153,6 @@ func VerifyAllCombinationsFor7(
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6, p7 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5, collection6, collection7 interface{}) error {
-
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5, p6, p7)
 	}
@@ -180,7 +175,6 @@ func VerifyAllCombinationsFor8(
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6, p7, p8 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5, collection6, collection7, collection8 interface{}) error {
-
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5, p6, p7, p8)
 	}
@@ -198,7 +192,7 @@ func VerifyAllCombinationsFor8(
 }
 
 // VerifyAllCombinationsFor9 is for combinations of 9.
-func VerifyAllCombinationsFor9( // nolint: funlen
+func VerifyAllCombinationsFor9( // nolint: funlen, gocognit
 	t Failable,
 	header string,
 	transform func(a, b, c, d, e, f, g, h, i interface{}) string,
@@ -211,13 +205,11 @@ func VerifyAllCombinationsFor9( // nolint: funlen
 	collection7,
 	collection8,
 	collection9 interface{}) error {
-
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)
 	}
 
 	var mapped []string
-
 	slice1 := reflect.ValueOf(collection1)
 	slice2 := reflect.ValueOf(collection2)
 	slice3 := reflect.ValueOf(collection3)
