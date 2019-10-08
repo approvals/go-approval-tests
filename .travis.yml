@@ -10,7 +10,7 @@ install:
 
 script:
   - test -z "$(go fmt -s -l -w ./... | tee /dev/stderr)"
-  - $(go env GOPATH)/bin/golangci-lint --run
+  - $(go env GOPATH)/bin/golangci-lint run
   - go build -v ./...
   - go test ./... -race -coverprofile=coverage.txt -covermode=atomic
 
