@@ -1,7 +1,7 @@
 package approvaltests_test
 
 import (
-	"github.com/approvals/go-approval-tests"
+	"github.com/approvals/go-approval-tests" // nolint: goimports
 )
 
 func ExampleVerifyString() {
@@ -42,7 +42,7 @@ func ExampleVerifyAllCombinationsFor2() {
 	// [ccccc,3] => ccc
 }
 
-func ExampleVerifyAllCombinationsFor2WithSkip() {
+func ExampleVerifyAllCombinationsFor2_withSkip() {
 	words := []string{"stack", "fold"}
 	otherWords := []string{"overflow", "trickle"}
 
