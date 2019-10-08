@@ -10,6 +10,7 @@ linters:
     - gosec
     - errcheck
     - gochecknoglobals
+    - wsl
 
 issues:
   exclude-use-default: false # disable filtering of defaults for better zero-issue policy
