@@ -93,7 +93,7 @@ func (s *approvalName) compare(approvalFile, receivedFile string, reader io.Read
 	approved = s.normalizeLineEndings(approved)
 
 	// The two sides are identical, nothing more to do.
-	if bytes.Compare(received, approved) == 0 {
+	if bytes.Equal(received, approved) {
 		return nil
 	}
 
