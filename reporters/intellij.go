@@ -14,9 +14,9 @@ func (s *intellij) Report(approved, received string) bool {
 
 	var programName string
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		programName = "C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2016/bin/idea.exe"
-	case "darwin":
+	case goosDarwin:
 		programName = "/Applications/IntelliJ IDEA.app/Contents/MacOS/idea"
 	}
 

@@ -13,9 +13,9 @@ func (s *gogland) Report(approved, received string) bool {
 	xs := []string{"diff", received, approved}
 	var programName string
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		programName = "unknown"
-	case "darwin":
+	case goosDarwin:
 		programName = "/Applications/Gogland 1.0 EAP.app/Contents/MacOS/gogland"
 	}
 

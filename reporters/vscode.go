@@ -15,9 +15,9 @@ func (s *vsCode) Report(approved, received string) bool {
 	xs := []string{"-d", received, approved}
 	var programName string
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		programName = "C:/Program Files/Microsoft VS Code/Code.exe"
-	case "darwin":
+	case goosDarwin:
 		programName = "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
 	}
 
