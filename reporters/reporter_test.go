@@ -1,10 +1,9 @@
 package reporters
 
 import (
+	"github.com/chrisbbe/go-approval-tests/utils"
 	"os"
 	"testing"
-
-	"github.com/approvals/go-approval-tests/utils"
 )
 
 type testReporter struct {

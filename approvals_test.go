@@ -3,11 +3,10 @@ package approvaltests
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/chrisbbe/go-approval-tests/reporters"
 	"os"
 	"strings"
 	"testing"
-
-	"github.com/approvals/go-approval-tests/reporters"
 )
 
 func TestMain(m *testing.M) {

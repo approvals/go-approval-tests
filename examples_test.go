@@ -1,8 +1,6 @@
 package approvaltests_test
 
-import (
-	"github.com/approvals/go-approval-tests"
-)
+import approvaltests "github.com/chrisbbe/go-approval-tests"
 
 func ExampleVerifyString() {
 	approvaltests.VerifyString(t, "Hello World!")

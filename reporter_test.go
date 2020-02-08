@@ -1,11 +1,10 @@
 package approvaltests
 
 import (
+	"github.com/chrisbbe/go-approval-tests/reporters"
+	"github.com/chrisbbe/go-approval-tests/utils"
 	"os"
 	"testing"
-
-	"github.com/approvals/go-approval-tests/reporters"
-	"github.com/approvals/go-approval-tests/utils"
 )
 
 type testFailable struct{}

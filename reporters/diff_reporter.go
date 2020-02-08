@@ -1,9 +1,8 @@
 package reporters
 
 import (
+	"github.com/chrisbbe/go-approval-tests/utils"
 	"os/exec"
-
-	"github.com/approvals/go-approval-tests/utils"
 )
 
 // NewFrontLoadedReporter creates the default front loaded reporter.

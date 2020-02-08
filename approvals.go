@@ -4,15 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/chrisbbe/go-approval-tests/reporters"
+	"github.com/chrisbbe/go-approval-tests/utils"
 	"io"
 	"os"
 	"strings"
 
 	"encoding/xml"
 	"reflect"
-
-	"github.com/approvals/go-approval-tests/reporters"
-	"github.com/approvals/go-approval-tests/utils"
 )
 
 var (
