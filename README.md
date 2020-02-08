@@ -2,10 +2,10 @@
 
 ApprovalTests for [go](https://golang.org/)
 
-[![GoDoc](https://godoc.org/github.com/approvals/go-approval-tests?status.svg)](https://godoc.org/github.com/approvals/go-approval-tests)
+[![GoDoc](https://godoc.org/github.com/chrisbbe/go-approval-tests?status.svg)](https://godoc.org/github.com/chrisbbe/go-approval-tests)
 [![Go Report Card](https://goreportcard.com/badge/github.com/chrisbbe/go-approval-tests)](https://goreportcard.com/report/github.com/chrisbbe/go-approval-tests)
-[![Coverage Status](https://codecov.io/gh/approvals/go-approval-tests/graph/badge.svg)](https://codecov.io/gh/approvals/go-approval-tests)
-[![Build Status](https://travis-ci.org/approvals/go-approval-tests.svg)](https://travis-ci.org/approvals/go-approval-tests)
+[![codecov](https://codecov.io/gh/chrisbbe/go-approval-tests/branch/master/graph/badge.svg)](https://codecov.io/gh/chrisbbe/go-approval-tests)
+[![Build Status](https://travis-ci.org/chrisbbe/go-approval-tests.svg?branch=master)](https://travis-ci.org/chrisbbe/go-approval-tests)
 
 # Golden master Verification Library
 
