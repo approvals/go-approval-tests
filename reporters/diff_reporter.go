@@ -22,7 +22,7 @@ func NewDiffReporter() *Reporter {
 		NewIntelliJReporter(),
 		NewFileMergeReporter(),
 		NewVSCodeReporter(),
-		NewGoGlandReporter(),
+		NewGoLandReporter(),
 		NewPrintSupportedDiffProgramsReporter(),
 		NewQuietReporter(),
 	)
