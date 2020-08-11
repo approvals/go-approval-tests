@@ -1,6 +1,8 @@
 package reporters
 
 import (
+	"fmt"
+	"os"
 	"runtime"
 )
 
@@ -16,7 +18,9 @@ func (s *vsCode) Report(approved, received string) bool {
 	var programName string
 	switch runtime.GOOS {
 	case goosWindows:
-		programName = "C:/Program Files/Microsoft VS Code/Code.exe"
+		if username, ok := os.LookupEnv("USERNAME"); ok {
+			programName = fmt.Sprintf("C:/Users/%s/AppData/Local/Programs/Microsoft VS Code/Code.exe", username)
+		}
 	case goosDarwin:
 		programName = "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
 	}
