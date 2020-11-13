@@ -18,12 +18,12 @@ var (
 
 // VerifyAllCombinationsFor1 Example:
 //   VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"})
-func VerifyAllCombinationsFor1(t Failable, header string, transform func(interface{}) string, collection1 interface{}) error {
+func VerifyAllCombinationsFor1(t Failable, header string, transform func(interface{}) string, collection1 interface{}) {
 	transform2 := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, transform2, collection1,
+	VerifyAllCombinationsFor9(t, header, transform2, collection1,
 		emptyCollection,
 		emptyCollection,
 		emptyCollection,
@@ -43,12 +43,12 @@ func VerifyAllCombinationsFor2(
 	t Failable,
 	header string,
 	transform func(p1, p2 interface{}) string,
-	collection1, collection2 interface{}) error {
+	collection1, collection2 interface{}) {
 	transform2 := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, transform2, collection1,
+	VerifyAllCombinationsFor9(t, header, transform2, collection1,
 		collection2,
 		emptyCollection,
 		emptyCollection,
@@ -64,12 +64,12 @@ func VerifyAllCombinationsFor3(
 	t Failable,
 	header string,
 	transform func(p1, p2, p3 interface{}) string,
-	collection1, collection2, collection3 interface{}) error {
+	collection1, collection2, collection3 interface{}) {
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, kerning,
+	VerifyAllCombinationsFor9(t, header, kerning,
 		collection1,
 		collection2,
 		collection3,
@@ -86,12 +86,12 @@ func VerifyAllCombinationsFor4(
 	t Failable,
 	header string,
 	transform func(p1, p2, p3, p4 interface{}) string,
-	collection1, collection2, collection3, collection4 interface{}) error {
+	collection1, collection2, collection3, collection4 interface{}) {
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, kerning,
+	VerifyAllCombinationsFor9(t, header, kerning,
 		collection1,
 		collection2,
 		collection3,
@@ -108,12 +108,12 @@ func VerifyAllCombinationsFor5(
 	t Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5 interface{}) string,
-	collection1, collection2, collection3, collection4, collection5 interface{}) error {
+	collection1, collection2, collection3, collection4, collection5 interface{}) {
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, kerning,
+	VerifyAllCombinationsFor9(t, header, kerning,
 		collection1,
 		collection2,
 		collection3,
@@ -130,12 +130,12 @@ func VerifyAllCombinationsFor6(
 	t Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6 interface{}) string,
-	collection1, collection2, collection3, collection4, collection5, collection6 interface{}) error {
+	collection1, collection2, collection3, collection4, collection5, collection6 interface{}) {
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5, p6)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, kerning,
+	VerifyAllCombinationsFor9(t, header, kerning,
 		collection1,
 		collection2,
 		collection3,
@@ -152,12 +152,12 @@ func VerifyAllCombinationsFor7(
 	t Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6, p7 interface{}) string,
-	collection1, collection2, collection3, collection4, collection5, collection6, collection7 interface{}) error {
+	collection1, collection2, collection3, collection4, collection5, collection6, collection7 interface{}) {
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5, p6, p7)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, kerning,
+	VerifyAllCombinationsFor9(t, header, kerning,
 		collection1,
 		collection2,
 		collection3,
@@ -174,12 +174,12 @@ func VerifyAllCombinationsFor8(
 	t Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6, p7, p8 interface{}) string,
-	collection1, collection2, collection3, collection4, collection5, collection6, collection7, collection8 interface{}) error {
+	collection1, collection2, collection3, collection4, collection5, collection6, collection7, collection8 interface{}) {
 	kerning := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1, p2, p3, p4, p5, p6, p7, p8)
 	}
 
-	return VerifyAllCombinationsFor9(t, header, kerning,
+	VerifyAllCombinationsFor9(t, header, kerning,
 		collection1,
 		collection2,
 		collection3,
@@ -204,7 +204,7 @@ func VerifyAllCombinationsFor9( // nolint: funlen, gocognit
 	collection6,
 	collection7,
 	collection8,
-	collection9 interface{}) error {
+	collection9 interface{}) {
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)
 	}
@@ -255,7 +255,7 @@ func VerifyAllCombinationsFor9( // nolint: funlen, gocognit
 	}
 
 	outputText := header + strings.Join(mapped, "\n")
-	return VerifyString(t, outputText)
+	VerifyString(t, outputText)
 }
 
 func getParameterText(args ...interface{}) string {

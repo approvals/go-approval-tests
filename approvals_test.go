@@ -11,14 +11,14 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	r := UseReporter(reporters.NewBeyondCompareReporter())
+	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
 
 	os.Exit(m.Run())
 }
 
 func TestVerifyStringApproval(t *testing.T) {
-	r := UseReporter(reporters.NewIntelliJReporter())
+	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
 
 	VerifyString(t, "Hello World!")
@@ -44,13 +44,13 @@ func TestVerifyXMLStruct(t *testing.T) {
 }
 
 func TestVerifyBadXMLStruct(t *testing.T) {
-	xml := struct {
+	xmlContent := struct {
 		Title string
 	}{
 		Title: "Hello World!",
 	}
 
-	VerifyXMLStruct(t, xml)
+	VerifyXMLStruct(t, xmlContent)
 }
 
 func TestVerifyXMLBytes(t *testing.T) {

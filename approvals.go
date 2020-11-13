@@ -26,10 +26,11 @@ type Failable interface {
 
 // VerifyWithExtension Example:
 //   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
-func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error {
+func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
 	namer, err := getApprovalName()
 	if err != nil {
-		return err
+		t.Fail()
+		return
 	}
 
 	reporter := getReporter()
@@ -38,44 +39,42 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) error 
 		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
 		t.Fail()
 	} else {
-		os.Remove(namer.getReceivedFile(extWithDot))
+		_ = os.Remove(namer.getReceivedFile(extWithDot))
 	}
-
-	return err
 }
 
 // Verify Example:
 //   Verify(t, strings.NewReader("Hello"))
-func Verify(t Failable, reader io.Reader) error {
-	return VerifyWithExtension(t, reader, ".txt")
+func Verify(t Failable, reader io.Reader) {
+	VerifyWithExtension(t, reader, ".txt")
 }
 
 // VerifyString stores the passed string into the received file and confirms
 // that it matches the approved local file. On failure, it will launch a reporter.
-func VerifyString(t Failable, s string) error {
+func VerifyString(t Failable, s string) {
 	reader := strings.NewReader(s)
-	return Verify(t, reader)
+	Verify(t, reader)
 }
 
 // VerifyXMLStruct Example:
 //   VerifyXMLStruct(t, xml)
-func VerifyXMLStruct(t Failable, obj interface{}) error {
-	xmlb, err := xml.MarshalIndent(obj, "", "  ")
+func VerifyXMLStruct(t Failable, obj interface{}) {
+	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		tip := ""
 		if reflect.TypeOf(obj).Name() == "" {
 			tip = "when using anonymous types be sure to include\n  XMLName xml.Name `xml:\"Your_Name_Here\"`\n"
 		}
 		message := fmt.Sprintf("error while pretty printing XML\n%verror:\n  %v\nXML:\n  %v\n", tip, err, obj)
-		return VerifyWithExtension(t, strings.NewReader(message), ".xml")
+		VerifyWithExtension(t, strings.NewReader(message), ".xml")
+	} else {
+		VerifyWithExtension(t, bytes.NewReader(xmlContent), ".xml")
 	}
-
-	return VerifyWithExtension(t, bytes.NewReader(xmlb), ".xml")
 }
 
 // VerifyXMLBytes Example:
 //   VerifyXMLBytes(t, []byte("<Test/>"))
-func VerifyXMLBytes(t Failable, bs []byte) error {
+func VerifyXMLBytes(t Failable, bs []byte) {
 	type node struct {
 		Attr     []xml.Attr
 		XMLName  xml.Name
@@ -87,60 +86,60 @@ func VerifyXMLBytes(t Failable, bs []byte) error {
 	err := xml.Unmarshal(bs, &x)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing XML\nerror:\n  %s\nXML:\n  %s\n", err, string(bs))
-		return VerifyWithExtension(t, strings.NewReader(message), ".xml")
+		VerifyWithExtension(t, strings.NewReader(message), ".xml")
+	} else {
+		VerifyXMLStruct(t, x)
 	}
-
-	return VerifyXMLStruct(t, x)
 }
 
 // VerifyJSONStruct Example:
 //   VerifyJSONStruct(t, json)
-func VerifyJSONStruct(t Failable, obj interface{}) error {
+func VerifyJSONStruct(t Failable, obj interface{}) {
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
-		return VerifyWithExtension(t, strings.NewReader(message), ".json")
+		VerifyWithExtension(t, strings.NewReader(message), ".json")
+	} else {
+		VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")
 	}
-
-	return VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")
 }
 
 // VerifyJSONBytes Example:
 //   VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
-func VerifyJSONBytes(t Failable, bs []byte) error {
+func VerifyJSONBytes(t Failable, bs []byte) {
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
-		return VerifyWithExtension(t, strings.NewReader(message), ".json")
+		VerifyWithExtension(t, strings.NewReader(message), ".json")
+	} else {
+		VerifyJSONStruct(t, obj)
 	}
-
-	return VerifyJSONStruct(t, obj)
 }
 
 // VerifyMap Example:
 //   VerifyMap(t, map[string][string] { "dog": "bark" })
-func VerifyMap(t Failable, m interface{}) error {
+func VerifyMap(t Failable, m interface{}) {
 	outputText := utils.PrintMap(m)
-	return VerifyString(t, outputText)
+	VerifyString(t, outputText)
 }
 
 // VerifyArray Example:
 //   VerifyArray(t, []string{"dog", "cat"})
-func VerifyArray(t Failable, array interface{}) error {
+func VerifyArray(t Failable, array interface{}) {
 	outputText := utils.PrintArray(array)
-	return VerifyString(t, outputText)
+	VerifyString(t, outputText)
 }
 
 // VerifyAll Example:
 //   VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
-func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string) error {
+func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string) {
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)
 	}
 
 	outputText := header + strings.Join(utils.MapToString(collection, transform), "\n")
-	return VerifyString(t, outputText)
+	VerifyString(t, outputText)
 }
 
 type reporterCloser struct {
