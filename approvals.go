@@ -3,13 +3,12 @@ package approvaltests
 import (
 	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"os"
-	"strings"
-
-	"encoding/xml"
 	"reflect"
+	"strings"
 
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"

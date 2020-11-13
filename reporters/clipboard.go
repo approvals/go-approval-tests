@@ -21,7 +21,7 @@ func (s *clipboard) Report(approved, received string) bool {
 
 func copyToClipboard(move string) bool {
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		return copyToWindowsClipboard(move)
 	default:
 		return copyToDarwinClipboard(move)
@@ -35,7 +35,7 @@ func getMoveCommandText(approved, received string) string {
 	var move string
 
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		move = fmt.Sprintf("move /Y \"%s\" \"%s\"", receivedFull, approvedFull)
 	default:
 		move = fmt.Sprintf("mv %s %s", receivedFull, approvedFull)

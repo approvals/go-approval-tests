@@ -8,10 +8,7 @@ import (
 // DoesFileExist checks if a file exists.
 func DoesFileExist(fileName string) bool {
 	_, err := os.Stat(fileName)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return true
+	return !os.IsNotExist(err)
 }
 
 // EnsureExists creates if the file does not already exist.

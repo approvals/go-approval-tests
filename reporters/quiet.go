@@ -20,7 +20,6 @@ func (s *quiet) Report(approved, received string) bool {
 
 	if utils.DoesFileExist(approved) {
 		fmt.Printf("approval files did not match\napproved: %v\nreceived: %v\n", approvedFull, receivedFull)
-
 	} else {
 		fmt.Printf("result never approved\napproved: %v\nreceived: %v\n", approvedFull, receivedFull)
 	}

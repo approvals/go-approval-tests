@@ -16,7 +16,7 @@ func (s *fileLauncher) Report(approved, received string) bool {
 	var cmd *exec.Cmd
 
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		cmd = exec.Command("cmd", "/C", "start", "Needed Title", received, "/B")
 	default:
 		cmd = exec.Command("open", received)

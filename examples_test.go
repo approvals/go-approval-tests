@@ -1,7 +1,7 @@
 package approvaltests_test
 
 import (
-	"github.com/approvals/go-approval-tests"
+	"github.com/approvals/go-approval-tests" // nolint: goimports
 )
 
 func ExampleVerifyString() {
@@ -42,7 +42,7 @@ func ExampleVerifyAllCombinationsFor2() {
 	// [ccccc,3] => ccc
 }
 
-func ExampleVerifyAllCombinationsFor2WithSkip() {
+func ExampleVerifyAllCombinationsFor2_withSkip() {
 	words := []string{"stack", "fold"}
 	otherWords := []string{"overflow", "trickle"}
 
@@ -56,10 +56,10 @@ func ExampleVerifyAllCombinationsFor2WithSkip() {
 	}
 
 	approvaltests.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
-	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2WithSkip.received.txt")
+	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt")
 	// Output:
-	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2WithSkip.received.txt
-	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2WithSkip.approved.txt file
+	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt
+	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2_withSkip.approved.txt file
 	// and contains the text:
 	//
 	// combineWords

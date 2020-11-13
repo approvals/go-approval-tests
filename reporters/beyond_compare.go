@@ -15,9 +15,9 @@ func (s *beyondCompare) Report(approved, received string) bool {
 	xs := []string{received, approved}
 	var programName string
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		programName = "C:/Program Files/Beyond Compare 4/BComp.exe"
-	case "darwin":
+	case goosDarwin:
 		programName = "/Applications/Beyond Compare.app/Contents/MacOS/bcomp"
 	}
 

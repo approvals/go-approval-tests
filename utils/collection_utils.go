@@ -15,7 +15,6 @@ func PrintMap(m interface{}) string {
 	if v.Kind() != reflect.Map {
 		outputText = fmt.Sprintf("error while printing map\nreceived a %T\n  %s\n", m, m)
 	} else {
-
 		keys := v.MapKeys()
 		var xs []string
 

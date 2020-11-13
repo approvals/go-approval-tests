@@ -17,11 +17,11 @@ func (s *vsCode) Report(approved, received string) bool {
 	xs := []string{"-d", received, approved}
 	var programName string
 	switch runtime.GOOS {
-	case "windows":
+	case goosWindows:
 		if username, ok := os.LookupEnv("USERNAME"); ok {
 			programName = fmt.Sprintf("C:/Users/%s/AppData/Local/Programs/Microsoft VS Code/Code.exe", username)
 		}
-	case "darwin":
+	case goosDarwin:
 		programName = "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
 	}
 

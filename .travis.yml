@@ -3,14 +3,14 @@ sudo: false
 language: go
 
 go:
-  - '1.10.x'
+  - '1.12.x'
 
 install:
-  - go get -u github.com/golang/lint/golint
+  - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.20.0
 
 script:
   - test -z "$(go fmt -s -l -w ./... | tee /dev/stderr)"
-  - golint -set_exit_status ./...
+  - $(go env GOPATH)/bin/golangci-lint run
   - go build -v ./...
   - go test ./... -race -coverprofile=coverage.txt -covermode=atomic
 
