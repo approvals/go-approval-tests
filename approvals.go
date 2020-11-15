@@ -22,6 +22,8 @@ var (
 // Failable is an interface wrapper around testing.T
 type Failable interface {
 	Fail()
+	Fatal(args ...interface{})
+	Fatalf(format string, args ...interface{})
 }
 
 // VerifyWithExtension Example:
@@ -37,7 +39,7 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
 	err = namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
 	if err != nil {
 		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
-		t.Fail()
+		t.Fatal("Failed Approval: received does not match approved.")
 	} else {
 		_ = os.Remove(namer.getReceivedFile(extWithDot))
 	}
