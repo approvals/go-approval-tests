@@ -13,7 +13,7 @@ ApprovalTests allows for easy testing of larger objects, strings and anything el
 
 # Examples
 ## In Project
-Note: ApprovalTests uses approvaltests to test itself. Therefore there are many examples in the code itself.
+Note: ApprovalTests uses approvals to test itself. Therefore there are many examples in the code itself.
 
 - [approvals_test.go](approvals_test.go)
 

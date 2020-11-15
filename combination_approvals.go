@@ -1,4 +1,4 @@
-package approvaltests
+package approvals
 
 import (
 	"fmt"
