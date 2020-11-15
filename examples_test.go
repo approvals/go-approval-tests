@@ -1,11 +1,11 @@
 package approvals_test
 
 import (
-	approvaltests "github.com/approvals/go-approval-tests" // nolint: goimports
+	"github.com/approvals/go-approval-tests" // nolint: goimports
 )
 
 func ExampleVerifyString() {
-	approvaltests.VerifyString(t, "Hello World!")
+	approvals.VerifyString(t, "Hello World!")
 	printFileContent("examples_test.ExampleVerifyString.received.txt")
 
 	// Output:
@@ -24,7 +24,7 @@ func ExampleVerifyAllCombinationsFor2() {
 		return text.(string)[:length.(int)]
 	}
 
-	approvaltests.VerifyAllCombinationsFor2(t, "substring", functionToTest, letters, numbers)
+	approvals.VerifyAllCombinationsFor2(t, "substring", functionToTest, letters, numbers)
 	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2.received.txt")
 	// Output:
 	// This produced the file examples_test.ExampleVerifyAllCombinationsFor2.received.txt
@@ -50,12 +50,12 @@ func ExampleVerifyAllCombinationsFor2_withSkip() {
 		first := firstWord.(string)
 		second := secondWord.(string)
 		if first+second == "stackoverflow" {
-			return approvaltests.SkipThisCombination
+			return approvals.SkipThisCombination
 		}
 		return first + second
 	}
 
-	approvaltests.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
+	approvals.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
 	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt")
 	// Output:
 	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt

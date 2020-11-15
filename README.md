@@ -12,6 +12,14 @@ ApprovalTests for [go](https://golang.org/)
 ApprovalTests allows for easy testing of larger objects, strings and anything else that can be saved to a file (images, sounds, csv, etc...)
 
 # Examples
+## Basic string verification
+
+```go
+func TestHelloWorld(t *testing.T) {
+	approvals.VerifyString(t, "Hello World!"))
+}
+```
+
 ## In Project
 Note: ApprovalTests uses approvals to test itself. Therefore there are many examples in the code itself.
 

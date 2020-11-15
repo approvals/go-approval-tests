@@ -8,9 +8,19 @@ import (
 	"github.com/approvals/go-approval-tests/utils"
 )
 
-type testFailable struct{}
+// TestFailable is a fake replacing testing.T
+// It implements the parts of the testing.T interface approvals uses,
+// ie the approvaltests.Failable interface
+type TestFailable struct{}
 
-func (s *testFailable) Fail() {}
+func (s *TestFailable) Fail() {}
+func (s *TestFailable) Name() string {
+	return "TestFailable"
+}
+func (s *TestFailable) Fatalf(format string, args ...interface{}) {}
+func (c *TestFailable) Fatal(args ...interface{})                 {}
+func (s *TestFailable) Log(args ...interface{})                   {}
+func (s *TestFailable) Logf(format string, args ...interface{})   {}
 
 type testReporter struct {
 	called    bool
@@ -39,7 +49,7 @@ func TestUseReporter(t *testing.T) {
 	a := newTestReporter(true)
 	r := UseReporter(reporters.Reporter(a))
 
-	f := &testFailable{}
+	f := &TestFailable{}
 
 	VerifyString(f, "foo")
 
@@ -63,7 +73,7 @@ func TestFrontLoadedReporter(t *testing.T) {
 	nextCloser := UseReporter(reporters.Reporter(next))
 	defer nextCloser.Close()
 
-	f := &testFailable{}
+	f := &TestFailable{}
 
 	VerifyString(f, "foo")
 

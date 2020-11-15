@@ -11,20 +11,32 @@ import (
 	"strings"
 )
 
-type approvalName struct {
+type ApprovalName struct {
 	name     string
 	fileName string
 }
 
-func newApprovalName(pc uintptr, f *runtime.Func) (*approvalName, error) {
-	namer := approvalName{}
+func getApprovalName(t Failable) *ApprovalName {
+	fileName, err := findFileName()
+	if err != nil {
+		t.Fatalf("approvals: could not find the test filename or approved files location")
+		return nil
+	}
 
-	namer.fileName, _ = f.FileLine(pc)
+	var name = t.Name()
+	name = strings.ReplaceAll(name, string(os.PathSeparator), ".")
+	namer := NewApprovalName(name, *fileName)
 
-	splits := strings.Split(f.Name(), ".")
-	namer.name = splits[len(splits)-1]
+	return &namer
 
-	return &namer, nil
+}
+
+func NewApprovalName(name string, fileName string) ApprovalName {
+	var namer = ApprovalName{
+		name:     name,
+		fileName: fileName,
+	}
+	return namer
 }
 
 // Walk the call stack, and try to find the test method that was executed.
@@ -32,7 +44,7 @@ func newApprovalName(pc uintptr, f *runtime.Func) (*approvalName, error) {
 // *assumed* to be common across all callers.  The test runner has a Name() of
 // 'testing.tRunner'.  The method immediately previous to this is the test
 // method.
-func getApprovalName() (*approvalName, error) {
+func findFileName() (*string, error) {
 	pc := make([]uintptr, 100)
 	count := runtime.Callers(0, pc)
 
@@ -45,20 +57,21 @@ func getApprovalName() (*approvalName, error) {
 			break
 		}
 	}
+	testMethodPtr := pc[i-1]
+	testMethod := runtime.FuncForPC(testMethodPtr)
+	var fileName, _ = testMethod.FileLine(testMethodPtr)
 
 	if i == 0 || !isTestRunner(lastFunc) {
 		return nil, fmt.Errorf("approvals: could not find the test method")
 	}
-
-	testMethod := runtime.FuncForPC(pc[i-1])
-	return newApprovalName(pc[i-1], testMethod)
+	return &fileName, nil
 }
 
 func isTestRunner(f *runtime.Func) bool {
 	return f != nil && f.Name() == "testing.tRunner" || f.Name() == "testing.runExample"
 }
 
-func (s *approvalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
+func (s *ApprovalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
 	received, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return err
@@ -94,17 +107,17 @@ func (s *approvalName) compare(approvalFile, receivedFile string, reader io.Read
 	return fmt.Errorf("failed to approved %s", s.name)
 }
 
-func (s *approvalName) normalizeLineEndings(bs []byte) []byte {
+func (s *ApprovalName) normalizeLineEndings(bs []byte) []byte {
 	return bytes.Replace(bs, []byte("\r\n"), []byte("\n"), -1)
 }
 
-func (s *approvalName) dumpReceivedTestResult(bs []byte, receivedFile string) error {
+func (s *ApprovalName) dumpReceivedTestResult(bs []byte, receivedFile string) error {
 	err := ioutil.WriteFile(receivedFile, bs, 0644)
 
 	return err
 }
 
-func (s *approvalName) getFileName(extWithDot string, suffix string) string {
+func (s *ApprovalName) getFileName(extWithDot string, suffix string) string {
 	if !strings.HasPrefix(extWithDot, ".") {
 		extWithDot = fmt.Sprintf(".%s", extWithDot)
 	}
@@ -115,10 +128,10 @@ func (s *approvalName) getFileName(extWithDot string, suffix string) string {
 	return fmt.Sprintf("%s.%s.%s%s", baseWithoutExt, s.name, suffix, extWithDot)
 }
 
-func (s *approvalName) getReceivedFile(extWithDot string) string {
+func (s *ApprovalName) getReceivedFile(extWithDot string) string {
 	return s.getFileName(extWithDot, "received")
 }
 
-func (s *approvalName) getApprovalFile(extWithDot string) string {
+func (s *ApprovalName) getApprovalFile(extWithDot string) string {
 	return s.getFileName(extWithDot, "approved")
 }

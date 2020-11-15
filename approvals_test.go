@@ -25,7 +25,32 @@ func TestVerifyStringApproval(t *testing.T) {
 }
 
 func TestReporterFromSetup(t *testing.T) {
-	VerifyString(t, "Hello World!")
+	VerifyString(t, hello("World"))
+}
+
+type ExampleTestCaseParameters struct {
+	name  string
+	value string
+}
+
+var ExampleParameterizedTestcases = []ExampleTestCaseParameters{
+	{name: "Normal", value: "Sue"},
+	{name: "Long", value: "Chandrasekhar"},
+	{name: "Short", value: "A"},
+}
+
+// hello world function that can be the system-under-test
+func hello(name string) string {
+	return fmt.Sprintf("Hello %s!", name)
+}
+
+func TestParameterizedTests(t *testing.T) {
+	t.Parallel()
+	for _, tc := range ExampleParameterizedTestcases {
+		t.Run(tc.name, func(t *testing.T) {
+			VerifyString(t, hello(tc.value))
+		})
+	}
 }
 
 func TestVerifyXMLStruct(t *testing.T) {

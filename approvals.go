@@ -24,22 +24,22 @@ type Failable interface {
 	Fail()
 	Fatal(args ...interface{})
 	Fatalf(format string, args ...interface{})
+	Name() string
+	Log(args ...interface{})
+	Logf(format string, args ...interface{})
 }
 
 // VerifyWithExtension Example:
 //   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
-	namer, err := getApprovalName()
-	if err != nil {
-		t.Fail()
-		return
-	}
+	namer := getApprovalName(t)
 
 	reporter := getReporter()
-	err = namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
+	var err = namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
 	if err != nil {
 		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
-		t.Fatal("Failed Approval: received does not match approved.")
+		t.Log("Failed Approval: received does not match approved.")
+		t.Fail()
 	} else {
 		_ = os.Remove(namer.getReceivedFile(extWithDot))
 	}

@@ -7,5 +7,5 @@
 - [ ] clean up the func VerifyAllCombinationsForX calls
 - [ ] move examples to testable examples
 - [ ] revisit documentation
-- [ ] evaluate using https://golang.org/pkg/testing/#T.Name over getApprovalName()
-- [ ] should support parallel tests
+- [x] evaluate using https://golang.org/pkg/testing/#T.Name over getApprovalName()
+- [x] should support parallel tests

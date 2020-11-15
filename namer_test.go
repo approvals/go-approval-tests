@@ -6,10 +6,7 @@ import (
 )
 
 func Test00(t *testing.T) {
-	approvalName, err := getApprovalName()
-	if err != nil {
-		t.Fatalf("%s", err)
-	}
+	approvalName := getApprovalName(t)
 
 	approvalFile := approvalName.getApprovalFile(".txt")
 	assertEndsWith(approvalFile, "namer_test.Test00.approved.txt", t)

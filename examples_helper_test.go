@@ -2,6 +2,7 @@ package approvals_test
 
 import (
 	"fmt"
+	approvals "github.com/approvals/go-approval-tests"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -9,7 +10,7 @@ import (
 
 var (
 	// this is a mock testing.T for documentation purposes
-	t = &failing{}
+	t = &approvals.TestFailable{}
 )
 
 // failing is a mock struct that is only there for documentation convenience,
