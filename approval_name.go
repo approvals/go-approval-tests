@@ -12,25 +12,19 @@ import (
 )
 
 type approvalName struct {
-	pc       uintptr
-	fullName string
 	name     string
 	fileName string
-	fileLine int
 }
 
 func newApprovalName(pc uintptr, f *runtime.Func) (*approvalName, error) {
-	namer := &approvalName{
-		pc:       pc,
-		fullName: f.Name(),
-	}
+	namer := approvalName{}
 
-	namer.fileName, namer.fileLine = f.FileLine(pc)
+	namer.fileName, _ = f.FileLine(pc)
 
-	splits := strings.Split(namer.fullName, ".")
+	splits := strings.Split(f.Name(), ".")
 	namer.name = splits[len(splits)-1]
 
-	return namer, nil
+	return &namer, nil
 }
 
 // Walk the call stack, and try to find the test method that was executed.
