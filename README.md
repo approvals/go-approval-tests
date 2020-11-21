@@ -16,7 +16,7 @@ ApprovalTests allows for easy testing of larger objects, strings and anything el
 
 ```go
 func TestHelloWorld(t *testing.T) {
-	approvals.VerifyString(t, "Hello World!"))
+	approvals.VerifyString(t, "Hello World!")
 }
 ```
 
