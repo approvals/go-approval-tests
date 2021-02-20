@@ -23,6 +23,8 @@ func (s *vsCode) Report(approved, received string) bool {
 		}
 	case goosDarwin:
 		programName = "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+	case goosLinux:
+		programName = "/usr/bin/code"
 	}
 
 	return launchProgram(programName, approved, xs...)
