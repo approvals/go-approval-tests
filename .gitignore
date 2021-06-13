@@ -5,6 +5,7 @@
 *.so
 
 .idea/
+*.iml
 
 # Folders
 _obj
