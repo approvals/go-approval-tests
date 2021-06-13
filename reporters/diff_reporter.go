@@ -8,11 +8,9 @@ import (
 
 // NewFrontLoadedReporter creates the default front loaded reporter.
 func NewFrontLoadedReporter() Reporter {
-	tmp := NewFirstWorkingReporter(
+	return NewFirstWorkingReporter(
 		NewContinuousIntegrationReporter(),
 	)
-
-	return tmp
 }
 
 // NewDiffReporter creates the default diff reporter.
