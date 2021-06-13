@@ -28,11 +28,13 @@ type Failable interface {
 	Name() string
 	Log(args ...interface{})
 	Logf(format string, args ...interface{})
+	Helper()
 }
 
 // VerifyWithExtension Example:
 //   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
+	t.Helper()
 	namer := getApprovalName(t)
 
 	reporter := getReporter()
@@ -49,12 +51,14 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
 // Verify Example:
 //   Verify(t, strings.NewReader("Hello"))
 func Verify(t Failable, reader io.Reader) {
+	t.Helper()
 	VerifyWithExtension(t, reader, ".txt")
 }
 
 // VerifyString stores the passed string into the received file and confirms
 // that it matches the approved local file. On failure, it will launch a reporter.
 func VerifyString(t Failable, s string) {
+	t.Helper()
 	reader := strings.NewReader(s)
 	Verify(t, reader)
 }
@@ -62,6 +66,7 @@ func VerifyString(t Failable, s string) {
 // VerifyXMLStruct Example:
 //   VerifyXMLStruct(t, xml)
 func VerifyXMLStruct(t Failable, obj interface{}) {
+	t.Helper()
 	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		tip := ""
@@ -78,6 +83,7 @@ func VerifyXMLStruct(t Failable, obj interface{}) {
 // VerifyXMLBytes Example:
 //   VerifyXMLBytes(t, []byte("<Test/>"))
 func VerifyXMLBytes(t Failable, bs []byte) {
+	t.Helper()
 	type node struct {
 		Attr     []xml.Attr
 		XMLName  xml.Name
@@ -98,6 +104,7 @@ func VerifyXMLBytes(t Failable, bs []byte) {
 // VerifyJSONStruct Example:
 //   VerifyJSONStruct(t, json)
 func VerifyJSONStruct(t Failable, obj interface{}) {
+	t.Helper()
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
@@ -110,6 +117,7 @@ func VerifyJSONStruct(t Failable, obj interface{}) {
 // VerifyJSONBytes Example:
 //   VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
 func VerifyJSONBytes(t Failable, bs []byte) {
+	t.Helper()
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
@@ -123,6 +131,7 @@ func VerifyJSONBytes(t Failable, bs []byte) {
 // VerifyMap Example:
 //   VerifyMap(t, map[string][string] { "dog": "bark" })
 func VerifyMap(t Failable, m interface{}) {
+	t.Helper()
 	outputText := utils.PrintMap(m)
 	VerifyString(t, outputText)
 }
@@ -130,6 +139,7 @@ func VerifyMap(t Failable, m interface{}) {
 // VerifyArray Example:
 //   VerifyArray(t, []string{"dog", "cat"})
 func VerifyArray(t Failable, array interface{}) {
+	t.Helper()
 	outputText := utils.PrintArray(array)
 	VerifyString(t, outputText)
 }
@@ -137,6 +147,7 @@ func VerifyArray(t Failable, array interface{}) {
 // VerifyAll Example:
 //   VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
 func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string) {
+	t.Helper()
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)
 	}
