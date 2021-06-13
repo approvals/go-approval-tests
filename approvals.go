@@ -157,7 +157,7 @@ func VerifyAll(t Failable, header string, collection interface{}, transform func
 }
 
 type reporterCloser struct {
-	reporter *reporters.Reporter
+	reporter reporters.Reporter
 }
 
 func (s *reporterCloser) Close() error {
@@ -166,7 +166,7 @@ func (s *reporterCloser) Close() error {
 }
 
 type frontLoadedReporterCloser struct {
-	reporter *reporters.Reporter
+	reporter reporters.Reporter
 }
 
 func (s *frontLoadedReporterCloser) Close() error {
@@ -193,7 +193,7 @@ func UseReporter(reporter reporters.Reporter) io.Closer {
 		reporter: defaultReporter,
 	}
 
-	defaultReporter = &reporter
+	defaultReporter = reporter
 	return closer
 }
 
@@ -205,14 +205,14 @@ func UseFrontLoadedReporter(reporter reporters.Reporter) io.Closer {
 		reporter: defaultFrontLoadedReporter,
 	}
 
-	defaultFrontLoadedReporter = &reporter
+	defaultFrontLoadedReporter = reporter
 	return closer
 }
 
 func getReporter() reporters.Reporter {
 	return reporters.NewFirstWorkingReporter(
-		*defaultFrontLoadedReporter,
-		*defaultReporter,
+		defaultFrontLoadedReporter,
+		defaultReporter,
 	)
 }
 

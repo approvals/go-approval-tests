@@ -7,16 +7,16 @@ import (
 )
 
 // NewFrontLoadedReporter creates the default front loaded reporter.
-func NewFrontLoadedReporter() *Reporter {
+func NewFrontLoadedReporter() Reporter {
 	tmp := NewFirstWorkingReporter(
 		NewContinuousIntegrationReporter(),
 	)
 
-	return &tmp
+	return tmp
 }
 
 // NewDiffReporter creates the default diff reporter.
-func NewDiffReporter() *Reporter {
+func NewDiffReporter() Reporter {
 	tmp := NewFirstWorkingReporter(
 		NewBeyondCompareReporter(),
 		NewIntelliJReporter(),
@@ -27,7 +27,7 @@ func NewDiffReporter() *Reporter {
 		NewQuietReporter(),
 	)
 
-	return &tmp
+	return tmp
 }
 
 func launchProgram(programName, approved string, args ...string) bool {
