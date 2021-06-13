@@ -15,7 +15,7 @@ func NewFrontLoadedReporter() Reporter {
 
 // NewDiffReporter creates the default diff reporter.
 func NewDiffReporter() Reporter {
-	tmp := NewFirstWorkingReporter(
+	return NewFirstWorkingReporter(
 		NewBeyondCompareReporter(),
 		NewIntelliJReporter(),
 		NewFileMergeReporter(),
@@ -24,8 +24,6 @@ func NewDiffReporter() Reporter {
 		NewPrintSupportedDiffProgramsReporter(),
 		NewQuietReporter(),
 	)
-
-	return tmp
 }
 
 func launchProgram(programName, approved string, args ...string) bool {
