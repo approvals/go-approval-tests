@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// ApprovalName struct.
 type ApprovalName struct {
 	name     string
 	fileName string
@@ -28,9 +29,9 @@ func getApprovalName(t Failable) *ApprovalName {
 	namer := NewApprovalName(name, *fileName)
 
 	return &namer
-
 }
 
+// NewApprovalName returns a new ApprovalName object.
 func NewApprovalName(name string, fileName string) ApprovalName {
 	var namer = ApprovalName{
 		name:     name,

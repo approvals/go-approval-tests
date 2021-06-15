@@ -21,6 +21,7 @@ func TestNamerFilename(t *testing.T) {
 
 func TestParameterizedTestNames(t *testing.T) {
 	for _, tc := range ExampleParameterizedTestcases {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			var namer = getApprovalName(t)
 			if !strings.HasSuffix(namer.name, "TestParameterizedTestNames."+tc.name) {
