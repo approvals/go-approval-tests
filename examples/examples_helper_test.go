@@ -1,4 +1,3 @@
-// nolint:unused // this is an example file
 package approvals_test
 
 import (
@@ -6,13 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
-
-	approvals "github.com/approvals/go-approval-tests"
-)
-
-var (
-	// this is a mock testing.T for documentation purposes
-	t = &approvals.TestFailable{}
 )
 
 // failing is a mock struct that is only there for documentation convenience,
@@ -20,8 +12,19 @@ var (
 // normal tests.
 type failing struct{}
 
-// Fail implements approvaltest.Fail
-func (f *failing) Fail() {}
+func (s *failing) Fail() {}
+func (s *failing) Name() string {
+	return "TestFailable"
+}
+func (s *failing) Fatalf(format string, args ...interface{}) {}
+func (c *failing) Fatal(args ...interface{})                 {}
+func (s *failing) Log(args ...interface{})                   {}
+func (s *failing) Logf(format string, args ...interface{})   {}
+
+var (
+	// nolint:unused // this is a mock testing.T for documentation purposes
+	f = &failing{}
+)
 
 // documentation helper just for the example
 func printFileContent(path string) {

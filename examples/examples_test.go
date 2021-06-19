@@ -1,22 +1,24 @@
 package approvals_test
 
 import (
-	"github.com/approvals/go-approval-tests" // nolint: goimports
+	"testing"
+
+	approvals "github.com/approvals/go-approval-tests"
 )
 
-func ExampleVerifyString() {
+func TestExampleVerifyString(t *testing.T) {
 	approvals.VerifyString(t, "Hello World!")
-	printFileContent("examples_test.ExampleVerifyString.received.txt")
+	printFileContent("examples_test.TestExampleVerifyString.received.txt")
 
 	// Output:
-	// This produced the file examples_test.ExampleVerifyString.received.txt
+	// This produced the file examples_test.TestExampleVerifyString.received.txt
 	// It will be compared against the examples_test.ExampleVerifyString.approved.txt file
 	// and contains the text:
 	//
 	// Hello World!
 }
 
-func ExampleVerifyAllCombinationsFor2() {
+func TestExampleVerifyAllCombinationsFor2(t *testing.T) {
 	letters := []string{"aaaaa", "bbbbb", "ccccc"}
 	numbers := []int{2, 3}
 
@@ -25,9 +27,9 @@ func ExampleVerifyAllCombinationsFor2() {
 	}
 
 	approvals.VerifyAllCombinationsFor2(t, "substring", functionToTest, letters, numbers)
-	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2.received.txt")
+	printFileContent("examples_test.TestExampleVerifyAllCombinationsFor2.received.txt")
 	// Output:
-	// This produced the file examples_test.ExampleVerifyAllCombinationsFor2.received.txt
+	// This produced the file examples_test.TestExampleVerifyAllCombinationsFor2.received.txt
 	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2.approved.txt file
 	// and contains the text:
 	//
@@ -42,7 +44,7 @@ func ExampleVerifyAllCombinationsFor2() {
 	// [ccccc,3] => ccc
 }
 
-func ExampleVerifyAllCombinationsFor2_withSkip() {
+func TestExampleVerifyAllCombinationsFor2_withSkip(t *testing.T) {
 	words := []string{"stack", "fold"}
 	otherWords := []string{"overflow", "trickle"}
 
@@ -56,13 +58,14 @@ func ExampleVerifyAllCombinationsFor2_withSkip() {
 	}
 
 	approvals.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
-	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt")
+	printFileContent("examples_test.TestExampleVerifyAllCombinationsFor2_withSkip.received.txt")
 	// Output:
-	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt
-	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2_withSkip.approved.txt file
+	// This produced the file examples_test.TestExampleVerifyAllCombinationsFor2_withSkip.received.txt
+	// It will be compared against the examples_test.TestExampleVerifyAllCombinationsFor2_withSkip.approved.txt file
 	// and contains the text:
 	//
 	// combineWords
+	//
 	//
 	// [stack,trickle] => stacktrickle
 	// [fold,overflow] => foldoverflow

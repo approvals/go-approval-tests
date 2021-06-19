@@ -5,7 +5,7 @@
 - [x] README link to go doc
 - [x] setup codecov.io + link in README
 - [ ] clean up the func VerifyAllCombinationsForX calls
-- [ ] move examples to testable examples
+- [x] move examples to testable examples
 - [ ] revisit documentation
 - [x] evaluate using https://golang.org/pkg/testing/#T.Name over getApprovalName()
 - [x] should support parallel tests
