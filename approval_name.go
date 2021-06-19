@@ -25,7 +25,7 @@ func getApprovalName(t Failable) *ApprovalName {
 	}
 
 	var name = t.Name()
-	name = strings.ReplaceAll(name, string(os.PathSeparator), ".")
+	name = strings.ReplaceAll(name, "/", ".")
 	namer := NewApprovalName(name, *fileName)
 
 	return &namer
