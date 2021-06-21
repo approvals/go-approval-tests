@@ -47,6 +47,7 @@ func hello(name string) string {
 func TestParameterizedTests(t *testing.T) {
 	t.Parallel()
 	for _, tc := range ExampleParameterizedTestcases {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			VerifyString(t, hello(tc.value))
 		})

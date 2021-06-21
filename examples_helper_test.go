@@ -1,11 +1,13 @@
+// nolint:unused // this is an example file
 package approvals_test
 
 import (
 	"fmt"
-	approvals "github.com/approvals/go-approval-tests"
 	"io/ioutil"
 	"log"
 	"strings"
+
+	approvals "github.com/approvals/go-approval-tests"
 )
 
 var (
