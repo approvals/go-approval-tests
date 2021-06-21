@@ -1,7 +1,7 @@
 package approvals_test
 
 import (
-	"github.com/approvals/go-approval-tests" // nolint: goimports
+	approvals "github.com/approvals/go-approval-tests"
 )
 
 func ExampleVerifyString() {

@@ -17,6 +17,7 @@ import (
 var (
 	defaultReporter            = reporters.NewDiffReporter()
 	defaultFrontLoadedReporter = reporters.NewFrontLoadedReporter()
+	defaultFolder              = ""
 )
 
 // Failable is an interface wrapper around testing.T
@@ -170,7 +171,7 @@ func (s *frontLoadedReporterCloser) Close() error {
 //
 //
 // func TestMain(m *testing.M) {
-// 	r := UseReporter(reporters.NewBeyondCompareReporter())
+// 	    r := approvals.UseReporter(reporters.NewBeyondCompareReporter())
 //      defer r.Close()
 //
 //      os.Exit(m.Run())
@@ -202,4 +203,21 @@ func getReporter() reporters.Reporter {
 		*defaultFrontLoadedReporter,
 		*defaultReporter,
 	)
+}
+
+// UseFolder configures which folder to use to store approval files.
+// By default, the approval files will be stored at the same level as the code.
+//
+// The following examples shows how to use the idiomatic 'testdata' folder
+// for all of your test cases in a package directory.
+//
+//
+// func TestMain(m *testing.M) {
+// 	    approvals.UseFolder("testdata")
+//
+//      os.Exit(m.Run())
+// }
+//
+func UseFolder(f string) {
+	defaultFolder = f
 }

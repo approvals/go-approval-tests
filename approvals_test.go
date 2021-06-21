@@ -14,6 +14,8 @@ func TestMain(m *testing.M) {
 	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
 
+	UseFolder("testdata")
+
 	os.Exit(m.Run())
 }
 
