@@ -123,10 +123,12 @@ func (s *ApprovalName) getFileName(extWithDot string, suffix string) string {
 		extWithDot = fmt.Sprintf(".%s", extWithDot)
 	}
 
-	dir, baseName := path.Split(s.fileName)
+	_, baseName := path.Split(s.fileName)
 	baseWithoutExt := baseName[:len(baseName)-len(path.Ext(s.fileName))]
 
-	return fmt.Sprintf("%stestdata/%s.%s.%s%s", dir, baseWithoutExt, s.name, suffix, extWithDot)
+	filename := fmt.Sprintf("%s.%s.%s%s", baseWithoutExt, s.name, suffix, extWithDot)
+
+	return path.Join(defaultFolder, filename)
 }
 
 func (s *ApprovalName) getReceivedFile(extWithDot string) string {
