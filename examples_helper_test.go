@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"path"
 	"strings"
 
 	approvals "github.com/approvals/go-approval-tests"
@@ -25,13 +24,13 @@ type failing struct{}
 func (f *failing) Fail() {}
 
 // documentation helper just for the example
-func printFileContent(filepath string) {
-	approvedPath := strings.Replace(filepath, ".received.", ".approved.", 1)
-	content, err := ioutil.ReadFile(path.Join("testdata", approvedPath))
+func printFileContent(path string) {
+	approvedPath := strings.Replace(path, ".received.", ".approved.", 1)
+	content, err := ioutil.ReadFile(approvedPath)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("This produced the file %s\n", filepath)
+	fmt.Printf("This produced the file %s\n", path)
 	fmt.Printf("It will be compared against the %s file\n", approvedPath)
 	fmt.Println("and contains the text:")
 	fmt.Println()
