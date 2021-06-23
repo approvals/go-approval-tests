@@ -213,9 +213,9 @@ func getReporter() reporters.Reporter {
 //
 //
 // func TestMain(m *testing.M) {
-// 	    approvals.UseFolder("testdata")
+//     approvals.UseFolder("testdata")
 //
-//      os.Exit(m.Run())
+//     os.Exit(m.Run())
 // }
 //
 func UseFolder(f string) {
