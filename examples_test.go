@@ -1,7 +1,9 @@
 package approvals_test
 
 import (
-	"github.com/approvals/go-approval-tests" // nolint: goimports
+	"testing"
+
+	approvals "github.com/approvals/go-approval-tests" // nolint: goimports
 )
 
 func ExampleVerifyString() {
@@ -67,4 +69,20 @@ func ExampleVerifyAllCombinationsFor2_withSkip() {
 	// [stack,trickle] => stacktrickle
 	// [fold,overflow] => foldoverflow
 	// [fold,trickle] => foldtrickle
+}
+
+func TestExampleParameterizedTestcases(t *testing.T) {
+	tests := map[string]struct {
+		input string
+	}{
+		"Simple": {"Joe"},
+		"No one": {"Outis"},
+	}
+
+	for name, tc := range tests {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			approvals.VerifyString(t, tc.input)
+		})
+	}
 }
