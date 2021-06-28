@@ -20,6 +20,17 @@ func TestHelloWorld(t *testing.T) {
 }
 ```
 
+## Store approved files in testdata subfolder
+Some people prefer to store their approved files in a subfolder "testdata" instead of in the same folder as the 
+production code. To configure this, add a call to UseFolder to your TestMain:
+
+```go
+func TestMain(m *testing.M) {
+	UseFolder("testdata")
+	os.Exit(m.Run())
+}
+```
+
 ## In Project
 Note: ApprovalTests uses approvals to test itself. Therefore there are many examples in the code itself.
 
@@ -64,6 +75,7 @@ defer r.Close()
 func TestMain(m *testing.M) {
 	r := UseReporter(reporters.NewBeyondCompareReporter())
 	defer r.Close()
+	UseFolder("testdata")
 
 	os.Exit(m.Run())
 }
