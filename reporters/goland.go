@@ -17,6 +17,8 @@ func (s *goland) Report(approved, received string) bool {
 		programName = "unknown"
 	case goosDarwin:
 		programName = "/Applications/GoLand.app/Contents/MacOS/goland"
+	case goosLinux:
+		programName = "/usr/local/bin/goland"
 	}
 
 	return launchProgram(programName, approved, xs...)

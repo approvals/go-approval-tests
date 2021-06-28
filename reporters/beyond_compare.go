@@ -19,6 +19,8 @@ func (s *beyondCompare) Report(approved, received string) bool {
 		programName = "C:/Program Files/Beyond Compare 4/BComp.exe"
 	case goosDarwin:
 		programName = "/Applications/Beyond Compare.app/Contents/MacOS/bcomp"
+	case goosLinux:
+		programName = "/usr/bin/bcompare"
 	}
 
 	return launchProgram(programName, approved, xs...)
