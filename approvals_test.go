@@ -39,6 +39,7 @@ var ExampleParameterizedTestcases = []ExampleTestCaseParameters{
 	{name: "Normal", value: "Sue"},
 	{name: "Long", value: "Chandrasekhar"},
 	{name: "Short", value: "A"},
+	{name: "Composed name", value: "Karl-Martin"},
 }
 
 // hello world function that can be the system-under-test
