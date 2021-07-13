@@ -58,7 +58,7 @@ func ExampleVerifyAllCombinationsFor2_withSkip() {
 	approvals.VerifyAllCombinationsFor2(t, "combineWords", functionToTest, words, otherWords)
 	printFileContent("examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt")
 	// Output:
-	// 	This produced the file examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt
+	// This produced the file examples_test.ExampleVerifyAllCombinationsFor2_withSkip.received.txt
 	// It will be compared against the examples_test.ExampleVerifyAllCombinationsFor2_withSkip.approved.txt file
 	// and contains the text:
 	//
