@@ -21,6 +21,7 @@ func NewDiffReporter() Reporter {
 		NewFileMergeReporter(),
 		NewVSCodeReporter(),
 		NewGoLandReporter(),
+		NewRealDiffReporter(),
 		NewPrintSupportedDiffProgramsReporter(),
 		NewQuietReporter(),
 	)
