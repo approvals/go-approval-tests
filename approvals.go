@@ -181,12 +181,12 @@ func (s *frontLoadedReporterCloser) Close() error {
 // in a package directory through go's setup feature.
 //
 //
-// func TestMain(m *testing.M) {
-// 	    r := approvals.UseReporter(reporters.NewBeyondCompareReporter())
-//      defer r.Close()
+//	func TestMain(m *testing.M) {
+//		r := approvals.UseReporter(reporters.NewBeyondCompareReporter())
+//		defer r.Close()
 //
-//      os.Exit(m.Run())
-// }
+//		os.Exit(m.Run())
+//	}
 //
 func UseReporter(reporter reporters.Reporter) io.Closer {
 	closer := &reporterCloser{
@@ -198,7 +198,7 @@ func UseReporter(reporter reporters.Reporter) io.Closer {
 }
 
 // UseFrontLoadedReporter configures reporters ahead of all other reporters to
-// handle situations like CI.  These reporters usually prevent reporting in
+// handle situations like CI. These reporters usually prevent reporting in
 // scenarios that are headless.
 func UseFrontLoadedReporter(reporter reporters.Reporter) io.Closer {
 	closer := &frontLoadedReporterCloser{
@@ -223,11 +223,11 @@ func getReporter() reporters.Reporter {
 // for all of your test cases in a package directory.
 //
 //
-// func TestMain(m *testing.M) {
-//     approvals.UseFolder("testdata")
+//	func TestMain(m *testing.M) {
+//		approvals.UseFolder("testdata")
 //
-//     os.Exit(m.Run())
-// }
+//		os.Exit(m.Run())
+//	}
 //
 func UseFolder(f string) {
 	defaultFolder = f
