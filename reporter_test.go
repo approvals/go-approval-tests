@@ -21,6 +21,7 @@ func (s *TestFailable) Fatalf(format string, args ...interface{}) {}
 func (s *TestFailable) Fatal(args ...interface{})                 {}
 func (s *TestFailable) Log(args ...interface{})                   {}
 func (s *TestFailable) Logf(format string, args ...interface{})   {}
+func (s *TestFailable) Helper()                                   {}
 
 type testReporter struct {
 	called    bool
