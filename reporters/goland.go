@@ -4,7 +4,7 @@ import "runtime"
 
 type goland struct{}
 
-// NewGoLandReporter creates a new reporter for GoGland.
+// NewGoLandReporter creates a new reporter for Goland.
 func NewGoLandReporter() Reporter {
 	return &goland{}
 }

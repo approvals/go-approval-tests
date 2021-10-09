@@ -1,13 +1,15 @@
 package reporters
 
 import (
-	"github.com/approvals/go-approval-tests/utils"
 	"os"
 	"os/exec"
+
+	"github.com/approvals/go-approval-tests/utils"
 )
 
 type realDiff struct{}
 
+// NewRealDiffReporter creates a reporter for the 'diff' utility.
 func NewRealDiffReporter() Reporter {
 	return &realDiff{}
 }
