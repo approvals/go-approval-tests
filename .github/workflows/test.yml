@@ -21,7 +21,7 @@ jobs:
       - name: Linting
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.20.0
+          version: v1.28.3
       - name: Build
         run: go build ./...
       - name: Test
