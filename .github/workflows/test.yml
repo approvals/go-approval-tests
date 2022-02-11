@@ -14,3 +14,5 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
+    - name: Setup Go environment
+      uses: actions/setup-go@v2.2.0
