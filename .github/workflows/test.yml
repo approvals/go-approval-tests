@@ -16,3 +16,9 @@ jobs:
     
     - name: Setup Go environment
       uses: actions/setup-go@v2.2.0
+    
+    - name: Build
+      run: go build -v ./...
+    
+    - name: test
+      run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
