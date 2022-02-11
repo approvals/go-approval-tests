@@ -6,6 +6,7 @@ ApprovalTests for [go](https://golang.org/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/approvals/go-approval-tests)](https://goreportcard.com/report/github.com/approvals/go-approval-tests)
 [![Coverage Status](https://codecov.io/gh/approvals/go-approval-tests/graph/badge.svg)](https://codecov.io/gh/approvals/go-approval-tests)
 [![Build Status](https://travis-ci.org/approvals/go-approval-tests.svg)](https://travis-ci.org/approvals/go-approval-tests)
+[![Build and Test](https://github.com/approvals/go-approval-tests/actions/workflows/test.yml/badge.svg)](https://github.com/approvals/go-approval-tests/actions/workflows/test.yml)
 
 # Golden master Verification Library
 
