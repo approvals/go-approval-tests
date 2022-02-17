@@ -35,5 +35,7 @@ func printFileContent(path string) {
 	fmt.Println("and contains the text:")
 	fmt.Println()
 	// sad sad hack because go examples trim blank middle lines
-	fmt.Println(strings.Replace(string(content), "\n\n", "\n", -1))
+	cleaned_text := strings.Replace(string(content), "\r", "", -1)
+	cleaned_text = strings.Replace(cleaned_text, "\n\n", "\n", -1)
+	fmt.Println(cleaned_text)
 }
