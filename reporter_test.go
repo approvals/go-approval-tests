@@ -11,17 +11,31 @@ import (
 // TestFailable is a fake replacing testing.T
 // It implements the parts of the testing.T interface approvals uses,
 // ie the approvaltests.Failable interface
-type TestFailable struct{}
+type TestFailable struct {
+	name string
+}
 
 func (s *TestFailable) Fail() {}
 func (s *TestFailable) Name() string {
-	return "TestFailable"
+	return s.name
+
 }
 func (s *TestFailable) Fatalf(format string, args ...interface{}) {}
 func (s *TestFailable) Fatal(args ...interface{})                 {}
 func (s *TestFailable) Log(args ...interface{})                   {}
 func (s *TestFailable) Logf(format string, args ...interface{})   {}
 func (s *TestFailable) Helper()                                   {}
+
+func NewTestFailable() *TestFailable {
+	return &TestFailable{
+		name: "TestFailable",
+	}
+}
+func NewTestFailableWithName(name string) *TestFailable {
+	return &TestFailable{
+		name: name,
+	}
+}
 
 type testReporter struct {
 	called    bool

@@ -17,6 +17,8 @@ func ExampleVerifyString() {
 }
 
 func ExampleVerifyAllCombinationsFor2() {
+	t = makeExamplesRunLikeTests("ExampleVerifyAllCombinationsFor2")
+
 	letters := []string{"aaaaa", "bbbbb", "ccccc"}
 	numbers := []int{2, 3}
 
@@ -42,7 +44,15 @@ func ExampleVerifyAllCombinationsFor2() {
 	// [ccccc,3] => ccc
 }
 
+func makeExamplesRunLikeTests(name string) *approvals.TestFailable {
+	t = approvals.NewTestFailableWithName(name)
+	approvals.UseFolder("")
+	return t
+}
+
 func ExampleVerifyAllCombinationsFor2_withSkip() {
+	t = makeExamplesRunLikeTests("ExampleVerifyAllCombinationsFor2_withSkip")
+
 	words := []string{"stack", "fold"}
 	otherWords := []string{"overflow", "trickle"}
 
