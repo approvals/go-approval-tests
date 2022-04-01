@@ -26,7 +26,7 @@ func TestParameterizedTestNames(t *testing.T) {
 			var namer = getApprovalName(t)
 			sanitizedName := strings.Replace(tc.name, " ", "_", -1)
 			if !strings.Contains(namer.name, "TestParameterizedTestNames.") &&
-					!strings.HasSuffix(namer.name, sanitizedName) {
+				!strings.HasSuffix(namer.name, sanitizedName) {
 				t.Fatalf("parameterized test name is wrong in namer, got %s", namer.name)
 			}
 		})
