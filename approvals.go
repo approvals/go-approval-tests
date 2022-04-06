@@ -112,7 +112,7 @@ func Options() *VerifyOptions {
 	return &VerifyOptions{}
 }
 
-func (v *VerifyOptions) WithRegexScrubber(scrubber *regexp.Regexp) *VerifyOptions {
+func (v *VerifyOptions) WithScrubber(scrubber *regexp.Regexp) *VerifyOptions {
 	v.scrubbers = append(v.scrubbers, func(s string) string {
 		return ""
 	})

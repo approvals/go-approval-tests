@@ -18,7 +18,7 @@ func TestScrubber(t *testing.T) {
 	}
 
 	scrubber, _ := regexp.Compile("\\d{10}$")
-	opts := approvals.Options().WithRegexScrubber(scrubber).WithGUIDScrubber()
+	opts := approvals.Options().WithScrubber(scrubber).WithGUIDScrubber()
 
 	approvals.VerifyJSONStruct(t, json, opts)
 }
