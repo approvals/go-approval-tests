@@ -102,23 +102,6 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...VerifyOptions) {
 	}
 }
 
-type scrubber func(s string) string
-
-type VerifyOptions struct {
-	scrubbers []scrubber
-}
-
-func Options() *VerifyOptions {
-	return &VerifyOptions{}
-}
-
-func (v VerifyOptions) WithScrubber(scrubber *regexp.Regexp) VerifyOptions {
-	v.scrubbers = append(v.scrubbers, func(s string) string {
-		return ""
-	})
-	return v
-}
-
 // VerifyJSONStruct Example:
 //   VerifyJSONStruct(t, json)
 func VerifyJSONStruct(t Failable, obj interface{}, opts ...VerifyOptions) {
@@ -255,4 +238,24 @@ func getReporter() reporters.Reporter {
 //
 func UseFolder(f string) {
 	defaultFolder = f
+}
+
+type scrubber func(s string) string
+
+type VerifyOptions struct {
+	scrubbers []scrubber
+}
+
+// Options enables providing individual Verify functions with customisations such as scrubbers
+func Options() *VerifyOptions {
+	return &VerifyOptions{}
+}
+
+// WithScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
+// and replace it with a static placeholder
+func (v VerifyOptions) WithScrubber(scrubber *regexp.Regexp) VerifyOptions {
+	v.scrubbers = append(v.scrubbers, func(s string) string {
+		return ""
+	})
+	return v
 }
