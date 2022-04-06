@@ -1,6 +1,7 @@
 package approvals_test
 
 import (
+	"fmt"
 	"regexp"
 	"testing"
 	"time"
@@ -17,8 +18,18 @@ func TestScrubber(t *testing.T) {
 		Time:  time.Now().Unix(),
 	}
 
-	scrubber, _ := regexp.Compile("\\d{10}$")
-	opts := approvals.Options().WithScrubber(scrubber).WithGUIDScrubber()
+	t.Run("VerifyJSONStruct", func(t *testing.T) {
+		scrubber, _ := regexp.Compile("\\d{10}$")
+		opts := approvals.Options().WithScrubber(scrubber)
 
-	approvals.VerifyJSONStruct(t, json, opts)
+		approvals.VerifyJSONStruct(t, json, opts)
+	})
+
+	t.Run("VerifyString", func(t *testing.T) {
+		scrubber, _ := regexp.Compile("\\d{10}$")
+		opts := approvals.Options().WithScrubber(scrubber)
+
+		s := fmt.Sprintf("The time is %v", time.Now().Unix())
+		approvals.VerifyString(t, s, opts)
+	})
 }
