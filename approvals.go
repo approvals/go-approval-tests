@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/approvals/go-approval-tests/reporters"
@@ -101,9 +102,37 @@ func VerifyXMLBytes(t Failable, bs []byte) {
 	}
 }
 
+type scrubber func(s string) string
+
+type VerifyOptions struct {
+	scrubbers []scrubber
+}
+
+func Options() *VerifyOptions {
+	return &VerifyOptions{}
+}
+
+func (v *VerifyOptions) WithRegexScrubber(scrubber *regexp.Regexp) *VerifyOptions {
+	v.scrubbers = append(v.scrubbers, func(s string) string {
+		return ""
+	})
+	return v
+}
+
+func (v *VerifyOptions) WithGUIDScrubber() *VerifyOptions {
+	v.scrubbers = append(v.scrubbers, func(s string) string {
+		return ""
+	})
+	return v
+}
+
+func (v *VerifyOptions) WithReporter() *VerifyOptions {
+	return v
+}
+
 // VerifyJSONStruct Example:
 //   VerifyJSONStruct(t, json)
-func VerifyJSONStruct(t Failable, obj interface{}) {
+func VerifyJSONStruct(t Failable, obj interface{}, opts ...*VerifyOptions) {
 	t.Helper()
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
