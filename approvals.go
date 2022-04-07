@@ -34,7 +34,7 @@ type Failable interface {
 
 // VerifyWithExtension Example:
 //   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
-func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts ...VerifyOptions) {
+func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
 	t.Helper()
 	namer := getApprovalName(t)
 
@@ -51,9 +51,9 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts .
 
 // Verify Example:
 //   Verify(t, strings.NewReader("Hello"))
-func Verify(t Failable, reader io.Reader, opts ...VerifyOptions) {
+func Verify(t Failable, reader io.Reader) {
 	t.Helper()
-	VerifyWithExtension(t, reader, ".txt", opts...)
+	VerifyWithExtension(t, reader, ".txt")
 }
 
 // VerifyString stores the passed string into the received file and confirms
@@ -68,12 +68,12 @@ func VerifyString(t Failable, s string, opts ...VerifyOptions) {
 	}
 
 	reader := strings.NewReader(s)
-	Verify(t, reader, opts...)
+	Verify(t, reader)
 }
 
 // VerifyXMLStruct Example:
 //   VerifyXMLStruct(t, xml)
-func VerifyXMLStruct(t Failable, obj interface{}, opts ...VerifyOptions) {
+func VerifyXMLStruct(t Failable, obj interface{}) {
 	t.Helper()
 	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
 	if err != nil {
@@ -82,15 +82,15 @@ func VerifyXMLStruct(t Failable, obj interface{}, opts ...VerifyOptions) {
 			tip = "when using anonymous types be sure to include\n  XMLName xml.Name `xml:\"Your_Name_Here\"`\n"
 		}
 		message := fmt.Sprintf("error while pretty printing XML\n%verror:\n  %v\nXML:\n  %v\n", tip, err, obj)
-		VerifyWithExtension(t, strings.NewReader(message), ".xml", opts...)
+		VerifyWithExtension(t, strings.NewReader(message), ".xml")
 	} else {
-		VerifyWithExtension(t, bytes.NewReader(xmlContent), ".xml", opts...)
+		VerifyWithExtension(t, bytes.NewReader(xmlContent), ".xml")
 	}
 }
 
 // VerifyXMLBytes Example:
 //   VerifyXMLBytes(t, []byte("<Test/>"))
-func VerifyXMLBytes(t Failable, bs []byte, opts ...VerifyOptions) {
+func VerifyXMLBytes(t Failable, bs []byte) {
 	t.Helper()
 	type node struct {
 		Attr     []xml.Attr
@@ -103,9 +103,9 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...VerifyOptions) {
 	err := xml.Unmarshal(bs, &x)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing XML\nerror:\n  %s\nXML:\n  %s\n", err, string(bs))
-		VerifyWithExtension(t, strings.NewReader(message), ".xml", opts...)
+		VerifyWithExtension(t, strings.NewReader(message), ".xml")
 	} else {
-		VerifyXMLStruct(t, x, opts...)
+		VerifyXMLStruct(t, x)
 	}
 }
 
@@ -125,13 +125,13 @@ func VerifyJSONStruct(t Failable, obj interface{}) {
 
 // VerifyJSONBytes Example:
 //   VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
-func VerifyJSONBytes(t Failable, bs []byte, opts ...VerifyOptions) {
+func VerifyJSONBytes(t Failable, bs []byte) {
 	t.Helper()
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
-		VerifyWithExtension(t, strings.NewReader(message), ".json", opts...)
+		VerifyWithExtension(t, strings.NewReader(message), ".json")
 	} else {
 		VerifyJSONStruct(t, obj)
 	}
