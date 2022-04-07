@@ -60,6 +60,13 @@ func Verify(t Failable, reader io.Reader, opts ...VerifyOptions) {
 // that it matches the approved local file. On failure, it will launch a reporter.
 func VerifyString(t Failable, s string, opts ...VerifyOptions) {
 	t.Helper()
+
+	for _, o := range opts {
+		for _, sb := range o.scrubbers {
+			s = sb(s)
+		}
+	}
+
 	reader := strings.NewReader(s)
 	Verify(t, reader, opts...)
 }
@@ -104,20 +111,15 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...VerifyOptions) {
 
 // VerifyJSONStruct Example:
 //   VerifyJSONStruct(t, json)
-func VerifyJSONStruct(t Failable, obj interface{}, opts ...VerifyOptions) {
+func VerifyJSONStruct(t Failable, obj interface{}) {
 	t.Helper()
-
-	//var options
-	//for _, o := range opts {
-	//	options = o.scrubbers
-	//}
 
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
-		VerifyWithExtension(t, strings.NewReader(message), ".json", opts...)
+		VerifyWithExtension(t, strings.NewReader(message), ".json")
 	} else {
-		VerifyWithExtension(t, bytes.NewReader(jsonb), ".json", opts...)
+		VerifyWithExtension(t, bytes.NewReader(jsonb), ".json")
 	}
 }
 
@@ -251,11 +253,11 @@ func Options() *VerifyOptions {
 	return &VerifyOptions{}
 }
 
-// WithScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
+// WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
 // and replace it with a static placeholder
-func (v VerifyOptions) WithScrubber(scrubber *regexp.Regexp) VerifyOptions {
+func (v VerifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer string) VerifyOptions {
 	v.scrubbers = append(v.scrubbers, func(s string) string {
-		return ""
+		return scrubber.ReplaceAllString(s, replacer)
 	})
 	return v
 }
