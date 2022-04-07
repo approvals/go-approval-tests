@@ -1,0 +1,3 @@
+[cat]=meow
+[dog]=bark
+[time]=<time>

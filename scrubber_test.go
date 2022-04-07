@@ -10,22 +10,20 @@ import (
 )
 
 func TestScrubber(t *testing.T) {
-	//json := struct {
-	//	Title string
-	//	Time  int64
-	//}{
-	//	Title: "Hello World!",
-	//	Time:  time.Now().Unix(),
-	//}
-	//
-	//t.Run("VerifyJSONStruct", func(t *testing.T) {
-	//	scrubber, _ := regexp.Compile("\\d{10}$")
-	//	opts := approvals.Options().WithRegexScrubber(scrubber, "<time>")
-	//
-	//	approvals.VerifyJSONStruct(t, json, opts)
-	//})
 
-	t.Run("VerifyString", func(t *testing.T) {
+	t.Run("VerifyMap with scrubber", func(t *testing.T) {
+		scrubber, _ := regexp.Compile("\\d{10}$")
+		opts := approvals.Options().WithRegexScrubber(scrubber, "<time>")
+
+		m := map[string]string{
+			"dog":  "bark",
+			"cat":  "meow",
+			"time": fmt.Sprint(time.Now().Unix()),
+		}
+		approvals.VerifyMap(t, m, opts)
+	})
+
+	t.Run("VerifyString with scrubber", func(t *testing.T) {
 		scrubber, _ := regexp.Compile("\\d{10}$")
 		opts := approvals.Options().WithRegexScrubber(scrubber, "<time>")
 
