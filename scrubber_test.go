@@ -3,6 +3,7 @@ package approvals_test
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"testing"
 	"time"
 
@@ -19,6 +20,14 @@ func TestVerifyMapWithRegexScrubber(t *testing.T) {
 		"time": fmt.Sprint(time.Now().Unix()),
 	}
 	approvals.VerifyMap(t, m, opts)
+}
+
+func TestVerifyArrayWithRegexScrubber(t *testing.T) {
+	scrubber, _ := regexp.Compile("cat")
+	opts := approvals.Options().WithRegexScrubber(scrubber, "person")
+
+	xs := []string{"dog", "cat", "bird"}
+	approvals.VerifyArray(t, xs, opts)
 }
 
 func TestVerifyStringWithRegexScrubber(t *testing.T) {
@@ -40,4 +49,12 @@ func TestVerifyStringWithMultipleScrubbers(t *testing.T) {
 
 	s := fmt.Sprintf("The time is %v", time.Now().Unix())
 	approvals.VerifyString(t, s, opts)
+}
+
+func TestVerifyAllWithRegexScrubber(t *testing.T) {
+	scrubber, _ := regexp.Compile("Llewellyn")
+	opts := approvals.Options().WithRegexScrubber(scrubber, "Walken")
+
+	xs := []string{"Christopher", "Llewellyn"}
+	approvals.VerifyAll(t, "uppercase", xs, func(x interface{}) string { return fmt.Sprintf("%s => %s", x, strings.ToUpper(x.(string))) }, opts)
 }
