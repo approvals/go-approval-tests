@@ -242,6 +242,7 @@ func UseFolder(f string) {
 
 type scrubber func(s string) string
 
+// VerifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
 type VerifyOptions struct {
 	scrubbers []scrubber
 }
