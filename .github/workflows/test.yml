@@ -4,6 +4,7 @@ name: Build and Test
 on:
   push:
   pull_request:
+  repository_dispatch:
 
 jobs:
 
