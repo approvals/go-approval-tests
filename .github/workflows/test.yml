@@ -5,6 +5,9 @@ on:
   push:
   pull_request:
   repository_dispatch:
+  schedule:
+     - cron: '05 5 1 * *' # <https://crontab.guru/#05_5_1_*_*> - "At 05:05 on day-of-month 1"  
+
 
 jobs:
 
