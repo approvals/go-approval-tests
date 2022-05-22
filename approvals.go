@@ -58,7 +58,7 @@ func Verify(t Failable, reader io.Reader) {
 
 // VerifyString stores the passed string into the received file and confirms
 // that it matches the approved local file. On failure, it will launch a reporter.
-func VerifyString(t Failable, s string, opts ...*verifyOptions) {
+func VerifyString(t Failable, s string, opts ...verifyOptions) {
 	t.Helper()
 	for _, o := range opts {
 		for _, sb := range o.scrubbers {
@@ -137,7 +137,7 @@ func VerifyJSONBytes(t Failable, bs []byte) {
 
 // VerifyMap Example:
 //   VerifyMap(t, map[string][string] { "dog": "bark" })
-func VerifyMap(t Failable, m interface{}, opts ...*verifyOptions) {
+func VerifyMap(t Failable, m interface{}, opts ...verifyOptions) {
 	t.Helper()
 	outputText := utils.PrintMap(m)
 	VerifyString(t, outputText, opts...)
@@ -145,7 +145,7 @@ func VerifyMap(t Failable, m interface{}, opts ...*verifyOptions) {
 
 // VerifyArray Example:
 //   VerifyArray(t, []string{"dog", "cat"})
-func VerifyArray(t Failable, array interface{}, opts ...*verifyOptions) {
+func VerifyArray(t Failable, array interface{}, opts ...verifyOptions) {
 	t.Helper()
 	outputText := utils.PrintArray(array)
 	VerifyString(t, outputText, opts...)
@@ -153,7 +153,7 @@ func VerifyArray(t Failable, array interface{}, opts ...*verifyOptions) {
 
 // VerifyAll Example:
 //   VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
-func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string, opts ...*verifyOptions) {
+func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string, opts ...verifyOptions) {
 	t.Helper()
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)
@@ -248,13 +248,13 @@ type verifyOptions struct {
 }
 
 // Options enables providing individual Verify functions with customisations such as scrubbers
-func Options() *verifyOptions {
-	return &verifyOptions{}
+func Options() verifyOptions {
+	return verifyOptions{}
 }
 
 // WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
 // and replace it with a static placeholder
-func (v *verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer string) *verifyOptions {
+func (v verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer string) verifyOptions {
 	v.scrubbers = append(v.scrubbers, func(s string) string {
 		return scrubber.ReplaceAllString(s, replacer)
 	})

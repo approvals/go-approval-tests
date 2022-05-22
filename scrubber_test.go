@@ -39,11 +39,10 @@ func TestVerifyStringWithRegexScrubber(t *testing.T) {
 }
 
 func TestVerifyStringWithMultipleScrubbers(t *testing.T) {
-	opts := approvals.Options()
-
 	scrubber1, _ := regexp.Compile("\\d{10}$")
 	scrubber2, _ := regexp.Compile("time")
-	opts.
+
+	opts := approvals.Options().
 		WithRegexScrubber(scrubber1, "<now>").
 		WithRegexScrubber(scrubber2, "<future>")
 
