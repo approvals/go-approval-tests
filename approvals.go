@@ -58,7 +58,7 @@ func Verify(t Failable, reader io.Reader) {
 
 // VerifyString stores the passed string into the received file and confirms
 // that it matches the approved local file. On failure, it will launch a reporter.
-func VerifyString(t Failable, s string, opts ...*VerifyOptions) {
+func VerifyString(t Failable, s string, opts ...*verifyOptions) {
 	t.Helper()
 	for _, o := range opts {
 		for _, sb := range o.scrubbers {
@@ -137,7 +137,7 @@ func VerifyJSONBytes(t Failable, bs []byte) {
 
 // VerifyMap Example:
 //   VerifyMap(t, map[string][string] { "dog": "bark" })
-func VerifyMap(t Failable, m interface{}, opts ...*VerifyOptions) {
+func VerifyMap(t Failable, m interface{}, opts ...*verifyOptions) {
 	t.Helper()
 	outputText := utils.PrintMap(m)
 	VerifyString(t, outputText, opts...)
@@ -145,7 +145,7 @@ func VerifyMap(t Failable, m interface{}, opts ...*VerifyOptions) {
 
 // VerifyArray Example:
 //   VerifyArray(t, []string{"dog", "cat"})
-func VerifyArray(t Failable, array interface{}, opts ...*VerifyOptions) {
+func VerifyArray(t Failable, array interface{}, opts ...*verifyOptions) {
 	t.Helper()
 	outputText := utils.PrintArray(array)
 	VerifyString(t, outputText, opts...)
@@ -153,7 +153,7 @@ func VerifyArray(t Failable, array interface{}, opts ...*VerifyOptions) {
 
 // VerifyAll Example:
 //   VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
-func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string, opts ...*VerifyOptions) {
+func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string, opts ...*verifyOptions) {
 	t.Helper()
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)
@@ -242,19 +242,19 @@ func UseFolder(f string) {
 
 type scrubber func(s string) string
 
-// VerifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
-type VerifyOptions struct {
+// verifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
+type verifyOptions struct {
 	scrubbers []scrubber
 }
 
 // Options enables providing individual Verify functions with customisations such as scrubbers
-func Options() *VerifyOptions {
-	return &VerifyOptions{}
+func Options() *verifyOptions {
+	return &verifyOptions{}
 }
 
 // WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
 // and replace it with a static placeholder
-func (v *VerifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer string) *VerifyOptions {
+func (v *verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer string) *verifyOptions {
 	v.scrubbers = append(v.scrubbers, func(s string) string {
 		return scrubber.ReplaceAllString(s, replacer)
 	})
