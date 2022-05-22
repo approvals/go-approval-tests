@@ -33,7 +33,7 @@ type Failable interface {
 }
 
 // VerifyWithExtension Example:
-//   VerifyWithExtension(t, strings.NewReader("Hello"), ".txt")
+//   VerifyWithExtension(t, strings.NewReader("Hello"), ".json")
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
 	t.Helper()
 	namer := getApprovalName(t)
