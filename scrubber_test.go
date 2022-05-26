@@ -10,6 +10,19 @@ import (
 	approvals "github.com/approvals/go-approval-tests"
 )
 
+func TestVerifyDoesNotAcceptSeveralVerifyOptions(t *testing.T) {
+	scrubber1, _ := regexp.Compile("\\d{10}$")
+	opts1 := approvals.Options().WithRegexScrubber(scrubber1, "<time>")
+	opts2 := approvals.Options().WithRegexScrubber(scrubber1, "<time>")
+
+	m := strings.NewReader("Hello World")
+
+	defer func() { _ = recover() }()
+
+	approvals.Verify(t, m, opts1, opts2)
+	t.Errorf("Panic expected")
+}
+
 func TestVerifyMapWithRegexScrubber(t *testing.T) {
 	scrubber, _ := regexp.Compile("\\d{10}$")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "<time>")

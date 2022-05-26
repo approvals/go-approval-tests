@@ -51,9 +51,41 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string) {
 
 // Verify Example:
 //   Verify(t, strings.NewReader("Hello"))
-func Verify(t Failable, reader io.Reader) {
+func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 	t.Helper()
-	VerifyWithExtension(t, reader, ".txt")
+
+	if len(opts) > 1 {
+		panic("Please use fluent syntax for options, see documentation for more information")
+	}
+
+	var extWithDot string = ".txt"
+	namer := getApprovalName(t)
+
+	if len(opts) > 0 {
+		b, err := io.ReadAll(reader)
+		if err != nil {
+			// TODO: do something
+		}
+
+		var result string
+		for _, o := range opts {
+			for _, sb := range o.scrubbers {
+				result = sb(string(b))
+			}
+		}
+
+		reader = strings.NewReader(result)
+	}
+
+	reporter := getReporter()
+	err := namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
+	if err != nil {
+		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
+		t.Log("Failed Approval: received does not match approved.")
+		t.Fail()
+	} else {
+		_ = os.Remove(namer.getReceivedFile(extWithDot))
+	}
 }
 
 // VerifyString stores the passed string into the received file and confirms
@@ -244,7 +276,8 @@ type scrubber func(s string) string
 
 // verifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
 type verifyOptions struct {
-	scrubbers []scrubber
+	scrubbers  []scrubber
+	extWithDot string
 }
 
 // Options enables providing individual Verify functions with customisations such as scrubbers
