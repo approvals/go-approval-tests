@@ -315,3 +315,9 @@ func (v verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer strin
 	})
 	return v
 }
+
+// WithExtension overrides the default file extension (.txt) for approval files.
+func (v verifyOptions) WithExtension(extension string) verifyOptions {
+	v.extWithDot = extension
+	return v
+}
