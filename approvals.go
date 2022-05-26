@@ -74,7 +74,13 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 		panic("Please use fluent syntax for options, see documentation for more information")
 	}
 
-	var extWithDot string = ".txt"
+	var extWithDot string
+	if len(opts) == 0 || opts[0].extWithDot != "" {
+		extWithDot = ".txt"
+	} else {
+		extWithDot = opts[0].extWithDot
+	}
+
 	namer := getApprovalName(t)
 
 	if len(opts) > 0 {
