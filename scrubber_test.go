@@ -43,6 +43,22 @@ func TestVerifyArrayWithRegexScrubber(t *testing.T) {
 	approvals.VerifyArray(t, xs, opts)
 }
 
+func TestVerifyJSONBytesWithRegexScrubber(t *testing.T) {
+	scrubber, _ := regexp.Compile("Hello")
+	opts := approvals.Options().WithRegexScrubber(scrubber, "Hi")
+
+	jb := []byte("{ \"Greeting\": \"Hello\" }")
+	approvals.VerifyJSONBytes(t, jb, opts)
+}
+
+func TestVerifyXMLBytesWithRegexScrubber(t *testing.T) {
+	scrubber, _ := regexp.Compile("Hello")
+	opts := approvals.Options().WithRegexScrubber(scrubber, "Hi")
+
+	xmlb := []byte("<Test><Title>Hello World!</Title><Name>Peter Pan</Name><Age>100</Age></Test>")
+	approvals.VerifyXMLBytes(t, xmlb, opts)
+}
+
 func TestVerifyStringWithRegexScrubber(t *testing.T) {
 	scrubber, _ := regexp.Compile("\\d{10}$")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "<now>")
