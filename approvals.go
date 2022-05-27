@@ -98,13 +98,8 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 // that it matches the approved local file. On failure, it will launch a reporter.
 func VerifyString(t Failable, s string, opts ...verifyOptions) {
 	t.Helper()
-	for _, o := range opts {
-		for _, sb := range o.scrubbers {
-			s = sb(s)
-		}
-	}
 	reader := strings.NewReader(s)
-	Verify(t, reader)
+	Verify(t, reader, opts...)
 }
 
 // VerifyXMLStruct Example:
