@@ -61,7 +61,7 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 	if len(opts) > 0 {
 		b, err := io.ReadAll(reader)
 		if err != nil {
-			// TODO: do something
+			panic(err)
 		}
 
 		result := string(b)
