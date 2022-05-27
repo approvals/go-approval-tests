@@ -37,16 +37,7 @@ type Failable interface {
 // Deprecated: Please use Verify with the Options() fluent syntax.
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts ...verifyOptions) {
 	t.Helper()
-
-	var v verifyOptions
-	if len(opts) == 0 {
-		v = Options()
-	} else {
-		v = opts[0]
-	}
-
-	v = v.WithExtension(extWithDot)
-	Verify(t, reader, v)
+	Verify(t, reader, alwaysOption(opts).WithExtension(extWithDot))
 }
 
 // Verify Example:
@@ -113,9 +104,9 @@ func VerifyXMLStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 			tip = "when using anonymous types be sure to include\n  XMLName xml.Name `xml:\"Your_Name_Here\"`\n"
 		}
 		message := fmt.Sprintf("error while pretty printing XML\n%verror:\n  %v\nXML:\n  %v\n", tip, err, obj)
-		VerifyWithExtension(t, strings.NewReader(message), ".xml", opts...)
+		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".xml"))
 	} else {
-		VerifyWithExtension(t, bytes.NewReader(xmlContent), ".xml", opts...)
+		Verify(t, bytes.NewReader(xmlContent), alwaysOption(opts).WithExtension(".xml"))
 	}
 }
 
@@ -134,7 +125,7 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...verifyOptions) {
 	err := xml.Unmarshal(bs, &x)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing XML\nerror:\n  %s\nXML:\n  %s\n", err, string(bs))
-		VerifyWithExtension(t, strings.NewReader(message), ".xml", opts...)
+		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".xml"))
 	} else {
 		VerifyXMLStruct(t, x, opts...)
 	}
@@ -148,9 +139,9 @@ func VerifyJSONStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
-		VerifyWithExtension(t, strings.NewReader(message), ".json", opts...)
+		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".json"))
 	} else {
-		VerifyWithExtension(t, bytes.NewReader(jsonb), ".json", opts...)
+		Verify(t, bytes.NewReader(jsonb), alwaysOption(opts).WithExtension(".json"))
 	}
 }
 
@@ -162,7 +153,7 @@ func VerifyJSONBytes(t Failable, bs []byte, opts ...verifyOptions) {
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
-		VerifyWithExtension(t, strings.NewReader(message), ".json", opts...)
+		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".json"))
 	} else {
 		VerifyJSONStruct(t, obj, opts...)
 	}
@@ -298,5 +289,16 @@ func (v verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer strin
 // WithExtension overrides the default file extension (.txt) for approval files.
 func (v verifyOptions) WithExtension(extension string) verifyOptions {
 	v.extWithDot = extension
+	return v
+}
+
+func alwaysOption(opts []verifyOptions) verifyOptions {
+	var v verifyOptions
+	if len(opts) == 0 {
+		v = Options()
+	} else {
+		v = opts[0]
+	}
+
 	return v
 }
