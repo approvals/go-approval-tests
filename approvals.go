@@ -34,35 +34,19 @@ type Failable interface {
 
 // VerifyWithExtension Example:
 //   VerifyWithExtension(t, strings.NewReader("Hello"), ".json")
+// Deprecated: Please use Verify with the Options() fluent syntax.
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts ...verifyOptions) {
 	t.Helper()
-	namer := getApprovalName(t)
 
-	if len(opts) > 0 {
-		b, err := io.ReadAll(reader)
-		if err != nil {
-			// TODO: do something
-		}
-
-		var result string
-		for _, o := range opts {
-			for _, sb := range o.scrubbers {
-				result = sb(string(b))
-			}
-		}
-
-		reader = strings.NewReader(result)
-	}
-
-	reporter := getReporter()
-	err := namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
-	if err != nil {
-		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
-		t.Log("Failed Approval: received does not match approved.")
-		t.Fail()
+	var v verifyOptions
+	if len(opts) == 0 {
+		v = Options()
 	} else {
-		_ = os.Remove(namer.getReceivedFile(extWithDot))
+		v = opts[0]
 	}
+
+	v = v.WithExtension(extWithDot)
+	Verify(t, reader, v)
 }
 
 // Verify Example:
@@ -75,7 +59,7 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 	}
 
 	var extWithDot string
-	if len(opts) == 0 || opts[0].extWithDot != "" {
+	if len(opts) == 0 || opts[0].extWithDot == "" {
 		extWithDot = ".txt"
 	} else {
 		extWithDot = opts[0].extWithDot
@@ -89,10 +73,10 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 			// TODO: do something
 		}
 
-		var result string
+		result := string(b)
 		for _, o := range opts {
 			for _, sb := range o.scrubbers {
-				result = sb(string(b))
+				result = sb(result)
 			}
 		}
 
