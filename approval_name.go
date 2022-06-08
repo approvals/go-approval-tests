@@ -48,28 +48,32 @@ func NewApprovalName(name string, fileName string) ApprovalName {
 func findFileName() (*string, error) {
 	pc := make([]uintptr, 100)
 	count := runtime.Callers(0, pc)
+	frames := runtime.CallersFrames(pc[:count])
 
-	i := 0
-	var lastFunc *runtime.Func
+	var lastFrame, testFrame *runtime.Frame
 
-	for ; i < count; i++ {
-		lastFunc = runtime.FuncForPC(pc[i])
-		if isTestRunner(lastFunc) {
+	for {
+		frame, more := frames.Next()
+		if !more {
 			break
 		}
-	}
-	testMethodPtr := pc[i-1]
-	testMethod := runtime.FuncForPC(testMethodPtr)
-	var fileName, _ = testMethod.FileLine(testMethodPtr)
 
-	if i == 0 || !isTestRunner(lastFunc) {
+		if isTestRunner(&frame) {
+			testFrame = &frame
+			break
+		}
+		lastFrame = &frame
+	}
+
+	if !isTestRunner(testFrame) {
 		return nil, fmt.Errorf("approvals: could not find the test method")
 	}
-	return &fileName, nil
+
+	return &lastFrame.File, nil
 }
 
-func isTestRunner(f *runtime.Func) bool {
-	return f != nil && f.Name() == "testing.tRunner" || f.Name() == "testing.runExample"
+func isTestRunner(f *runtime.Frame) bool {
+	return f != nil && f.Function == "testing.tRunner" || f.Function == "testing.runExample"
 }
 
 func (s *ApprovalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
