@@ -86,3 +86,17 @@ func TestVerifyAllWithRegexScrubber(t *testing.T) {
 	xs := []string{"Christopher", "Llewellyn"}
 	approvals.VerifyAll(t, "uppercase", xs, func(x interface{}) string { return fmt.Sprintf("%s => %s", x, strings.ToUpper(x.(string))) }, opts)
 }
+
+func TestVerifyJSONBytesWithJSONPathScrubber(t *testing.T) {
+	opts := approvals.Options().
+		WithJSONPathScrubber("greeting", "Hi!!!!").
+		WithJSONPathScrubber("list[*].greeting", "Why hello!!!")
+
+	jb := []byte(`{
+		"greeting":"Hello",
+		"list":[
+			{ "greeting": "Hello 1" },
+			{ "greeting": "Hello 2"}]
+		}`)
+	approvals.VerifyJSONBytes(t, jb, opts)
+}
