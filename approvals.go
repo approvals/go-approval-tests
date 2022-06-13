@@ -286,6 +286,15 @@ func (v verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer strin
 	return v
 }
 
+// WithCustomScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
+// using a custom function and replace it with a static placeholder
+func (v verifyOptions) WithCustomScrubber(scrubFunc func(s, r string) string, replacer string) verifyOptions {
+	v.scrubbers = append(v.scrubbers, func(s string) string {
+		return scrubFunc(s, replacer)
+	})
+	return v
+}
+
 // WithExtension overrides the default file extension (.txt) for approval files.
 func (v verifyOptions) WithExtension(extension string) verifyOptions {
 	v.extWithDot = extension
