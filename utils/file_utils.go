@@ -19,3 +19,14 @@ func EnsureExists(fileName string) {
 
 	ioutil.WriteFile(fileName, []byte(""), 0644)
 }
+
+// ReadFile reads the content of a file.
+func ReadFile(fileName string) (string, error) {
+	content, err := ioutil.ReadFile(fileName)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(content), nil
+}
