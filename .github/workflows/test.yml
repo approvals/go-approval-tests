@@ -12,7 +12,10 @@ on:
 jobs:
 
   build-and-test:
-    runs-on: windows-latest 
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     
     steps:
     - name: Checkout
