@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/" # Root directory of the repository
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+  - package-ecosystem: "github-actions"
+    directory: "/" # Root directory of the repository
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
