@@ -23,6 +23,8 @@ jobs:
     
     - name: Setup Go environment
       uses: actions/setup-go@v5.1.0
+      with:
+          go-version: 'stable'
     
     - name: Build
       run: go build -v ./...
