@@ -5,7 +5,10 @@ import (
 )
 
 func ExampleVerifyString() {
+	t = makeExamplesRunLikeTests("ExampleVerifyString")
+
 	approvals.VerifyString(t, "Hello World!")
+
 	printFileContent("examples_test.ExampleVerifyString.received.txt")
 
 	// Output:

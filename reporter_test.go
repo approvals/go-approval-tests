@@ -1,6 +1,7 @@
 package approvals
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -15,7 +16,9 @@ type TestFailable struct {
 	name string
 }
 
-func (s *TestFailable) Fail() {}
+func (s *TestFailable) Fail() {
+	fmt.Println("This test failed")
+}
 func (s *TestFailable) Name() string {
 	return s.name
 
