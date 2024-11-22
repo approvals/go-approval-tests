@@ -19,9 +19,8 @@ func (s *continuousIntegration) Report(approved, received string) bool {
 
 	if exists {
 		ci, err := strconv.ParseBool(value)
-		if err == nil && ci {
-			systemout := NewSystemoutReporter()
-			return systemout.Report(approved, received)
+		if err == nil {
+			return ci
 		}
 	}
 

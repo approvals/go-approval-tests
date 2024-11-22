@@ -69,6 +69,10 @@ func findFileName() (*string, error) {
 		return nil, fmt.Errorf("approvals: could not find the test method")
 	}
 
+	if lastFrame == nil {
+		return nil, fmt.Errorf("approvals: could not find the last frame")
+	}
+
 	return &lastFrame.File, nil
 }
 
