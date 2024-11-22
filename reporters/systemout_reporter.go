@@ -20,8 +20,8 @@ func (s *systemout) Report(approved, received string) bool {
 
 	fmt.Printf("approval files did not match\napproved: %v\nreceived: %v\n", approvedFull, receivedFull)
 
-	printFileContent("Received", received)
-	printFileContent("Approved", approved)
+	printFileContent("Received", receivedFull)
+	printFileContent("Approved", approvedFull)
 
 	return true
 }
