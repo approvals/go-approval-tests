@@ -1,3 +1,7 @@
+- [ ] Add Markdown snippits 
+- [ ] Check starter project and update if needed
+- [ ] Link to the starter project
+- [ ] Start doing tagged releases
 - [ ] Newbie Reporters ?
 - [ ] VScode reporter
 - [ ] Move fixtures to their own folder
