@@ -30,3 +30,18 @@ func ReadFile(fileName string) (string, error) {
 
 	return string(content), nil
 }
+
+func AppendToFile(fileName, text string) error {
+	f, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	if _, err := f.WriteString(text); err != nil {
+		return err
+	}
+
+	return nil
+}

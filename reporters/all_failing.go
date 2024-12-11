@@ -11,6 +11,10 @@ func NewAllFailingTestReporter() Reporter {
 	return &allFailing{}
 }
 
+func NewReportAllToClipboard() Reporter {
+	return &allFailing{}
+}
+
 func (s *allFailing) Report(approved, received string) bool {
 	move := getMoveCommandText(approved, received)
 	clipboardScratchData = clipboardScratchData + move + "\n"

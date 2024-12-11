@@ -27,3 +27,5 @@ _testmain.go
 *.test
 *.prof
 coverage.txt
+
+.approval_tests_temp
