@@ -33,7 +33,9 @@ type Failable interface {
 }
 
 // VerifyWithExtension Example:
-//   VerifyWithExtension(t, strings.NewReader("Hello"), ".json")
+//
+//	VerifyWithExtension(t, strings.NewReader("Hello"), ".json")
+//
 // Deprecated: Please use Verify with the Options() fluent syntax.
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts ...verifyOptions) {
 	t.Helper()
@@ -41,7 +43,8 @@ func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts .
 }
 
 // Verify Example:
-//   Verify(t, strings.NewReader("Hello"))
+//
+//	Verify(t, strings.NewReader("Hello"))
 func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 	t.Helper()
 
@@ -49,12 +52,12 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 		panic("Please use fluent syntax for options, see documentation for more information")
 	}
 
-	var extWithDot string
-	if len(opts) == 0 || opts[0].extWithDot == "" {
-		extWithDot = ".txt"
-	} else {
-		extWithDot = opts[0].extWithDot
+	var opt verifyOptions
+	if len(opts) > 0 {
+		opt = opts[0]
 	}
+
+	extWithDot := opt.GetExtension()
 
 	namer := getApprovalName(t)
 
@@ -94,7 +97,8 @@ func VerifyString(t Failable, s string, opts ...verifyOptions) {
 }
 
 // VerifyXMLStruct Example:
-//   VerifyXMLStruct(t, xml)
+//
+//	VerifyXMLStruct(t, xml)
 func VerifyXMLStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	t.Helper()
 	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
@@ -111,7 +115,8 @@ func VerifyXMLStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 }
 
 // VerifyXMLBytes Example:
-//   VerifyXMLBytes(t, []byte("<Test/>"))
+//
+//	VerifyXMLBytes(t, []byte("<Test/>"))
 func VerifyXMLBytes(t Failable, bs []byte, opts ...verifyOptions) {
 	t.Helper()
 	type node struct {
@@ -132,7 +137,8 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...verifyOptions) {
 }
 
 // VerifyJSONStruct Example:
-//   VerifyJSONStruct(t, json)
+//
+//	VerifyJSONStruct(t, json)
 func VerifyJSONStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	t.Helper()
 
@@ -146,7 +152,8 @@ func VerifyJSONStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 }
 
 // VerifyJSONBytes Example:
-//   VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
+//
+//	VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
 func VerifyJSONBytes(t Failable, bs []byte, opts ...verifyOptions) {
 	t.Helper()
 	var obj map[string]interface{}
@@ -160,7 +167,8 @@ func VerifyJSONBytes(t Failable, bs []byte, opts ...verifyOptions) {
 }
 
 // VerifyMap Example:
-//   VerifyMap(t, map[string][string] { "dog": "bark" })
+//
+//	VerifyMap(t, map[string][string] { "dog": "bark" })
 func VerifyMap(t Failable, m interface{}, opts ...verifyOptions) {
 	t.Helper()
 	outputText := utils.PrintMap(m)
@@ -168,7 +176,8 @@ func VerifyMap(t Failable, m interface{}, opts ...verifyOptions) {
 }
 
 // VerifyArray Example:
-//   VerifyArray(t, []string{"dog", "cat"})
+//
+//	VerifyArray(t, []string{"dog", "cat"})
 func VerifyArray(t Failable, array interface{}, opts ...verifyOptions) {
 	t.Helper()
 	outputText := utils.PrintArray(array)
@@ -176,7 +185,8 @@ func VerifyArray(t Failable, array interface{}, opts ...verifyOptions) {
 }
 
 // VerifyAll Example:
-//   VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
+//
+//	VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
 func VerifyAll(t Failable, header string, collection interface{}, transform func(interface{}) string, opts ...verifyOptions) {
 	t.Helper()
 	if len(header) != 0 {
@@ -211,14 +221,12 @@ func (s *frontLoadedReporterCloser) Close() error {
 // The following examples shows how to use a reporter for all of your test cases
 // in a package directory through go's setup feature.
 //
-//
 //	func TestMain(m *testing.M) {
 //		r := approvals.UseReporter(reporters.NewBeyondCompareReporter())
 //		defer r.Close()
 //
 //		os.Exit(m.Run())
 //	}
-//
 func UseReporter(reporter reporters.Reporter) io.Closer {
 	closer := &reporterCloser{
 		reporter: defaultReporter,
@@ -253,13 +261,11 @@ func getReporter() reporters.Reporter {
 // The following examples shows how to use the idiomatic 'testdata' folder
 // for all of your test cases in a package directory.
 //
-//
 //	func TestMain(m *testing.M) {
 //		approvals.UseFolder("testdata")
 //
 //		os.Exit(m.Run())
 //	}
-//
 func UseFolder(f string) {
 	defaultFolder = f
 }
@@ -268,8 +274,23 @@ type scrubber func(s string) string
 
 // verifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
 type verifyOptions struct {
-	scrubbers  []scrubber
-	extWithDot string
+	scrubbers []scrubber
+	fields    map[string]interface{}
+}
+
+func (v verifyOptions) GetExtension() string {
+	f := v.getField("extWithDot", ".txt")
+	return f.(string)
+}
+
+func (v verifyOptions) getField(key string, defaultValue string) interface{} {
+	if v.fields == nil {
+		return defaultValue
+	}
+	if value, ok := v.fields[key]; ok {
+		return value
+	}
+	return defaultValue
 }
 
 // Options enables providing individual Verify functions with customisations such as scrubbers
@@ -288,8 +309,21 @@ func (v verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer strin
 
 // WithExtension overrides the default file extension (.txt) for approval files.
 func (v verifyOptions) WithExtension(extension string) verifyOptions {
-	v.extWithDot = extension
-	return v
+	o := NewVerifyOptions(v.fields, "extWithDot", extension)
+	o.scrubbers = v.scrubbers
+	return o
+}
+
+func NewVerifyOptions(fields map[string]interface{}, key string, value interface{}) verifyOptions {
+	// Make a copy of the fields map, but with the new key and value
+	newFields := make(map[string]interface{}, len(fields))
+	for k, v := range fields {
+		newFields[k] = v
+	}
+	newFields[key] = value
+	return verifyOptions{
+		fields: newFields,
+	}
 }
 
 func alwaysOption(opts []verifyOptions) verifyOptions {
