@@ -61,24 +61,13 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 
 	namer := getApprovalName(t)
 
-	if len(opts) > 0 {
-		b, err := io.ReadAll(reader)
-		if err != nil {
-			panic(err)
-		}
-
-		result := string(b)
-		for _, o := range opts {
-			for _, sb := range o.scrubbers {
-				result = sb(result)
-			}
-		}
-
-		reader = strings.NewReader(result)
+	reader, err := opt.Scrub(reader)
+	if err != nil {
+		panic(err)
 	}
 
 	reporter := getReporter()
-	err := namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
+	err = namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
 	if err != nil {
 		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
 		t.Log("Failed Approval: received does not match approved.")
@@ -274,8 +263,7 @@ type scrubber func(s string) string
 
 // verifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
 type verifyOptions struct {
-	scrubbers []scrubber
-	fields    map[string]interface{}
+	fields map[string]interface{}
 }
 
 func (v verifyOptions) GetExtension() string {
@@ -283,7 +271,7 @@ func (v verifyOptions) GetExtension() string {
 	return f.(string)
 }
 
-func (v verifyOptions) getField(key string, defaultValue string) interface{} {
+func (v verifyOptions) getField(key string, defaultValue interface{}) interface{} {
 	if v.fields == nil {
 		return defaultValue
 	}
@@ -298,20 +286,32 @@ func Options() verifyOptions {
 	return verifyOptions{}
 }
 
+func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
+	b, err := io.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	result := string(b)
+	for _, sb := range v.getField("scrubbers", []scrubber{}).([]scrubber) {
+		result = sb(result)
+	}
+
+	return strings.NewReader(result), nil
+}
+
 // WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
 // and replace it with a static placeholder
-func (v verifyOptions) WithRegexScrubber(scrubber *regexp.Regexp, replacer string) verifyOptions {
-	v.scrubbers = append(v.scrubbers, func(s string) string {
-		return scrubber.ReplaceAllString(s, replacer)
+func (v verifyOptions) WithRegexScrubber(regex *regexp.Regexp, replacer string) verifyOptions {
+	newScrubbers := append(v.getField("scrubbers", []scrubber{}).([]scrubber), func(s string) string {
+		return regex.ReplaceAllString(s, replacer)
 	})
-	return v
+	return NewVerifyOptions(v.fields, "scrubbers", newScrubbers)
 }
 
 // WithExtension overrides the default file extension (.txt) for approval files.
 func (v verifyOptions) WithExtension(extension string) verifyOptions {
-	o := NewVerifyOptions(v.fields, "extWithDot", extension)
-	o.scrubbers = v.scrubbers
-	return o
+	return NewVerifyOptions(v.fields, "extWithDot", extension)
 }
 
 func NewVerifyOptions(fields map[string]interface{}, key string, value interface{}) verifyOptions {
