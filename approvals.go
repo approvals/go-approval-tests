@@ -90,6 +90,7 @@ func VerifyString(t Failable, s string, opts ...verifyOptions) {
 //	VerifyXMLStruct(t, xml)
 func VerifyXMLStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	t.Helper()
+	options := alwaysOption(opts).WithExtension(".xml")
 	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		tip := ""
@@ -97,9 +98,9 @@ func VerifyXMLStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 			tip = "when using anonymous types be sure to include\n  XMLName xml.Name `xml:\"Your_Name_Here\"`\n"
 		}
 		message := fmt.Sprintf("error while pretty printing XML\n%verror:\n  %v\nXML:\n  %v\n", tip, err, obj)
-		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".xml"))
+		Verify(t, strings.NewReader(message), options)
 	} else {
-		Verify(t, bytes.NewReader(xmlContent), alwaysOption(opts).WithExtension(".xml"))
+		Verify(t, bytes.NewReader(xmlContent), options)
 	}
 }
 
@@ -130,13 +131,13 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...verifyOptions) {
 //	VerifyJSONStruct(t, json)
 func VerifyJSONStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	t.Helper()
-
+	options := alwaysOption(opts).WithExtension(".json")
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
-		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".json"))
+		Verify(t, strings.NewReader(message), options)
 	} else {
-		Verify(t, bytes.NewReader(jsonb), alwaysOption(opts).WithExtension(".json"))
+		Verify(t, bytes.NewReader(jsonb), options)
 	}
 }
 
