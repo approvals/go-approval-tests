@@ -39,7 +39,7 @@ type Failable interface {
 // Deprecated: Please use Verify with the Options() fluent syntax.
 func VerifyWithExtension(t Failable, reader io.Reader, extWithDot string, opts ...verifyOptions) {
 	t.Helper()
-	Verify(t, reader, alwaysOption(opts).WithExtension(extWithDot))
+	Verify(t, reader, alwaysOption(opts).ForFile().WithExtension(extWithDot))
 }
 
 // Verify Example:
@@ -57,7 +57,7 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 		opt = opts[0]
 	}
 
-	extWithDot := opt.GetExtension()
+	extWithDot := opt.ForFile().GetExtension()
 
 	namer := getApprovalName(t)
 
@@ -90,7 +90,7 @@ func VerifyString(t Failable, s string, opts ...verifyOptions) {
 //	VerifyXMLStruct(t, xml)
 func VerifyXMLStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	t.Helper()
-	options := alwaysOption(opts).WithExtension(".xml")
+	options := alwaysOption(opts).ForFile().WithExtension(".xml")
 	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		tip := ""
@@ -120,7 +120,7 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...verifyOptions) {
 	err := xml.Unmarshal(bs, &x)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing XML\nerror:\n  %s\nXML:\n  %s\n", err, string(bs))
-		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".xml"))
+		Verify(t, strings.NewReader(message), alwaysOption(opts).ForFile().WithExtension(".xml"))
 	} else {
 		VerifyXMLStruct(t, x, opts...)
 	}
@@ -131,7 +131,7 @@ func VerifyXMLBytes(t Failable, bs []byte, opts ...verifyOptions) {
 //	VerifyJSONStruct(t, json)
 func VerifyJSONStruct(t Failable, obj interface{}, opts ...verifyOptions) {
 	t.Helper()
-	options := alwaysOption(opts).WithExtension(".json")
+	options := alwaysOption(opts).ForFile().WithExtension(".json")
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		message := fmt.Sprintf("error while pretty printing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, obj)
@@ -150,7 +150,7 @@ func VerifyJSONBytes(t Failable, bs []byte, opts ...verifyOptions) {
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
-		Verify(t, strings.NewReader(message), alwaysOption(opts).WithExtension(".json"))
+		Verify(t, strings.NewReader(message), alwaysOption(opts).ForFile().WithExtension(".json"))
 	} else {
 		VerifyJSONStruct(t, obj, opts...)
 	}
@@ -267,16 +267,42 @@ type verifyOptions struct {
 	fields map[string]interface{}
 }
 
+type fileOptions struct {
+	fields map[string]interface{}
+}
+
+func (v verifyOptions) ForFile() fileOptions {
+	return fileOptions{fields: v.fields}
+}
+
+// Deprecated: Use `ForFile().WithExtension(extension)` instead.
+func (v verifyOptions) WithExtension(extension string) verifyOptions {
+	return v.ForFile().WithExtension(extension)
+}
+
+// Deprecated: Use `ForFile().GetExtension()` instead.
 func (v verifyOptions) GetExtension() string {
-	f := v.getField("extWithDot", ".txt")
-	return f.(string)
+	return v.ForFile().GetExtension()
+}
+
+func (f fileOptions) GetExtension() string {
+	ext := getField(f.fields, "extWithDot", ".txt")
+	return ext.(string)
 }
 
 func (v verifyOptions) getField(key string, defaultValue interface{}) interface{} {
-	if v.fields == nil {
+	return getField(v.fields, key, defaultValue)
+}
+
+func (f fileOptions) getField(key string, defaultValue interface{}) interface{} {
+	return getField(f.fields, key, defaultValue)
+}
+
+func getField(fields map[string]interface{}, key string, defaultValue interface{}) interface{} {
+	if fields == nil {
 		return defaultValue
 	}
-	if value, ok := v.fields[key]; ok {
+	if value, ok := fields[key]; ok {
 		return value
 	}
 	return defaultValue
@@ -311,8 +337,11 @@ func (v verifyOptions) WithRegexScrubber(regex *regexp.Regexp, replacer string) 
 }
 
 // WithExtension overrides the default file extension (.txt) for approval files.
-func (v verifyOptions) WithExtension(extension string) verifyOptions {
-	return NewVerifyOptions(v.fields, "extWithDot", extension)
+func (f fileOptions) WithExtension(extensionWithDot string) verifyOptions {
+	if !strings.HasPrefix(extensionWithDot, ".") {
+		extensionWithDot = "." + extensionWithDot
+	}
+	return NewVerifyOptions(f.fields, "extWithDot", extensionWithDot)
 }
 
 func NewVerifyOptions(fields map[string]interface{}, key string, value interface{}) verifyOptions {
