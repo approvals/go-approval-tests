@@ -8,7 +8,6 @@ import (
 	"io"
 	"os"
 	"reflect"
-	"regexp"
 	"strings"
 
 	"github.com/approvals/go-approval-tests/reporters"
@@ -260,8 +259,6 @@ func UseFolder(f string) {
 	defaultFolder = f
 }
 
-type scrubber func(s string) string
-
 // verifyOptions can be accessed via the approvals.Options() API enabling configuration of scrubbers
 type verifyOptions struct {
 	fields map[string]interface{}
@@ -313,10 +310,23 @@ func Options() verifyOptions {
 	return verifyOptions{}
 }
 
-var globalScrubbers []scrubber
+// WithScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
+func (v verifyOptions) WithScrubbers(scrubbers ...scrubber) verifyOptions {
+	return NewVerifyOptions(v.fields, "scrubbers", scrubbers)
+}
 
-func AddGlobalScrubber(scrubber scrubber) {
-	globalScrubbers = append(globalScrubbers, scrubber)
+// AddScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
+func (v verifyOptions) AddScrubber(scrubfn scrubber) verifyOptions {
+	newScrubbers := append(v.getField("scrubbers", []scrubber{}).([]scrubber), scrubfn)
+	return v.WithScrubbers(newScrubbers...)
+}
+
+// WithExtension overrides the default file extension (.txt) for approval files.
+func (f fileOptions) WithExtension(extensionWithDot string) verifyOptions {
+	if !strings.HasPrefix(extensionWithDot, ".") {
+		extensionWithDot = "." + extensionWithDot
+	}
+	return NewVerifyOptions(f.fields, "extWithDot", extensionWithDot)
 }
 
 func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
@@ -330,35 +340,7 @@ func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
 		result = sb(result)
 	}
 
-	// globally applied scrubbing
-	for _, sb := range globalScrubbers {
-		result = sb(result)
-	}
-
 	return strings.NewReader(result), nil
-}
-
-// WithScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
-func (v verifyOptions) WithScrubber(scrubfn func(string) string) verifyOptions {
-	newScrubbers := append(v.getField("scrubbers", []scrubber{}).([]scrubber), scrubfn)
-	return NewVerifyOptions(v.fields, "scrubbers", newScrubbers)
-}
-
-// WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
-// and replace it with a static placeholder
-func (v verifyOptions) WithRegexScrubber(regex *regexp.Regexp, replacer string) verifyOptions {
-	newScrubbers := append(v.getField("scrubbers", []scrubber{}).([]scrubber), func(s string) string {
-		return regex.ReplaceAllString(s, replacer)
-	})
-	return NewVerifyOptions(v.fields, "scrubbers", newScrubbers)
-}
-
-// WithExtension overrides the default file extension (.txt) for approval files.
-func (f fileOptions) WithExtension(extensionWithDot string) verifyOptions {
-	if !strings.HasPrefix(extensionWithDot, ".") {
-		extensionWithDot = "." + extensionWithDot
-	}
-	return NewVerifyOptions(f.fields, "extWithDot", extensionWithDot)
 }
 
 func NewVerifyOptions(fields map[string]interface{}, key string, value interface{}) verifyOptions {
