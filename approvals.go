@@ -311,14 +311,14 @@ func Options() verifyOptions {
 }
 
 // WithScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
-func (v verifyOptions) WithScrubbers(scrubbers ...scrubber) verifyOptions {
-	return NewVerifyOptions(v.fields, "scrubbers", scrubbers)
+func (v verifyOptions) WithScrubber(scrub scrubber) verifyOptions {
+	return NewVerifyOptions(v.fields, "scrubber", scrub)
 }
 
 // AddScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
 func (v verifyOptions) AddScrubber(scrubfn scrubber) verifyOptions {
-	newScrubbers := append(v.getField("scrubbers", []scrubber{}).([]scrubber), scrubfn)
-	return v.WithScrubbers(newScrubbers...)
+	scrub := CreateMultiScrubber(v.getField("scrubber", CreateNoopScrubber()).(scrubber), scrubfn)
+	return v.WithScrubber(scrub)
 }
 
 // WithExtension overrides the default file extension (.txt) for approval files.
@@ -335,10 +335,8 @@ func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
 		return nil, err
 	}
 
-	result := string(b)
-	for _, sb := range v.getField("scrubbers", []scrubber{}).([]scrubber) {
-		result = sb(result)
-	}
+	scrub := v.getField("scrubber", CreateNoopScrubber()).(scrubber)
+	result := scrub(string(b))
 
 	return strings.NewReader(result), nil
 }

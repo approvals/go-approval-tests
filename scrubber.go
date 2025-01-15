@@ -20,8 +20,10 @@ func CreateRegexScrubber(regex *regexp.Regexp, replacer string) scrubber {
 }
 
 // NoopScrubber is a scrubber that does nothing
-func NoopScrubber(s string) string {
-	return s
+func CreateNoopScrubber() scrubber {
+	return func(s string) string {
+		return s
+	}
 }
 
 // CreateMultiScrubber allows you to chain multiple scrubbers together
