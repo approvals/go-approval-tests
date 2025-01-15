@@ -313,6 +313,12 @@ func Options() verifyOptions {
 	return verifyOptions{}
 }
 
+var globalScrubbers []scrubber
+
+func AddGlobalScrubber(scrubber scrubber) {
+	globalScrubbers = append(globalScrubbers, scrubber)
+}
+
 func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
 	b, err := io.ReadAll(reader)
 	if err != nil {
@@ -324,7 +330,18 @@ func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
 		result = sb(result)
 	}
 
+	// globally applied scrubbing
+	for _, sb := range globalScrubbers {
+		result = sb(result)
+	}
+
 	return strings.NewReader(result), nil
+}
+
+// WithScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
+func (v verifyOptions) WithScrubber(scrubfn func(string) string) verifyOptions {
+	newScrubbers := append(v.getField("scrubbers", []scrubber{}).([]scrubber), scrubfn)
+	return NewVerifyOptions(v.fields, "scrubbers", newScrubbers)
 }
 
 // WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
