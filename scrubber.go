@@ -1,6 +1,9 @@
 package approvals
 
-import "regexp"
+import (
+	"regexp"
+	"strconv"
+)
 
 type scrubber func(s string) string
 
@@ -19,6 +22,25 @@ func CreateRegexScrubber(regex *regexp.Regexp, replacer string) scrubber {
 	}
 }
 
+// CreateRegexScrubberWithLabeler allows you to create a scrubber that uses a regular expression to scrub data
+func CreateRegexScrubberWithLabeler(regex *regexp.Regexp, replacer func(int) string) scrubber {
+	return func(s string) string {
+		m := map[string]int{}
+		replacefn := func(s string) string {
+			idx := 0
+			if i, ok := m[s]; ok {
+				idx = i
+			} else {
+				idx = len(m)
+				m[s] = idx
+			}
+
+			return replacer(idx)
+		}
+		return regex.ReplaceAllStringFunc(s, replacefn)
+	}
+}
+
 // NoopScrubber is a scrubber that does nothing
 func CreateNoopScrubber() scrubber {
 	return func(s string) string {
@@ -34,4 +56,9 @@ func CreateMultiScrubber(scrubbers ...scrubber) scrubber {
 		}
 		return s
 	}
+}
+
+func CreateGuidScrubber() scrubber {
+	regex := regexp.MustCompile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+	return CreateRegexScrubberWithLabeler(regex, func(n int) string { return "guid_" + strconv.Itoa(n) })
 }

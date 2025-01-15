@@ -86,3 +86,13 @@ func TestVerifyAllWithRegexScrubber(t *testing.T) {
 	xs := []string{"Christopher", "Llewellyn"}
 	approvals.VerifyAll(t, "uppercase", xs, func(x interface{}) string { return fmt.Sprintf("%s => %s", x, strings.ToUpper(x.(string))) }, opts)
 }
+
+func TestScrubGuids(t *testing.T) {
+	guids := []string{"2fd78d4a-ad49-447d-96a8-deda585a9aa5",
+		"2fd78d4a-1111-1111-1111-deda585a9aa5",
+		"2fd78d4a-3333-3333-3333-deda585a9aa5",
+		"2fd78d4a-ad49-447d-96a8-deda585a9aa5",
+		"2fd78d4a-ad49-447d-96a8-deda585a9aa5 and text"}
+
+	approvals.VerifyAll(t, "guids", guids, func(x interface{}) string { return fmt.Sprintf("%v", x) }, approvals.Options().WithScrubber(approvals.CreateGuidScrubber()))
+}
