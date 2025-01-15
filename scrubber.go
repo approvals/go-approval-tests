@@ -17,24 +17,19 @@ func (v verifyOptions) WithRegexScrubber(regex *regexp.Regexp, replacer string) 
 
 // CreateRegexScrubber allows you to create a scrubber that uses a regular expression to scrub data
 func CreateRegexScrubber(regex *regexp.Regexp, replacer string) scrubber {
-	return func(s string) string {
-		return regex.ReplaceAllString(s, replacer)
-	}
+	return CreateRegexScrubberWithLabeler(regex, func(int) string { return replacer })
 }
 
 // CreateRegexScrubberWithLabeler allows you to create a scrubber that uses a regular expression to scrub data
 func CreateRegexScrubberWithLabeler(regex *regexp.Regexp, replacer func(int) string) scrubber {
 	return func(s string) string {
-		m := map[string]int{}
+		seen := map[string]int{}
 		replacefn := func(s string) string {
-			idx := 0
-			if i, ok := m[s]; ok {
-				idx = i
-			} else {
-				idx = len(m)
-				m[s] = idx
+			idx, ok := seen[s]
+			if !ok {
+				idx = len(seen)
+				seen[s] = idx
 			}
-
 			return replacer(idx)
 		}
 		return regex.ReplaceAllStringFunc(s, replacefn)
