@@ -51,3 +51,28 @@ func GetSupportedFormatsRegex() []string {
 	}
 	return regexList
 }
+
+// public static DateScrubber getScrubberFor(String formattedExample)
+//
+//	{
+//	  for (SupportedFormat pattern : getSupportedFormats())
+//	  {
+//	    DateScrubber scrubber = new DateScrubber(pattern.getRegex());
+//	    if ("[Date1]".equals(scrubber.scrub(formattedExample)))
+//	    { return scrubber; }
+//	  }
+//	  throw new FormattedException(
+//	      "No match found for %s.\n Feel free to add your date at https://github.com/approvals/ApprovalTests.Java/issues/112 \n Current supported formats are: %s",
+//	      formattedExample, Query.select(getSupportedFormats(), SupportedFormat::getRegex));
+//	}
+func GetDateScrubberFor(formattedExample string) (scrubber, error) {
+	for _, pattern := range GetSupportedFormats() {
+		scrubber := NewDateScrubber(pattern.Regex)
+		if "[Date1]" == scrubber(formattedExample) {
+			return scrubber, nil
+		}
+	}
+	return nil, fmt.Errorf(
+		"No match found for %s.\n Feel free to add your date at https://github.com/approvals/ApprovalTests.Java/issues/112 \n Current supported formats are: %v",
+		formattedExample, GetSupportedFormatsRegex())
+}
