@@ -30,7 +30,7 @@ func CreateRegexScrubberWithLabeler(regex *regexp.Regexp, replacer func(int) str
 				idx = len(seen)
 				seen[s] = idx
 			}
-			return replacer(idx)
+			return replacer(idx + 1)
 		}
 		return regex.ReplaceAllStringFunc(s, replacefn)
 	}
