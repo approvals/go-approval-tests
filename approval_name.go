@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"runtime"
@@ -81,7 +80,8 @@ func isTestRunner(f *runtime.Frame) bool {
 }
 
 func (s *ApprovalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
-	received, err := ioutil.ReadAll(reader)
+
+	received, err := io.ReadAll(reader)
 	if err != nil {
 		return err
 	}
@@ -100,7 +100,7 @@ func (s *ApprovalName) compare(approvalFile, receivedFile string, reader io.Read
 	}
 	defer fh.Close()
 
-	approved, err := ioutil.ReadAll(fh)
+	approved, err := io.ReadAll(fh)
 	if err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func (s *ApprovalName) normalizeLineEndings(bs []byte) []byte {
 }
 
 func (s *ApprovalName) dumpReceivedTestResult(bs []byte, receivedFile string) error {
-	err := ioutil.WriteFile(receivedFile, bs, 0644)
+	err := os.WriteFile(receivedFile, bs, 0644)
 
 	return err
 }

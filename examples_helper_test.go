@@ -3,8 +3,8 @@ package approvals_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	approvals "github.com/approvals/go-approval-tests"
@@ -26,7 +26,7 @@ func (f *failing) Fail() {}
 // documentation helper just for the example
 func printFileContent(path string) {
 	approvedPath := strings.Replace(path, ".received.", ".approved.", 1)
-	content, err := ioutil.ReadFile(approvedPath)
+	content, err := os.ReadFile(approvedPath)
 	if err != nil {
 		log.Fatal(err)
 	}

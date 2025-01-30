@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"io/ioutil"
 	"os"
 )
 
@@ -17,12 +16,12 @@ func EnsureExists(fileName string) {
 		return
 	}
 
-	ioutil.WriteFile(fileName, []byte(""), 0644)
+	os.WriteFile(fileName, []byte(""), 0644)
 }
 
 // ReadFile reads the content of a file.
 func ReadFile(fileName string) (string, error) {
-	content, err := ioutil.ReadFile(fileName)
+	content, err := os.ReadFile(fileName)
 
 	if err != nil {
 		return "", err
