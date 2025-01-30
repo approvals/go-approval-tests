@@ -81,6 +81,8 @@ func isTestRunner(f *runtime.Frame) bool {
 
 func (s *ApprovalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
 
+	GetApprovedFileLoggerInstance().Log(approvalFile)
+
 	received, err := io.ReadAll(reader)
 	if err != nil {
 		return err
