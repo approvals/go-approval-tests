@@ -1,6 +1,7 @@
 package reporters
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -76,5 +77,7 @@ func TestCIReporter(t *testing.T) {
 	defer restoreEnv(exists, "CI", value)
 
 	r := NewContinuousIntegrationReporter()
-	utils.AssertEqual(t, true, r.Report("", ""), "did not detect CI")
+	report := r.Report("", "")
+	fmt.Println("^^^ The above error is expected ^^^")
+	utils.AssertEqual(t, true, report, "did not detect CI")
 }
