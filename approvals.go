@@ -58,7 +58,7 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 
 	extWithDot := opt.ForFile().GetExtension()
 
-	namer := getApprovalName(t)
+	namer := opt.ForFile().GetNamer(t)
 
 	reader, err := opt.Scrub(reader)
 	if err != nil {

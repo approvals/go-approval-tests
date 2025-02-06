@@ -33,6 +33,11 @@ func (f fileOptions) GetExtension() string {
 	return ext.(string)
 }
 
+func (f fileOptions) GetNamer(t Failable) *ApprovalName {
+	ext := getField(f.fields, "namer", getApprovalName(t))
+	return ext.(*ApprovalName)
+}
+
 func (v verifyOptions) getField(key string, defaultValue interface{}) interface{} {
 	return getField(v.fields, key, defaultValue)
 }
