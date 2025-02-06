@@ -1,9 +1,7 @@
 package core
 
-import "io"
-
 type ApprovalNamer interface {
-	Compare(approvalFile, receivedFile string, reader io.Reader) error
+	GetName() string
 	GetReceivedFile(extWithDot string) string
 	GetApprovalFile(extWithDot string) string
 }
