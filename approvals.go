@@ -56,23 +56,25 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 		opt = opts[0]
 	}
 
-	extWithDot := opt.ForFile().GetExtension()
-
-	namer := opt.ForFile().GetNamer(t)
-
 	reader, err := opt.Scrub(reader)
 	if err != nil {
 		panic(err)
 	}
 
+	extWithDot := opt.ForFile().GetExtension()
+	namer := opt.ForFile().GetNamer(t)
+
+	approvalFile := namer.getApprovalFile(extWithDot)
+	receivedFile := namer.getReceivedFile(extWithDot)
+
 	reporter := getReporter()
-	err = namer.compare(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot), reader)
+	err = namer.compare(approvalFile, receivedFile, reader)
 	if err != nil {
-		reporter.Report(namer.getApprovalFile(extWithDot), namer.getReceivedFile(extWithDot))
+		reporter.Report(approvalFile, receivedFile)
 		t.Log("Failed Approval: received does not match approved.")
 		t.Fail()
 	} else {
-		_ = os.Remove(namer.getReceivedFile(extWithDot))
+		_ = os.Remove(receivedFile)
 	}
 }
 
