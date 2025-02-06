@@ -7,3 +7,5 @@ type ApprovalNamer interface {
 	GetReceivedFile(extWithDot string) string
 	GetApprovalFile(extWithDot string) string
 }
+
+type ApprovalNamerCreator func(t Failable) ApprovalNamer

@@ -8,6 +8,8 @@ import (
 	"path"
 	"runtime"
 	"strings"
+
+	"github.com/approvals/go-approval-tests/core"
 )
 
 // ApprovalName struct.
@@ -16,7 +18,13 @@ type ApprovalName struct {
 	fileName string
 }
 
-func getApprovalName(t Failable) *ApprovalName {
+func getApprovalNameCreator() core.ApprovalNamerCreator {
+	return func(t core.Failable) core.ApprovalNamer {
+		return getApprovalName(t)
+	}
+}
+
+func getApprovalName(t core.Failable) *ApprovalName {
 	fileName, err := findFileName()
 	if err != nil {
 		t.Fatalf("approvals: could not find the test filename or approved files location")

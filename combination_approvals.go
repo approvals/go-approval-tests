@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	"github.com/approvals/go-approval-tests/core"
 )
 
 type emptyType struct{}
@@ -17,8 +19,9 @@ var (
 )
 
 // VerifyAllCombinationsFor1 Example:
-//   VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"})
-func VerifyAllCombinationsFor1(t Failable, header string, transform func(interface{}) string, collection1 interface{}) {
+//
+//	VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, []string("dog", "cat"})
+func VerifyAllCombinationsFor1(t core.Failable, header string, transform func(interface{}) string, collection1 interface{}) {
 	transform2 := func(p1, p2, p3, p4, p5, p6, p7, p8, p9 interface{}) string {
 		return transform(p1)
 	}
@@ -40,7 +43,7 @@ func VerifyAllCombinationsFor1(t Failable, header string, transform func(interfa
 // approved version. If the transform function returns SkipThisCombination the
 // output of this combination won't be displayed inside the received file.
 func VerifyAllCombinationsFor2(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2 interface{}) string,
 	collection1, collection2 interface{}) {
@@ -61,7 +64,7 @@ func VerifyAllCombinationsFor2(
 
 // VerifyAllCombinationsFor3 is for combinations of 3.
 func VerifyAllCombinationsFor3(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2, p3 interface{}) string,
 	collection1, collection2, collection3 interface{}) {
@@ -83,7 +86,7 @@ func VerifyAllCombinationsFor3(
 
 // VerifyAllCombinationsFor4 is for combinations of 4.
 func VerifyAllCombinationsFor4(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2, p3, p4 interface{}) string,
 	collection1, collection2, collection3, collection4 interface{}) {
@@ -105,7 +108,7 @@ func VerifyAllCombinationsFor4(
 
 // VerifyAllCombinationsFor5 is for combinations of 5.
 func VerifyAllCombinationsFor5(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5 interface{}) {
@@ -127,7 +130,7 @@ func VerifyAllCombinationsFor5(
 
 // VerifyAllCombinationsFor6 is for combinations of 6.
 func VerifyAllCombinationsFor6(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5, collection6 interface{}) {
@@ -149,7 +152,7 @@ func VerifyAllCombinationsFor6(
 
 // VerifyAllCombinationsFor7 is for combinations of 7.
 func VerifyAllCombinationsFor7(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6, p7 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5, collection6, collection7 interface{}) {
@@ -171,7 +174,7 @@ func VerifyAllCombinationsFor7(
 
 // VerifyAllCombinationsFor8 is for combinations of 8.
 func VerifyAllCombinationsFor8(
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(p1, p2, p3, p4, p5, p6, p7, p8 interface{}) string,
 	collection1, collection2, collection3, collection4, collection5, collection6, collection7, collection8 interface{}) {
@@ -193,7 +196,7 @@ func VerifyAllCombinationsFor8(
 
 // VerifyAllCombinationsFor9 is for combinations of 9.
 func VerifyAllCombinationsFor9( // nolint: funlen, gocognit
-	t Failable,
+	t core.Failable,
 	header string,
 	transform func(a, b, c, d, e, f, g, h, i interface{}) string,
 	collection1,

@@ -35,13 +35,13 @@ func (f fileOptions) GetExtension() string {
 	return ext.(string)
 }
 
-func (f fileOptions) WithNamer(namer core.ApprovalNamer) verifyOptions {
+func (f fileOptions) WithNamer(namer core.ApprovalNamerCreator) verifyOptions {
 	return NewVerifyOptions(f.fields, "namer", namer)
 }
 
-func (f fileOptions) GetNamer(t Failable) core.ApprovalNamer {
-	ext := getField(f.fields, "namer", getApprovalName(t))
-	return ext.(core.ApprovalNamer)
+func (f fileOptions) GetNamer() core.ApprovalNamerCreator {
+	ext := getField(f.fields, "namer", getApprovalNameCreator())
+	return ext.(core.ApprovalNamerCreator)
 }
 
 func (v verifyOptions) getField(key string, defaultValue interface{}) interface{} {
