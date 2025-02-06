@@ -64,11 +64,11 @@ func Verify(t Failable, reader io.Reader, opts ...verifyOptions) {
 	extWithDot := opt.ForFile().GetExtension()
 	namer := opt.ForFile().GetNamer(t)
 
-	approvalFile := namer.getApprovalFile(extWithDot)
-	receivedFile := namer.getReceivedFile(extWithDot)
+	approvalFile := namer.GetApprovalFile(extWithDot)
+	receivedFile := namer.GetReceivedFile(extWithDot)
 
 	reporter := getReporter()
-	err = namer.compare(approvalFile, receivedFile, reader)
+	err = namer.Compare(approvalFile, receivedFile, reader)
 	if err != nil {
 		reporter.Report(approvalFile, receivedFile)
 		t.Log("Failed Approval: received does not match approved.")

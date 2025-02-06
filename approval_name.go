@@ -79,7 +79,7 @@ func isTestRunner(f *runtime.Frame) bool {
 	return f != nil && f.Function == "testing.tRunner" || f.Function == "testing.runExample"
 }
 
-func (s *ApprovalName) compare(approvalFile, receivedFile string, reader io.Reader) error {
+func (s *ApprovalName) Compare(approvalFile, receivedFile string, reader io.Reader) error {
 
 	GetApprovedFileLoggerInstance().Log(approvalFile)
 
@@ -141,10 +141,10 @@ func (s *ApprovalName) getFileName(extWithDot string, suffix string) string {
 	return path.Join(defaultFolder, filename)
 }
 
-func (s *ApprovalName) getReceivedFile(extWithDot string) string {
+func (s *ApprovalName) GetReceivedFile(extWithDot string) string {
 	return s.getFileName(extWithDot, "received")
 }
 
-func (s *ApprovalName) getApprovalFile(extWithDot string) string {
+func (s *ApprovalName) GetApprovalFile(extWithDot string) string {
 	return s.getFileName(extWithDot, "approved")
 }
