@@ -22,6 +22,6 @@ func assertEndsWith(s string, ending string, t *testing.T) {
 }
 
 func TestTemplatedCustomNamer(t *testing.T) {
-	// custom := NewTemplatedCustomNamer("{TestSourceDirectory}/{TestFileName}.{TestCaseName}.custom.{ApprovedOrReceived}.{FileExtension}")
-	// VerifyString(t, "Hello", Options().ForFile().WithNamer(custom))
+	custom := CreateTemplatedCustomNamerCreator("{TestSourceDirectory}/{TestFileName}.{TestCaseName}.custom.{ApprovedOrReceived}.{FileExtension}")
+	VerifyString(t, "Hello", Options().ForFile().WithNamer(custom))
 }
