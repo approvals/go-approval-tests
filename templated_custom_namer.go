@@ -27,9 +27,9 @@ func NewTemplatedCustomNamer(t core.Failable, template string) *templatedCustomN
 		template: template,
 	}
 
-	name := getApprovalName(t)
+	name, fileName := getApprovalName(t)
 
-	namer.fillParts(name.name, name.fileName)
+	namer.fillParts(name, fileName)
 
 	return namer
 }

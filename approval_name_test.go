@@ -6,16 +6,16 @@ import (
 )
 
 func TestNamer(t *testing.T) {
-	var namer = getApprovalName(t)
-	if !strings.HasSuffix(namer.name, "TestNamer") {
-		t.Fatalf("test name is wrong in namer, got %s", namer.name)
+	name, _ := getApprovalName(t)
+	if !strings.HasSuffix(name, "TestNamer") {
+		t.Fatalf("test name is wrong in namer, got %s", name)
 	}
 }
 
 func TestNamerFilename(t *testing.T) {
-	var namer = getApprovalName(t)
-	if !strings.HasSuffix(namer.fileName, "approval_name_test.go") {
-		t.Fatalf("test filename is wrong in namer, got %s", namer.fileName)
+	_, fileName := getApprovalName(t)
+	if !strings.HasSuffix(fileName, "approval_name_test.go") {
+		t.Fatalf("test filename is wrong in namer, got %s", fileName)
 	}
 }
 
@@ -23,11 +23,11 @@ func TestParameterizedTestNames(t *testing.T) {
 	for _, tc := range ExampleParameterizedTestcases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			var namer = getApprovalName(t)
+			name, _ := getApprovalName(t)
 			sanitizedName := strings.Replace(tc.name, " ", "_", -1)
-			if !strings.Contains(namer.name, "TestParameterizedTestNames.") &&
-				!strings.HasSuffix(namer.name, sanitizedName) {
-				t.Fatalf("parameterized test name is wrong in namer, got %s", namer.name)
+			if !strings.Contains(name, "TestParameterizedTestNames.") &&
+				!strings.HasSuffix(name, sanitizedName) {
+				t.Fatalf("parameterized test name is wrong in namer, got %s", name)
 			}
 		})
 	}

@@ -6,12 +6,12 @@ import (
 )
 
 func Test00(t *testing.T) {
-	approvalName := getApprovalName(t)
+	namer := getApprovalNameCreator()(t)
 
-	approvalFile := approvalName.GetApprovalFile(".txt")
+	approvalFile := namer.GetApprovalFile(".txt")
 	assertEndsWith(approvalFile, "namer_test.Test00.approved.txt", t)
 
-	receivedFile := approvalName.GetReceivedFile(".txt")
+	receivedFile := namer.GetReceivedFile(".txt")
 	assertEndsWith(receivedFile, "namer_test.Test00.received.txt", t)
 }
 
