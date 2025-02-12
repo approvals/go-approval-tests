@@ -16,9 +16,7 @@ type ApprovalName struct {
 }
 
 func getApprovalNameCreator() core.ApprovalNamerCreator {
-	return func(t core.Failable) core.ApprovalNamer {
-		return getApprovalName(t)
-	}
+	return CreateTemplatedCustomNamerCreator("{TestSourceDirectory}/{ApprovalsSubdirectory}/{TestFileName}.{TestCaseName}.{ApprovedOrReceived}.{FileExtension}")
 }
 
 func getApprovalName(t core.Failable) *ApprovalName {
