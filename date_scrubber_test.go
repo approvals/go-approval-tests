@@ -2,6 +2,7 @@ package approvals_test
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	approvals "github.com/approvals/go-approval-tests"
@@ -38,7 +39,7 @@ func TestGetDateScrubber(t *testing.T) {
 }
 
 func TestExampleForDocumentation(t *testing.T) {
-	// begin-snippet: scrub-date-example
+	// begin-snippet: scrub_date_example
 	scrubber, err := approvals.GetDateScrubberFor("00:00:00")
 	if err != nil {
 		t.Error(err)
@@ -47,9 +48,15 @@ func TestExampleForDocumentation(t *testing.T) {
 	// end-snippet
 }
 
-//   @Test
-//   void supportedFormats()
-//   {
-//     VelocityApprovals.verify(c -> c.put("formats", DateScrubber.getSupportedFormats()),
-//         new Options().forFile().withExtension(".md"));
-//   }
+func TestSupportedFormats(t *testing.T) {
+	formats := approvals.GetSupportedFormats()
+
+	table := "| Example Date | RegEx Pattern |\n"
+	table += "| :-------------------- | :----------------------- |\n"
+
+	for _, f := range formats {
+		table += fmt.Sprintf("| %s | `%s` |\n", f.Examples[0], strings.ReplaceAll(f.Regex, "|", `\|`))
+	}
+
+	approvals.VerifyString(t, table, approvals.Options().ForFile().WithExtension(".md"))
+}
