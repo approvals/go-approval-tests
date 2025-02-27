@@ -8,7 +8,15 @@ ApprovalTests for [go](https://golang.org/)
 [![Build and Test](https://github.com/approvals/go-approval-tests/actions/workflows/test.yml/badge.svg)](https://github.com/approvals/go-approval-tests/actions/workflows/test.yml)
 
 <!-- toc -->
-<!-- endToc -->
+## Contents
+
+  * [Basic string verification](#basic-string-verification)
+  * [Store approved files in testdata subfolder](#store-approved-files-in-testdata-subfolder)
+  * [In Project](#in-project)
+  * [JSON](#json)
+  * [Reporters](#reporters)
+    * [Method level](#method-level)
+    * [Test Level](#test-level)<!-- endToc -->
 
 # Golden master Verification Library
 
