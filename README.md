@@ -58,11 +58,30 @@ Note: ApprovalTests uses approvals to test itself. Therefore there are many exam
 ## JSON
 VerifyJSONBytes - Simple Formatting for easy comparison. Also uses the .json file extension
 
-snippet: verify_json
+<!-- snippet: verify_json -->
+<a id='snippet-verify_json'></a>
+```go
+func TestVerifyJSON(t *testing.T) {
+	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
+	approvals.VerifyJSONBytes(t, jsonb)
+}
+```
+<sup><a href='/documentation_examples/documentation_examples_test.go#L16-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_json' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Matches file: `documentation_examples_test.TestVerifyJSON.approved.json`
 
-snippet: documentation_examples_test.TestVerifyJSON.approved.json
+<!-- snippet: documentation_examples_test.TestVerifyJSON.approved.json -->
+<a id='snippet-documentation_examples_test.TestVerifyJSON.approved.json'></a>
+```json
+{
+  "age": 42,
+  "bark": "woof",
+  "foo": "bar"
+}
+```
+<sup><a href='/documentation_examples/testdata/documentation_examples_test.TestVerifyJSON.approved.json#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-documentation_examples_test.TestVerifyJSON.approved.json' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Reporters
 ApprovalTests becomes _much_ more powerful with reporters. Reporters launch programs on failure to help you understand, fix and approve results.
