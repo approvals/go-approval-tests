@@ -25,11 +25,15 @@ ApprovalTests allows for easy testing of larger objects, strings and anything el
 # Examples
 ## Basic string verification
 
+<!-- snippet: HelloWorld -->
+<a id='snippet-HelloWorld'></a>
 ```go
 func TestHelloWorld(t *testing.T) {
 	approvals.VerifyString(t, "Hello World!")
 }
 ```
+<sup><a href='/documentation_examples_test.go#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-HelloWorld' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Store approved files in testdata subfolder
 Some people prefer to store their approved files in a subfolder "testdata" instead of in the same folder as the 
