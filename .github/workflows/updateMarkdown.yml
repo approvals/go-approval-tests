@@ -25,6 +25,6 @@ jobs:
           commit-message: ". d updated markdown snippets"
           rebase: 'true'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'master'
+          push-branch: 'main'
           name: github actions
           email: actions@github.com
