@@ -91,19 +91,8 @@ You can also declare which one to use. Either at the
 
 ### Method level
 
-```go
-r := UseReporter(reporters.NewIntelliJ())
-defer r.Close()
-```
+snippet: inline_reporter
 
 ### Test Level
 
-```go
-func TestMain(m *testing.M) {
-	r := UseReporter(reporters.NewBeyondCompareReporter())
-	defer r.Close()
-	UseFolder("testdata")
-
-	os.Exit(m.Run())
-}
-```
+snippet: test_main_with_reporter

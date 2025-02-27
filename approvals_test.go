@@ -10,6 +10,7 @@ import (
 	"github.com/approvals/go-approval-tests/reporters"
 )
 
+// begin-snippet: test_main_with_reporter
 func TestMain(m *testing.M) {
 	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
@@ -19,9 +20,13 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+// end-snippet
+
 func TestVerifyStringApproval(t *testing.T) {
+	// begin-snippet: inline_reporter
 	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
+	// end-snippet
 
 	VerifyString(t, "Hello World!")
 }

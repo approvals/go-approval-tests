@@ -4,6 +4,7 @@
 *.a
 *.so
 
+.vscode
 .idea/
 *.iml
 
