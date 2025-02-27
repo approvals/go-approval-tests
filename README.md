@@ -25,26 +25,30 @@ ApprovalTests allows for easy testing of larger objects, strings and anything el
 # Examples
 ## Basic string verification
 
-<!-- snippet: HelloWorld -->
-<a id='snippet-HelloWorld'></a>
+<!-- snippet: hello_world -->
+<a id='snippet-hello_world'></a>
 ```go
 func TestHelloWorld(t *testing.T) {
 	approvals.VerifyString(t, "Hello World!")
 }
 ```
-<sup><a href='/documentation_examples_test.go#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-HelloWorld' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/documentation_examples/documentation_examples_test.go#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-hello_world' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Store approved files in testdata subfolder
 Some people prefer to store their approved files in a subfolder "testdata" instead of in the same folder as the 
 production code. To configure this, add a call to UseFolder to your TestMain:
 
+<!-- snippet: test_main -->
+<a id='snippet-test_main'></a>
 ```go
 func TestMain(m *testing.M) {
-	UseFolder("testdata")
+	approvals.UseFolder("testdata")
 	os.Exit(m.Run())
 }
 ```
+<sup><a href='/documentation_examples/main_test.go#L10-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-test_main' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## In Project
 Note: ApprovalTests uses approvals to test itself. Therefore there are many examples in the code itself.

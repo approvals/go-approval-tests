@@ -1,4 +1,4 @@
-package approvals_test
+package documentation_examples_test
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	approvals "github.com/approvals/go-approval-tests"
 )
 
-// begin-snippet: HelloWorld
+// begin-snippet: hello_world
 func TestHelloWorld(t *testing.T) {
 	approvals.VerifyString(t, "Hello World!")
 }
