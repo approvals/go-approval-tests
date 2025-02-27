@@ -1,0 +1,5 @@
+{
+    "ExcludeDirectories": [ "add-directory-here" ],
+    "Convention": "InPlaceOverwrite",
+    "TocLevel": 5
+}
