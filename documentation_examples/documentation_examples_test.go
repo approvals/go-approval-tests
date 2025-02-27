@@ -12,3 +12,11 @@ func TestHelloWorld(t *testing.T) {
 }
 
 // end-snippet
+
+// begin-snippet: verify_json
+func TestVerifyJSON(t *testing.T) {
+	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
+	approvals.VerifyJSONBytes(t, jsonb)
+}
+
+// end-snippet

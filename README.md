@@ -58,22 +58,11 @@ Note: ApprovalTests uses approvals to test itself. Therefore there are many exam
 ## JSON
 VerifyJSONBytes - Simple Formatting for easy comparison. Also uses the .json file extension
 
-```go
-func TestVerifyJSON(t *testing.T) {
-	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
-	VerifyJSONBytes(t, jsonb)
-}
-```
+snippet: verify_json
 
-Matches file: approvals_test.TestVerifyJSON.received.json
+Matches file: `documentation_examples_test.TestVerifyJSON.approved.json`
 
-```json
-{
-  "age": 42,
-  "bark": "woof",
-  "foo": "bar"
-}
-```
+snippet: documentation_examples_test.TestVerifyJSON.approved.json
 
 ## Reporters
 ApprovalTests becomes _much_ more powerful with reporters. Reporters launch programs on failure to help you understand, fix and approve results.
