@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run MarkdownSnippets
-        run: run-md-snippets.sh
+        run: ./run-md-snippets.sh
       - name: Git Commit and Push
         uses: github-actions-x/commit@v2.9
         with:
