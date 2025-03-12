@@ -1,4 +1,11 @@
-toc
+<!-- toc -->
+## Contents
+
+  * [How to](#how-to)
+  * [Reference](#reference)
+  * [Explanations](#explanations)
+  * [Tutorial](#tutorial)
+    * [Missing Documentation?](#missing-documentation)<!-- endToc -->
 
 ## How to
 
