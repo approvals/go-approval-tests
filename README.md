@@ -10,13 +10,19 @@ ApprovalTests for [go](https://golang.org/)
 <!-- toc -->
 ## Contents
 
-  * [Basic string verification](#basic-string-verification)
-  * [Store approved files in testdata subfolder](#store-approved-files-in-testdata-subfolder)
-  * [In Project](#in-project)
-  * [JSON](#json)
-  * [Reporters](#reporters)
-    * [Method level](#method-level)
-    * [Test Level](#test-level)<!-- endToc -->
+- [ApprovalTests.go](#approvaltestsgo)
+  - [Contents](#contents)
+- [Golden master Verification Library](#golden-master-verification-library)
+- [Examples](#examples)
+  - [Basic string verification](#basic-string-verification)
+  - [Store approved files in testdata subfolder](#store-approved-files-in-testdata-subfolder)
+  - [In Project](#in-project)
+  - [JSON](#json)
+  - [Reporters](#reporters)
+    - [Method level](#method-level)
+    - [Test Level](#test-level)
+  - [Support and Documentation](#support-and-documentation)
+    - [Missing Documentation?](#missing-documentation)
 
 # Golden master Verification Library
 
@@ -101,7 +107,6 @@ defer r.Close()
 <!-- endSnippet -->
 
 ### Test Level
-
 <!-- snippet: test_main_with_reporter -->
 <a id='snippet-test_main_with_reporter'></a>
 ```go
@@ -116,3 +121,15 @@ func TestMain(m *testing.M) {
 ```
 <sup><a href='/approvals_test.go#L13-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-test_main_with_reporter' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+## Support and Documentation
+
+-   [Documentation](/docs/README.md)
+
+-   GitHub: [https://github.com/approvals/go-approvals-tests](https://github.com/approvals/go-approvals-tests)
+
+-   ApprovalTests Homepage: [http://www.approvaltests.com](http://www.approvaltests.com)
+  
+### Missing Documentation?
+
+If there is documentation you wish existed, please add a `page request` to [this issue](https://github.com/approvals/ApprovalTests.Python/issues/135).
