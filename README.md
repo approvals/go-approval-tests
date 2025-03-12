@@ -7,22 +7,7 @@ ApprovalTests for [go](https://golang.org/)
 [![Coverage Status](https://codecov.io/gh/approvals/go-approval-tests/graph/badge.svg)](https://codecov.io/gh/approvals/go-approval-tests)
 [![Build and Test](https://github.com/approvals/go-approval-tests/actions/workflows/test.yml/badge.svg)](https://github.com/approvals/go-approval-tests/actions/workflows/test.yml)
 
-<!-- toc -->
-## Contents
-
-- [ApprovalTests.go](#approvaltestsgo)
-  - [Contents](#contents)
-- [Golden master Verification Library](#golden-master-verification-library)
-- [Examples](#examples)
-  - [Basic string verification](#basic-string-verification)
-  - [Store approved files in testdata subfolder](#store-approved-files-in-testdata-subfolder)
-  - [In Project](#in-project)
-  - [JSON](#json)
-  - [Reporters](#reporters)
-    - [Method level](#method-level)
-    - [Test Level](#test-level)
-  - [Support and Documentation](#support-and-documentation)
-    - [Missing Documentation?](#missing-documentation)
+toc
 
 # Golden master Verification Library
 
