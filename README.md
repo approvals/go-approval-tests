@@ -132,4 +132,4 @@ func TestMain(m *testing.M) {
   
 ### Missing Documentation?
 
-If there is documentation you wish existed, please add a `page request` to [this issue](https://github.com/approvals/ApprovalTests.Python/issues/135).
+If there is documentation you wish existed, please add a `page request` to [this issue](https://github.com/approvals/go-approval-tests/issues/59).
