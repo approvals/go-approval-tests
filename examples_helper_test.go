@@ -12,7 +12,7 @@ import (
 
 var (
 	// this is a mock testing.T for documentation purposes
-	t = &approvals.TestFailable{}
+	t = approvals.NewTestFailableWithName("TestExampleForDocumentation")
 )
 
 // failing is a mock struct that is only there for documentation convenience,

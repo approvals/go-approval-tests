@@ -23,6 +23,7 @@ func TestMain(m *testing.M) {
 // end-snippet
 
 func TestVerifyStringApproval(t *testing.T) {
+	t.Parallel()
 	// begin-snippet: inline_reporter
 	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
@@ -32,6 +33,7 @@ func TestVerifyStringApproval(t *testing.T) {
 }
 
 func TestReporterFromSetup(t *testing.T) {
+	t.Parallel()
 	VerifyString(t, hello("World"))
 }
 
@@ -53,16 +55,17 @@ func hello(name string) string {
 }
 
 func TestParameterizedTests(t *testing.T) {
-	t.Parallel()
 	for _, tc := range ExampleParameterizedTestcases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			VerifyString(t, hello(tc.value))
 		})
 	}
 }
 
 func TestVerifyXMLStruct(t *testing.T) {
+	t.Parallel()
 	json := struct {
 		XMLName xml.Name `xml:"Test"`
 		Title   string
@@ -78,6 +81,7 @@ func TestVerifyXMLStruct(t *testing.T) {
 }
 
 func TestVerifyBadXMLStruct(t *testing.T) {
+	t.Parallel()
 	xmlContent := struct {
 		Title string
 	}{
@@ -88,16 +92,19 @@ func TestVerifyBadXMLStruct(t *testing.T) {
 }
 
 func TestVerifyXMLBytes(t *testing.T) {
+	t.Parallel()
 	xmlb := []byte("<Test><Title>Hello World!</Title><Name>Peter Pan</Name><Age>100</Age></Test>")
 	VerifyXMLBytes(t, xmlb)
 }
 
 func TestVerifyBadXMLBytes(t *testing.T) {
+	t.Parallel()
 	xmlb := []byte("Test></Test>")
 	VerifyXMLBytes(t, xmlb)
 }
 
 func TestVerifyJSONStruct(t *testing.T) {
+	t.Parallel()
 	json := struct {
 		Title string
 		Name  string
@@ -112,16 +119,19 @@ func TestVerifyJSONStruct(t *testing.T) {
 }
 
 func TestVerifyJSONBytes(t *testing.T) {
+	t.Parallel()
 	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
 }
 
 func TestVerifyBadJSONBytes(t *testing.T) {
+	t.Parallel()
 	jsonb := []byte("{ foo: \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
 }
 
 func TestVerifyMap(t *testing.T) {
+	t.Parallel()
 	m := map[string]string{
 		"dog": "bark",
 		"cat": "meow",
@@ -131,41 +141,49 @@ func TestVerifyMap(t *testing.T) {
 }
 
 func TestVerifyMapBadMap(t *testing.T) {
+	t.Parallel()
 	m := "foo"
 	VerifyMap(t, m)
 }
 
 func TestVerifyMapEmptyMap(t *testing.T) {
+	t.Parallel()
 	m := map[string]string{}
 	VerifyMap(t, m)
 }
 
 func TestVerifyArray(t *testing.T) {
+	t.Parallel()
 	xs := []string{"dog", "cat", "bird"}
 	VerifyArray(t, xs)
 }
 
 func TestVerifyArrayBadArray(t *testing.T) {
+	t.Parallel()
 	xs := "string"
 	VerifyArray(t, xs)
 }
 
 func TestVerifyArrayEmptyArray(t *testing.T) {
+	t.Parallel()
 	var xs []string
 	VerifyArray(t, xs)
 }
 
 func TestVerifyArrayTransformation(t *testing.T) {
+	t.Parallel()
 	xs := []string{"Christopher", "Llewellyn"}
 	VerifyAll(t, "uppercase", xs, func(x interface{}) string { return fmt.Sprintf("%s => %s", x, strings.ToUpper(x.(string))) })
 }
 
 func TestVerifyAllCombinationsFor1(t *testing.T) {
+	t.Parallel()
 	xs := []string{"Christopher", "Llewellyn"}
 	VerifyAllCombinationsFor1(t, "uppercase", func(x interface{}) string { return strings.ToUpper(x.(string)) }, xs)
 }
 
 func TestVerifyAllCombinationsForSkipped(t *testing.T) {
+	t.Parallel()
 	xs := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	VerifyAllCombinationsFor1(
 		t,
@@ -180,6 +198,7 @@ func TestVerifyAllCombinationsForSkipped(t *testing.T) {
 }
 
 func TestVerifyAllCombinationsFor2(t *testing.T) {
+	t.Parallel()
 	xs1 := []string{"Christopher", "Llewellyn"}
 	xs2 := []int{0, 1}
 	VerifyAllCombinationsFor2(
@@ -191,6 +210,7 @@ func TestVerifyAllCombinationsFor2(t *testing.T) {
 }
 
 func TestVerifyAllCombinationsFor9(t *testing.T) {
+	t.Parallel()
 	xs1 := []string{"Christopher"}
 
 	VerifyAllCombinationsFor9(

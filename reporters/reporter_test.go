@@ -26,6 +26,7 @@ func (s *testReporter) Report(approved, received string) bool {
 }
 
 func TestFirstWorkingReporter(t *testing.T) {
+    t.Parallel()
 	a := newTestReporter(false)
 	b := newTestReporter(true)
 	c := newTestReporter(true)
@@ -39,6 +40,7 @@ func TestFirstWorkingReporter(t *testing.T) {
 }
 
 func TestMultiReporter(t *testing.T) {
+    t.Parallel()
 	a := newTestReporter(true)
 	b := newTestReporter(true)
 
@@ -51,6 +53,7 @@ func TestMultiReporter(t *testing.T) {
 }
 
 func TestMultiReporterWithNoWorkingReporters(t *testing.T) {
+    t.Parallel()
 	a := newTestReporter(false)
 	b := newTestReporter(false)
 
@@ -71,6 +74,7 @@ func restoreEnv(exists bool, key, value string) {
 }
 
 func TestCIReporter(t *testing.T) {
+    t.Parallel()
 	value, exists := os.LookupEnv("CI")
 
 	os.Setenv("CI", "true")

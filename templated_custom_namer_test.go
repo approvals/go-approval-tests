@@ -6,6 +6,7 @@ import (
 )
 
 func Test00(t *testing.T) {
+    t.Parallel()
 	namer := getApprovalNameCreator()(t)
 
 	approvalFile := namer.GetApprovalFile(".txt")
@@ -22,6 +23,7 @@ func assertEndsWith(s string, ending string, t *testing.T) {
 }
 
 func TestTemplatedCustomNamer(t *testing.T) {
+    t.Parallel()
 	custom := CreateTemplatedCustomNamerCreator("{TestSourceDirectory}/{ApprovalsSubdirectory}/{TestFileName}.{TestCaseName}.custom.{ApprovedOrReceived}.{FileExtension}")
 	VerifyString(t, "Hello", Options().ForFile().WithNamer(custom))
 }

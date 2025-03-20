@@ -21,15 +21,10 @@ func (s *TestFailable) Name() string {
 
 }
 func (s *TestFailable) Error(args ...interface{}) {
-	fmt.Println("This test failed")
+	fmt.Printf("%s failed (expected)\n", s.Name())
 }
 func (s *TestFailable) Helper() {}
 
-func NewTestFailable() *TestFailable {
-	return &TestFailable{
-		name: "TestFailable",
-	}
-}
 func NewTestFailableWithName(name string) *TestFailable {
 	return &TestFailable{
 		name: name,
@@ -56,6 +51,7 @@ func (s *testReporter) Report(approved, received string) bool {
 }
 
 func TestUseReporter(t *testing.T) {
+	t.Parallel()
 	front := UseFrontLoadedReporter(newTestReporter(false))
 	defer front.Close()
 
@@ -63,7 +59,7 @@ func TestUseReporter(t *testing.T) {
 	a := newTestReporter(true)
 	r := UseReporter(reporters.Reporter(a))
 
-	f := &TestFailable{}
+	f := NewTestFailableWithName(t.Name())
 
 	VerifyString(f, "foo")
 
@@ -79,6 +75,7 @@ func TestUseReporter(t *testing.T) {
 }
 
 func TestFrontLoadedReporter(t *testing.T) {
+	t.Parallel()
 	old := getReporter()
 	front := newTestReporter(false)
 	next := newTestReporter(true)
@@ -87,7 +84,7 @@ func TestFrontLoadedReporter(t *testing.T) {
 	nextCloser := UseReporter(reporters.Reporter(next))
 	defer nextCloser.Close()
 
-	f := &TestFailable{}
+	f := NewTestFailableWithName(t.Name())
 
 	VerifyString(f, "foo")
 
