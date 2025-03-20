@@ -31,10 +31,11 @@ ApprovalTests allows for easy testing of larger objects, strings and anything el
 <a id='snippet-hello_world'></a>
 ```go
 func TestHelloWorld(t *testing.T) {
+    t.Parallel()
 	approvals.VerifyString(t, "Hello World!")
 }
 ```
-<sup><a href='/documentation_examples/documentation_examples_test.go#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-hello_world' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/documentation_examples/documentation_examples_test.go#L9-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-hello_world' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Store approved files in testdata subfolder
@@ -64,11 +65,12 @@ VerifyJSONBytes - Simple Formatting for easy comparison. Also uses the .json fil
 <a id='snippet-verify_json'></a>
 ```go
 func TestVerifyJSON(t *testing.T) {
+    t.Parallel()
 	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	approvals.VerifyJSONBytes(t, jsonb)
 }
 ```
-<sup><a href='/documentation_examples/documentation_examples_test.go#L16-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_json' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/documentation_examples/documentation_examples_test.go#L17-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_json' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Matches file: `documentation_examples_test.TestVerifyJSON.approved.json`
@@ -99,7 +101,7 @@ You can also declare which one to use. Either at the
 r := UseReporter(reporters.NewContinuousIntegrationReporter())
 defer r.Close()
 ```
-<sup><a href='/approvals_test.go#L26-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-inline_reporter' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/approvals_test.go#L27-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-inline_reporter' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### Test Level
