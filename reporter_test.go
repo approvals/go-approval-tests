@@ -51,7 +51,6 @@ func (s *testReporter) Report(approved, received string) bool {
 }
 
 func TestUseReporter(t *testing.T) {
-	t.Parallel()
 	front := UseFrontLoadedReporter(newTestReporter(false))
 	defer front.Close()
 
@@ -75,7 +74,6 @@ func TestUseReporter(t *testing.T) {
 }
 
 func TestFrontLoadedReporter(t *testing.T) {
-	t.Parallel()
 	old := getReporter()
 	front := newTestReporter(false)
 	next := newTestReporter(true)

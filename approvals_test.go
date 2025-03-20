@@ -23,7 +23,6 @@ func TestMain(m *testing.M) {
 // end-snippet
 
 func TestVerifyStringApproval(t *testing.T) {
-	t.Parallel()
 	// begin-snippet: inline_reporter
 	r := UseReporter(reporters.NewContinuousIntegrationReporter())
 	defer r.Close()
