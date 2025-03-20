@@ -16,7 +16,7 @@ if err != nil {
 }
 approvals.VerifyString(t, "created at 03:14:15", approvals.Options().WithScrubber(scrubber))
 ```
-<sup><a href='/date_scrubber_test.go#L42-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-scrub_date_example' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/date_scrubber_test.go#L45-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-scrub_date_example' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 which will produce
