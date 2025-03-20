@@ -9,6 +9,7 @@ import (
 )
 
 func TestSupportedFormatWorksForExamples(t *testing.T) {
+	t.Parallel()
 	for _, supportedFormat := range approvals.GetSupportedFormats() {
 		dateScrubber := approvals.NewDateScrubber(supportedFormat.Regex)
 		for _, example := range supportedFormat.Examples {
@@ -21,6 +22,7 @@ func TestSupportedFormatWorksForExamples(t *testing.T) {
 }
 
 func TestGetDateScrubber(t *testing.T) {
+	t.Parallel()
 	formats := approvals.GetSupportedFormats()
 	output := ""
 	for _, format := range formats {
@@ -39,6 +41,7 @@ func TestGetDateScrubber(t *testing.T) {
 }
 
 func TestExampleForDocumentation(t *testing.T) {
+	t.Parallel()
 	// begin-snippet: scrub_date_example
 	scrubber, err := approvals.GetDateScrubberFor("00:00:00")
 	if err != nil {
@@ -49,6 +52,7 @@ func TestExampleForDocumentation(t *testing.T) {
 }
 
 func TestSupportedFormats(t *testing.T) {
+	t.Parallel()
 	formats := approvals.GetSupportedFormats()
 
 	table := "| Example Date | RegEx Pattern |\n"
