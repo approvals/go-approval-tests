@@ -16,18 +16,14 @@ type TestFailable struct {
 	name string
 }
 
-func (s *TestFailable) Fail() {
-	fmt.Println("This test failed")
-}
 func (s *TestFailable) Name() string {
 	return s.name
 
 }
-func (s *TestFailable) Fatalf(format string, args ...interface{}) {}
-func (s *TestFailable) Fatal(args ...interface{})                 {}
-func (s *TestFailable) Log(args ...interface{})                   {}
-func (s *TestFailable) Logf(format string, args ...interface{})   {}
-func (s *TestFailable) Helper()                                   {}
+func (s *TestFailable) Error(args ...interface{}) {
+	fmt.Println("This test failed")
+}
+func (s *TestFailable) Helper() {}
 
 func NewTestFailable() *TestFailable {
 	return &TestFailable{

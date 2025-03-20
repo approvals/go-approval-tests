@@ -11,7 +11,7 @@ import (
 func getApprovalName(t core.Failable) (name string, fileName string) {
 	fileName, err := findFileName()
 	if err != nil {
-		t.Fatalf("approvals: could not find the test filename or approved files location")
+		t.Error("approvals: could not find the test filename or approved files location")
 		return "", ""
 	}
 
