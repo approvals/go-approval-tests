@@ -15,8 +15,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        go-version: [1.16.x, 1.17.x, 1.18.x, 1.19.x, 1.20.x, 1.21.x, 1.22.x, 1.23.x, 'stable']
+        os: 
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+        go-version: 
+          - 1.16.x
+          - 1.17.x
+          - 1.18.x
+          - 1.19.x
+          - 1.20.x
+          - 1.21.x
+          - 1.22.x
+          - 1.23.x
+          - 1.24.x
+          - 'stable'
     runs-on: ${{ matrix.os }}
     
     steps:
