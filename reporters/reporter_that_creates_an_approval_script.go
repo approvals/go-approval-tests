@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/approvals/go-approval-tests/internal/log"
 	"github.com/approvals/go-approval-tests/utils"
 )
 
 var (
 	directory                = ".approval_tests_temp"
-	filenameWithoutExtention = directory + "/approval_script"
+	filenameWithoutExtension = directory + "/approval_script"
 	filename                 = ""
 )
 
@@ -34,14 +35,9 @@ func initializeFile() {
 		return
 	}
 
-	filename = filenameWithoutExtention + ".sh"
+	filename = filenameWithoutExtension + ".sh"
 
-	// create the file and setup the parent directory if needed
-	err := os.MkdirAll(directory, os.ModePerm)
-	if err != nil {
-		fmt.Println("Error creating directory: ", err)
-		return
-	}
+	log.InitializeTempDirectory()
 
 	// create the file and make it executable in one step
 	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
