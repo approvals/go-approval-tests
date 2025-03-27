@@ -37,7 +37,7 @@ jobs:
     - name: test
       run: |
         mkdir test-reports
-        go test  ./... -race -coverprofile=coverage.txt -covermode=atomic | go-junit-report -set-exit-code > test-reports/test-results.xml
+        go test  -v ./... -race -coverprofile=coverage.txt -covermode=atomic | go-junit-report -set-exit-code > test-reports/test-results.xml
     
     - name: Publish Test Report
       uses: mikepenz/action-junit-report@v5
