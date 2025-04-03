@@ -33,8 +33,8 @@ func (l approvedFileLog) initializeFile() {
 
 	InitializeTempDirectory()
 
-	// create the file and make it executable in one step
-	file, err := os.OpenFile(l.filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	// create the file with read/write permissions for the user
+	file, err := os.OpenFile(l.filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		fmt.Println("Error creating file: ", err)
 		return

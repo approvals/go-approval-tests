@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/approvals/go-approval-tests/core"
+	"github.com/approvals/go-approval-tests/internal/log"
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
 )
@@ -60,6 +61,7 @@ func Verify(t core.Failable, reader io.Reader, opts ...verifyOptions) {
 	reporter := getReporter()
 	err = core.Compare(namer.GetName(), approvalFile, receivedFile, reader)
 	if err != nil {
+		log.GetFailedFileLoggerInstance().Log(receivedFile, approvalFile)
 		reporter.Report(approvalFile, receivedFile)
 		t.Error("Failed Approval: received does not match approved.")
 	} else {
