@@ -24,7 +24,7 @@ func GetFailedFileLoggerInstance() *failedFileLog {
 			filename: approvalTempdirectory + "/.failed_comparison.log",
 		}
 		failedInstance.initializeFile()
-		downloadApproveAllScriptIfMissing()
+		DownloadScriptFromCommonRepoIfNeeded("approve_all.py")
 	})
 
 	return failedInstance
@@ -49,11 +49,6 @@ func (l failedFileLog) Log(receivedFile, approvedFile string) {
 
 	logEntry := fmt.Sprintf("%s -> %s\n", receivedFile, approvedFile)
 	utils.AppendToFile(l.filename, logEntry)
-}
-
-func downloadApproveAllScriptIfMissing() {
-	// This could be implemented to download the script if needed
-	// For now, just stubbing out the method mentioned in the Java implementation
 }
 
 func Touch() {
