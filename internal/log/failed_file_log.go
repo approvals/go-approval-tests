@@ -24,7 +24,10 @@ func GetFailedFileLoggerInstance() *failedFileLog {
 			filename: approvalTempdirectory + "/.failed_comparison.log",
 		}
 		failedInstance.initializeFile()
-		DownloadScriptFromCommonRepoIfNeeded("approve_all.py")
+
+		// putting this in a go routine to avoid blocking
+		// the main thread while waiting for the file to be downloaded
+		go DownloadScriptFromCommonRepoIfNeeded("approve_all.py")
 	})
 
 	return failedInstance
