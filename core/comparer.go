@@ -11,7 +11,7 @@ import (
 
 func Compare(name, approvalFile, receivedFile string, reader io.Reader) error {
 	log.GetApprovedFileLoggerInstance().Log(approvalFile)
-
+	log.Touch()
 	received, err := io.ReadAll(reader)
 	if err != nil {
 		return err
