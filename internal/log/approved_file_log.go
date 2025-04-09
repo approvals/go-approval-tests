@@ -24,6 +24,10 @@ func GetApprovedFileLoggerInstance() *approvedFileLog {
 			filename: approvalTempdirectory + "/.approved_files.log",
 		}
 		instance.initializeFile()
+
+		// putting this in a go routine to avoid blocking
+		// the main thread while waiting for the file to be downloaded
+		go DownloadScriptFromCommonRepoIfNeeded("remove_abandoned_files.py")
 	})
 
 	return instance
