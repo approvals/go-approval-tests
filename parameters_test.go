@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// begin-snippet: parameterized_test_with_additional_information
 func TestWithParameters(t *testing.T) {
 	t.Parallel()
 
@@ -14,5 +15,5 @@ func TestWithParameters(t *testing.T) {
 		VerifyString(t, result, Options().ForFile().WithAdditionalInformation(value))
 	}
 }
-
+// end-snippet
 
