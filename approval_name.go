@@ -5,5 +5,5 @@ import (
 )
 
 func getApprovalNameCreator() core.ApprovalNamerCreator {
-	return CreateTemplatedCustomNamerCreator("{TestSourceDirectory}/{ApprovalsSubdirectory}/{TestFileName}.{TestCaseName}.{ApprovedOrReceived}.{FileExtension}")
+	return CreateTemplatedCustomNamerCreator("{TestSourceDirectory}/{ApprovalsSubdirectory}/{TestFileName}.{TestCaseName}{AdditionalInformation}.{ApprovedOrReceived}.{FileExtension}")
 }

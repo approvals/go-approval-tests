@@ -14,6 +14,7 @@ type templatedCustomNamer struct {
 	approvalsSubdirectory       string
 	testFileName                string
 	testCaseName                string
+	additionalInformation       string
 }
 
 func CreateTemplatedCustomNamerCreator(template string) core.ApprovalNamerCreator {
@@ -34,11 +35,6 @@ func NewTemplatedCustomNamer(t core.Failable, template string) *templatedCustomN
 	return namer
 }
 
-// auto testSourceDirectory = "{TestSourceDirectory}";
-// auto relativeTestSourceDirectory = "{RelativeTestSourceDirectory}";
-// auto approvalsSubdirectory = "{ApprovalsSubdirectory}";
-// auto testFileName = "{TestFileName}";
-// auto testCaseName = "{TestCaseName}";
 
 func (s *templatedCustomNamer) fillParts(name, filename string) {
 	s.testSourceDirectory = filepath.Dir(filename)
@@ -54,6 +50,13 @@ func (s *templatedCustomNamer) getFileName(extWithDot, approvedOrReceived string
 	out = strings.ReplaceAll(out, "{ApprovalsSubdirectory}", s.approvalsSubdirectory)
 	out = strings.ReplaceAll(out, "{TestFileName}", s.testFileName)
 	out = strings.ReplaceAll(out, "{TestCaseName}", s.testCaseName)
+	
+	additionalInformation := ""
+	if s.additionalInformation != "" {
+		additionalInformation = "." + s.additionalInformation
+	}
+	out = strings.ReplaceAll(out, "{AdditionalInformation}", additionalInformation)
+	
 	out = strings.ReplaceAll(out, "{ApprovedOrReceived}", approvedOrReceived)
 	out = strings.ReplaceAll(out, "{FileExtension}", strings.TrimPrefix(extWithDot, "."))
 

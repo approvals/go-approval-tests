@@ -3,7 +3,6 @@ package approvals
 import (
 	"io"
 	"strings"
-
 	"github.com/approvals/go-approval-tests/core"
 )
 
@@ -41,7 +40,17 @@ func (f fileOptions) WithNamer(namer core.ApprovalNamerCreator) verifyOptions {
 
 func (f fileOptions) GetNamer() core.ApprovalNamerCreator {
 	ext := getField(f.fields, "namer", getApprovalNameCreator())
-	return ext.(core.ApprovalNamerCreator)
+	creator := ext.(core.ApprovalNamerCreator)
+
+	return func(t core.Failable) core.ApprovalNamer {
+		namer := creator(t)
+		templated, ok := namer.(*templatedCustomNamer)
+		if ok {
+			templated.additionalInformation = f.getField("additionalInformation", "").(string)
+			return templated
+		}
+		return namer
+	}
 }
 
 func (v verifyOptions) getField(key string, defaultValue interface{}) interface{} {
@@ -84,6 +93,11 @@ func (f fileOptions) WithExtension(extensionWithDot string) verifyOptions {
 		extensionWithDot = "." + extensionWithDot
 	}
 	return NewVerifyOptions(f.fields, "extWithDot", extensionWithDot)
+}
+
+// WithAdditionalInformation allows adding additional information to the file name for parameterized tests.
+func (f fileOptions) WithAdditionalInformation(info string) verifyOptions {
+	return NewVerifyOptions(f.fields, "additionalInformation", strings.ReplaceAll(info, " ", "_"))
 }
 
 func (v verifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
