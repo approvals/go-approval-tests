@@ -5,8 +5,8 @@
 ## Contents
 
   * [Introduction](#introduction)
-  * [Sample Code](#sample-code)
-<!-- endToc -->
+  * [Sample Code with Subtests](#sample-code-with-subtests)
+  * [Sample Code with Additional Information](#sample-code-with-additional-information)<!-- endToc -->
 
 ## Introduction
 By default, ApprovalTests only allows one verify (`.approved.` ) file per test or subtest.
@@ -18,11 +18,33 @@ to add identifiers to your approval file names.
 
 We suggest using subtests when possible:
 
-snippet: parameterized_test_with_subtests
+<!-- snippet: parameterized_test_with_subtests -->
+<a id='snippet-parameterized_test_with_subtests'></a>
+```go
+var ExampleParameterizedTestcases = []ExampleTestCaseParameters{
+	{name: "Normal", value: "Sue"},
+	{name: "Long", value: "Chandrasekhar"},
+	{name: "Short", value: "A"},
+	{name: "Composed name", value: "Karl-Martin"},
+}
+
+func TestParameterizedTests(t *testing.T) {
+	for _, tc := range ExampleParameterizedTestcases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			VerifyString(t, hello(tc.value))
+		})
+	}
+}
+```
+<sup><a href='/approvals_test.go#L49-L66' title='Snippet source file'>snippet source</a> | <a href='#snippet-parameterized_test_with_subtests' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Sample Code with Additional Information
 
 <!-- snippet: parameterized_test_with_additional_information -->
+<a id='snippet-parameterized_test_with_additional_information'></a>
 ```go
 func TestWithParameters(t *testing.T) {
 	t.Parallel()
@@ -34,6 +56,7 @@ func TestWithParameters(t *testing.T) {
 	}
 }
 ```
+<sup><a href='/parameters_test.go#L8-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-parameterized_test_with_additional_information' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This code sample ensures that the approval files include the additional information for each parameter. For example:
