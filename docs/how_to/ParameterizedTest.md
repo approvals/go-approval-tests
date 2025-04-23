@@ -9,13 +9,18 @@
 <!-- endToc -->
 
 ## Introduction
-By default, ApprovalTests only allows one verify (`.approved.` ) file per test.
-
+By default, ApprovalTests only allows one verify (`.approved.` ) file per test or subtest.
 When working with parameterized tests, you may want multiple files.
 The `Options().ForFile().WithAdditionalInformation()` functionality allows you
 to add identifiers to your approval file names.
 
-## Sample Code
+## Sample Code with Subtests
+
+We suggest using subtests when possible:
+
+snippet: parameterized_test_with_subtests
+
+## Sample Code with Additional Information
 
 <!-- snippet: parameterized_test_with_additional_information -->
 ```go

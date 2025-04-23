@@ -41,16 +41,17 @@ type ExampleTestCaseParameters struct {
 	value string
 }
 
+// hello world function that can be the system-under-test
+func hello(name string) string {
+	return fmt.Sprintf("Hello %s!", name)
+}
+
+// begin-snippet: parameterized_test_with_subtests
 var ExampleParameterizedTestcases = []ExampleTestCaseParameters{
 	{name: "Normal", value: "Sue"},
 	{name: "Long", value: "Chandrasekhar"},
 	{name: "Short", value: "A"},
 	{name: "Composed name", value: "Karl-Martin"},
-}
-
-// hello world function that can be the system-under-test
-func hello(name string) string {
-	return fmt.Sprintf("Hello %s!", name)
 }
 
 func TestParameterizedTests(t *testing.T) {
@@ -62,6 +63,7 @@ func TestParameterizedTests(t *testing.T) {
 		})
 	}
 }
+// end-snippet
 
 func TestVerifyXMLStruct(t *testing.T) {
 	t.Parallel()

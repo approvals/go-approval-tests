@@ -9,6 +9,7 @@
 
 ## How to
 
+-   [Parameterized Tests](how_to/ParameterizedTest.md)
 -   [Scrub Dates](how_to/ScrubDates.md)
 
 ## Reference
