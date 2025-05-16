@@ -38,7 +38,7 @@ func TestParameterizedTests(t *testing.T) {
 	}
 }
 ```
-<sup><a href='/approvals_test.go#L49-L66' title='Snippet source file'>snippet source</a> | <a href='#snippet-parameterized_test_with_subtests' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/approvals_test.go#L49-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-parameterized_test_with_subtests' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Sample Code with Additional Information
