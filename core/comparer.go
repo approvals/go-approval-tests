@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/approvals/go-approval-tests/internal/log"
 )
@@ -52,7 +53,10 @@ func normalizeLineEndings(bs []byte) []byte {
 }
 
 func dumpReceivedTestResult(bs []byte, receivedFile string) error {
-	err := os.WriteFile(receivedFile, bs, 0644)
-
-	return err
+	dir := filepath.Dir(receivedFile)
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(receivedFile, bs, 0644)
 }

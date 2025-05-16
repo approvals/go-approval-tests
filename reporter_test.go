@@ -1,35 +1,12 @@
 package approvals
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
 )
-
-// TestFailable is a fake replacing testing.T
-// It implements the parts of the testing.T interface approvals uses,
-// ie the approvaltests.Failable interface
-type TestFailable struct {
-	name string
-}
-
-func (s *TestFailable) Name() string {
-	return s.name
-
-}
-func (s *TestFailable) Error(args ...interface{}) {
-	fmt.Printf("%s failed (expected)\n", s.Name())
-}
-func (s *TestFailable) Helper() {}
-
-func NewTestFailableWithName(name string) *TestFailable {
-	return &TestFailable{
-		name: name,
-	}
-}
 
 type testReporter struct {
 	called    bool

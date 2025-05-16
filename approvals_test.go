@@ -63,6 +63,7 @@ func TestParameterizedTests(t *testing.T) {
 		})
 	}
 }
+
 // end-snippet
 
 func TestVerifyXMLStruct(t *testing.T) {
@@ -230,4 +231,17 @@ func TestVerifyAllCombinationsFor9(t *testing.T) {
 		[]int{10, 11},
 		[]int{12, 13},
 		[]int{14, 15})
+}
+
+func TestVerifyStringWithNonExistentFolder(t *testing.T) {
+	nonExistentDir := "testdata/nonexistent_subdir"
+	UseFolder(nonExistentDir)
+	defer UseFolder("testdata")
+
+	fakeT := NewTestFailableWithName("TestVerifyStringWithNonExistentFolder")
+	VerifyString(fakeT, "Hello from a missing folder!")
+
+	if !fakeT.Failed() {
+		t.Error("Expected approval mismatch failure, but test did not fail")
+	}
 }
