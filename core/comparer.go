@@ -13,15 +13,7 @@ import (
 func Compare(name, approvalFile, receivedFile string, reader io.Reader) error {
 	log.GetApprovedFileLoggerInstance().Log(approvalFile)
 	log.Touch()
-	received, err := io.ReadAll(reader)
-	if err != nil {
-		return err
-	}
-
-	// Ideally, this should only be written if
-	//  1. the approval file does not exist
-	//  2. the results differ
-	err = dumpReceivedTestResult(received, receivedFile)
+	received, err := writeText(reader, receivedFile)
 	if err != nil {
 		return err
 	}
@@ -46,6 +38,24 @@ func Compare(name, approvalFile, receivedFile string, reader io.Reader) error {
 	}
 
 	return fmt.Errorf("failed to approved %s", name)
+}
+
+func writeText(reader io.Reader, receivedFile string) ([]byte, error) {
+	received, err := io.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add a newline to the end of the file if it doesn't exist
+	if len(received) > 0 && received[len(received)-1] != '\n' {
+		received = append(received, []byte("\n")...)
+	}
+
+	err = dumpReceivedTestResult(received, receivedFile)
+	if err != nil {
+		return nil, err
+	}
+	return received, nil
 }
 
 func normalizeLineEndings(bs []byte) []byte {
