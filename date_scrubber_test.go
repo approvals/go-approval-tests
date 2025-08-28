@@ -2,7 +2,6 @@ package approvals_test
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 
@@ -24,7 +23,7 @@ func TestSupportedFormatWorksForExamples(t *testing.T) {
 }
 
 func TestGetDateScrubber(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	t.Parallel()
 	formats := approvals.GetSupportedFormats()
 	output := ""
@@ -65,12 +64,10 @@ func TestSupportedFormats(t *testing.T) {
 }
 
 func TestAddDateScrubber_ValidRegexAndExample(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
-	if err != nil {
-		t.Errorf("Expected no error, got: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	scrubber, err := approvals.GetDateScrubberFor("2024-Jan-01")
 	utils.RequireNoError(t, err)
@@ -83,7 +80,7 @@ func TestAddDateScrubber_ValidRegexAndExample(t *testing.T) {
 }
 
 func TestAddDateScrubber_InvalidRegex(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `[invalid`, false)
 	if err == nil {
@@ -95,7 +92,7 @@ func TestAddDateScrubber_InvalidRegex(t *testing.T) {
 }
 
 func TestAddDateScrubber_RegexDoesNotMatchExample(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-\d{2}-\d{2}`, false)
 	if err == nil {
@@ -107,21 +104,15 @@ func TestAddDateScrubber_RegexDoesNotMatchExample(t *testing.T) {
 }
 
 func TestAddDateScrubber_MessageDisplayDefault(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	console := approvals.NewConsoleOutput()
+	defer console.Close()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`)
 	utils.RequireNoError(t, err)
 	
-	w.Close()
-	os.Stdout = oldStdout
-	
-	buf := make([]byte, 1024)
-	n, _ := r.Read(buf)
-	output := string(buf[:n])
+	output := console.GetOutput()
 	
 	if !strings.Contains(output, "You are using a custom date scrubber") {
 		t.Errorf("Expected message to be displayed, got: %s", output)
@@ -132,23 +123,15 @@ func TestAddDateScrubber_MessageDisplayDefault(t *testing.T) {
 }
 
 func TestAddDateScrubber_MessageDisplaySuppressed(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	console := approvals.NewConsoleOutput()
+	defer console.Close()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
-	if err != nil {
-		t.Errorf("Expected no error, got: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
-	w.Close()
-	os.Stdout = oldStdout
-	
-	buf := make([]byte, 1024)
-	n, _ := r.Read(buf)
-	output := string(buf[:n])
+	output := console.GetOutput()
 	
 	if strings.Contains(output, "You are using a custom date scrubber") {
 		t.Errorf("Expected no message to be displayed, got: %s", output)
@@ -156,12 +139,10 @@ func TestAddDateScrubber_MessageDisplaySuppressed(t *testing.T) {
 }
 
 func TestAddDateScrubber_CustomScrubbersIntegratedInScrubbing(t *testing.T) {
-	t.Cleanup(func() { approvals.ClearCustomDateScrubbers() })
+	defer approvals.ClearCustomDateScrubbers()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
-	if err != nil {
-		t.Errorf("Expected no error, got: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	err = approvals.AddDateScrubber("01/Jan/2024", `\d{2}/[A-Za-z]{3}/\d{4}`, false)
 	utils.RequireNoError(t, err)
@@ -183,10 +164,10 @@ func TestAddDateScrubber_CustomScrubbersIntegratedInScrubbing(t *testing.T) {
 }
 
 func TestClearCustomDateScrubbers(t *testing.T) {
+	defer approvals.ClearCustomDateScrubbers()
+	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
-	if err != nil {
-		t.Errorf("Expected no error, got: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	_, err = approvals.GetDateScrubberFor("2024-Jan-01")
 	utils.RequireNoError(t, err)
