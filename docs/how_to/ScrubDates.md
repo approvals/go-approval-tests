@@ -11,12 +11,10 @@ The easiest way to scrub a date is by calling
 <a id='snippet-scrub_date_example'></a>
 ```go
 scrubber, err := approvals.GetDateScrubberFor("00:00:00")
-if err != nil {
-	t.Error(err)
-}
+utils.RequireNoError(t, err)
 approvals.VerifyString(t, "created at 03:14:15", approvals.Options().WithScrubber(scrubber))
 ```
-<sup><a href='/date_scrubber_test.go#L45-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-scrub_date_example' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/date_scrubber_test.go#L46-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-scrub_date_example' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 which will produce
