@@ -20,6 +20,7 @@ type ConsoleOutput struct {
 	stderrWriter   *os.File
 	wg             sync.WaitGroup
 	mu             sync.RWMutex
+	closed         bool
 }
 
 func NewConsoleOutput() *ConsoleOutput {
@@ -76,13 +77,29 @@ func NewConsoleOutput() *ConsoleOutput {
 	return console
 }
 
+func (c *ConsoleOutput) ensureClosed() {
+	c.mu.Lock()
+	if c.closed {
+		c.mu.Unlock()
+		return
+	}
+	c.stdoutWriter.Close()
+	c.stderrWriter.Close()
+	c.closed = true
+	c.mu.Unlock()
+	
+	c.wg.Wait()
+}
+
 func (c *ConsoleOutput) GetOutput() string {
+	c.ensureClosed()
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 	return c.stdoutBuffer.String()
 }
 
 func (c *ConsoleOutput) GetError() string {
+	c.ensureClosed()
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 	return c.stderrBuffer.String()
@@ -102,10 +119,7 @@ func (c *ConsoleOutput) VerifyAll(t core.Failable) {
 }
 
 func (c *ConsoleOutput) Close() error {
-	c.stdoutWriter.Close()
-	c.stderrWriter.Close()
-	
-	c.wg.Wait()
+	c.ensureClosed()
 	
 	c.stdoutReader.Close()
 	c.stderrReader.Close()
