@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	approvals "github.com/approvals/go-approval-tests"
+	"github.com/approvals/go-approval-tests/utils"
 )
 
 func TestSupportedFormatWorksForExamples(t *testing.T) {
@@ -30,9 +31,7 @@ func TestGetDateScrubber(t *testing.T) {
 	for _, format := range formats {
 		for _, example := range format.Examples {
 			scrubber, err := approvals.GetDateScrubberFor(example)
-			if err != nil {
-				t.Error(err)
-			}
+			utils.RequireNoError(t, err)
 			exampleText := fmt.Sprintf("{'date':\"%s\"}", example)
 			result := scrubber(exampleText)
 			expected := fmt.Sprintf("Scrubbing for %s:\nExample: %s\n\n", example, result)
@@ -46,9 +45,7 @@ func TestExampleForDocumentation(t *testing.T) {
 	t.Parallel()
 	// begin-snippet: scrub_date_example
 	scrubber, err := approvals.GetDateScrubberFor("00:00:00")
-	if err != nil {
-		t.Error(err)
-	}
+	utils.RequireNoError(t, err)
 	approvals.VerifyString(t, "created at 03:14:15", approvals.Options().WithScrubber(scrubber))
 	// end-snippet
 }
@@ -76,9 +73,7 @@ func TestAddDateScrubber_ValidRegexAndExample(t *testing.T) {
 	}
 	
 	scrubber, err := approvals.GetDateScrubberFor("2024-Jan-01")
-	if err != nil {
-		t.Errorf("Expected custom scrubber to work, got error: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	result := scrubber("Today is 2024-Jan-01")
 	expected := "Today is [Date1]"
@@ -119,9 +114,7 @@ func TestAddDateScrubber_MessageDisplayDefault(t *testing.T) {
 	os.Stdout = w
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`)
-	if err != nil {
-		t.Errorf("Expected no error, got: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	w.Close()
 	os.Stdout = oldStdout
@@ -171,20 +164,14 @@ func TestAddDateScrubber_CustomScrubbersIntegratedInScrubbing(t *testing.T) {
 	}
 	
 	err = approvals.AddDateScrubber("01/Jan/2024", `\d{2}/[A-Za-z]{3}/\d{4}`, false)
-	if err != nil {
-		t.Errorf("Expected no error, got: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	text := "Meeting on 2024-Feb-14 and conference on 15/Mar/2024"
 	scrubber1, err := approvals.GetDateScrubberFor("2023-Dec-25")
-	if err != nil {
-		t.Errorf("Expected first custom scrubber to work, got error: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	scrubber2, err := approvals.GetDateScrubberFor("01/Jan/2024")
-	if err != nil {
-		t.Errorf("Expected second custom scrubber to work, got error: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	result1 := scrubber1(text)
 	result2 := scrubber2(result1)
@@ -202,9 +189,7 @@ func TestClearCustomDateScrubbers(t *testing.T) {
 	}
 	
 	_, err = approvals.GetDateScrubberFor("2024-Jan-01")
-	if err != nil {
-		t.Errorf("Expected custom scrubber to work before clear, got error: %v", err)
-	}
+	utils.RequireNoError(t, err)
 	
 	approvals.ClearCustomDateScrubbers()
 	
