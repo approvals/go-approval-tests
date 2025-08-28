@@ -127,7 +127,9 @@ func AddDateScrubber(example string, regex string, displayMessage ...bool) error
 	})
 	
 	if showMessage {
-		fmt.Println("You are using a custom date scrubber. If you think the format you want to scrub would be useful for others, please add it to https://github.com/approvals/go-approval-tests/issues/64.")
+		fmt.Println("You are using a custom date scrubber. ")
+		fmt.Println("If you think the format you want to scrub would be useful for others,please add it to ")
+		fmt.Println("https://github.com/approvals/go-approval-tests/issues/64.")
 		fmt.Println("")
 		fmt.Println("To suppress this message, use")
 		fmt.Printf("AddDateScrubber(\"%s\", \"%s\", false)\n", example, regex)

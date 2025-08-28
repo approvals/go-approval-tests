@@ -83,11 +83,8 @@ func TestAddDateScrubber_InvalidRegex(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `[invalid`, false)
-	if err == nil {
-		t.Error("Expected error for invalid regex, got nil")
-	}
-	if !strings.Contains(err.Error(), "invalid regex pattern") {
-		t.Errorf("Expected 'invalid regex pattern' in error, got: %v", err)
+	if err == nil || !strings.Contains(err.Error(), "invalid regex pattern") {
+		t.Errorf("Expected 'invalid regex pattern' error, got: %v", err)
 	}
 }
 
@@ -95,11 +92,8 @@ func TestAddDateScrubber_RegexDoesNotMatchExample(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
 	
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-\d{2}-\d{2}`, false)
-	if err == nil {
-		t.Error("Expected error for non-matching regex, got nil")
-	}
-	if !strings.Contains(err.Error(), "does not match example") {
-		t.Errorf("Expected 'does not match example' in error, got: %v", err)
+	if err == nil || !strings.Contains(err.Error(), "does not match example") {
+		t.Errorf("Expected 'does not match example' error, got: %v", err)
 	}
 }
 
@@ -112,14 +106,7 @@ func TestAddDateScrubber_MessageDisplayDefault(t *testing.T) {
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`)
 	utils.RequireNoError(t, err)
 	
-	output := console.GetOutput()
-	
-	if !strings.Contains(output, "You are using a custom date scrubber") {
-		t.Errorf("Expected message to be displayed, got: %s", output)
-	}
-	if !strings.Contains(output, "https://github.com/approvals/go-approval-tests/issues/64") {
-		t.Errorf("Expected correct GitHub URL, got: %s", output)
-	}
+	console.VerifyOutput(t)
 }
 
 func TestAddDateScrubber_MessageDisplaySuppressed(t *testing.T) {
@@ -175,10 +162,7 @@ func TestClearCustomDateScrubbers(t *testing.T) {
 	approvals.ClearCustomDateScrubbers()
 	
 	_, err = approvals.GetDateScrubberFor("2024-Jan-01")
-	if err == nil {
-		t.Error("Expected error after clearing custom scrubbers, got nil")
-	}
-	if !strings.Contains(err.Error(), "No match found") {
-		t.Errorf("Expected 'No match found' in error, got: %v", err)
+	if err == nil || !strings.Contains(err.Error(), "No match found") {
+		t.Errorf("Expected 'No match found' error, got: %v", err)
 	}
 }
