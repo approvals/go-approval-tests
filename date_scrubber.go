@@ -3,12 +3,18 @@ package approvals
 import (
 	"fmt"
 	"regexp"
+	"sync"
 )
 
 type DateScrubber struct {
 	pattern     string
 	replacement func(int) string
 }
+
+var (
+	customScrubbers []SupportedFormat
+	customScrubbersMutex sync.RWMutex
+)
 
 func NewDateScrubber(pattern string) scrubber {
 	return CreateRegexScrubberWithLabeler(regexp.MustCompile(pattern), func(n int) string {
@@ -66,13 +72,72 @@ func GetSupportedFormatsRegex() []string {
 //	      formattedExample, Query.select(getSupportedFormats(), SupportedFormat::getRegex));
 //	}
 func GetDateScrubberFor(formattedExample string) (scrubber, error) {
-	for _, pattern := range GetSupportedFormats() {
+	allFormats := getAllFormats()
+	for _, pattern := range allFormats {
 		scrubber := NewDateScrubber(pattern.Regex)
 		if "[Date1]" == scrubber(formattedExample) {
 			return scrubber, nil
 		}
 	}
 	return nil, fmt.Errorf(
-		"No match found for %s.\n Feel free to add your date at https://github.com/approvals/ApprovalTests.Java/issues/112 \n Current supported formats are: %v",
-		formattedExample, GetSupportedFormatsRegex())
+		"No match found for %s.\n Feel free to add your date at https://github.com/approvals/go-approval-tests/issues/64 \n Current supported formats are: %v",
+		formattedExample, getAllFormatsRegex())
+}
+
+func getAllFormats() []SupportedFormat {
+	customScrubbersMutex.RLock()
+	defer customScrubbersMutex.RUnlock()
+	
+	allFormats := make([]SupportedFormat, 0, len(GetSupportedFormats())+len(customScrubbers))
+	allFormats = append(allFormats, GetSupportedFormats()...)
+	allFormats = append(allFormats, customScrubbers...)
+	return allFormats
+}
+
+func getAllFormatsRegex() []string {
+	allFormats := getAllFormats()
+	regexList := make([]string, len(allFormats))
+	for i, format := range allFormats {
+		regexList[i] = format.Regex
+	}
+	return regexList
+}
+
+func AddDateScrubber(example string, regex string, displayMessage ...bool) error {
+	showMessage := true
+	if len(displayMessage) > 0 {
+		showMessage = displayMessage[0]
+	}
+	
+	compiled, err := regexp.Compile(regex)
+	if err != nil {
+		return fmt.Errorf("invalid regex pattern: %w", err)
+	}
+	
+	if !compiled.MatchString(example) {
+		return fmt.Errorf("regex pattern '%s' does not match example '%s'", regex, example)
+	}
+	
+	customScrubbersMutex.Lock()
+	defer customScrubbersMutex.Unlock()
+	
+	customScrubbers = append(customScrubbers, SupportedFormat{
+		Regex:    regex,
+		Examples: []string{example},
+	})
+	
+	if showMessage {
+		fmt.Println("You are using a custom date scrubber. If you think the format you want to scrub would be useful for others, please add it to https://github.com/approvals/go-approval-tests/issues/64.")
+		fmt.Println("")
+		fmt.Println("To suppress this message, use")
+		fmt.Printf("AddDateScrubber(\"%s\", \"%s\", false)\n", example, regex)
+	}
+	
+	return nil
+}
+
+func ClearCustomDateScrubbers() {
+	customScrubbersMutex.Lock()
+	defer customScrubbersMutex.Unlock()
+	customScrubbers = nil
 }
