@@ -1,0 +1,4 @@
+STDOUT:
+Standard output
+STDERR:
+Error output
