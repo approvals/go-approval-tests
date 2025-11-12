@@ -245,3 +245,9 @@ func TestVerifyStringWithNonExistentFolder(t *testing.T) {
 		t.Error("Expected approval mismatch failure, but test did not fail")
 	}
 }
+
+func TestFailingApproval(t *testing.T) {
+	t.Parallel()
+	UseReporter(reporters.NewVSCodeRemoteReporter())
+	VerifyString(t, "Hello World!")
+}

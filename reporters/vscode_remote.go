@@ -22,25 +22,34 @@ func (s *vsCodeRemote) Report(approved, received string) bool {
 		return false
 	}
 
-	cliPath, err := findVSCodeServerCLI()
+	cliPath, err := exec.LookPath("code")
 	if err != nil {
-		return false
-	}
-
-	socketPath, err := findVSCodeIPCSocket()
-	if err != nil {
-		return false
+		cliPath, err = findVSCodeServerCLI()
+		if err != nil {
+			return false
+		}
 	}
 
 	if !utils.DoesFileExist(cliPath) {
 		return false
 	}
 
+	socketPath := os.Getenv("VSCODE_IPC_HOOK_CLI")
+	if socketPath == "" {
+		socketPath, err = findVSCodeIPCSocket()
+		if err != nil {
+			return false
+		}
+	}
+
 	utils.EnsureExists(approved)
 
 	cmd := exec.Command(cliPath, "-d", received, approved)
 	cmd.Env = append(os.Environ(), "VSCODE_IPC_HOOK_CLI="+socketPath)
-	cmd.Start()
+	err = cmd.Start()
+	if err != nil {
+		return false
+	}
 
 	return true
 }
@@ -51,9 +60,14 @@ func findVSCodeServerCLI() (string, error) {
 		return "", err
 	}
 
-	patterns := []string{
-		filepath.Join(homeDir, ".vscode-server", "cli", "servers", "*", "server", "bin", "remote-cli", "code"),
-		filepath.Join(homeDir, ".vscodeserver", "cli", "servers", "*", "server", "bin", "remote-cli", "code"),
+	var patterns []string
+	for _, baseDir := range []string{
+		".cursor-server",
+		".vscode-server",
+		".vscodeserver",
+	} {
+		patterns = append(patterns, filepath.Join(homeDir, baseDir, "bin", "*", "bin", "remote-cli", "code"))
+		patterns = append(patterns, filepath.Join(homeDir, baseDir, "cli", "servers", "*", "server", "bin", "remote-cli", "code"))
 	}
 
 	var allMatches []string
