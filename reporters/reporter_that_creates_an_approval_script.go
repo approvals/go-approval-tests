@@ -16,7 +16,7 @@ var (
 
 type approvalScript struct{}
 
-// NewAllFailingTestReporter copies move file command to your clipboard
+// Deprecated: NewAllFailingTestReporter copies move file command to your clipboard
 func NewReporterThatCreatesAnApprovalScript() Reporter {
 	initializeFile()
 	return &approvalScript{}
