@@ -1,10 +1,6 @@
 package reporters
 
-import (
-	"fmt"
-	"os"
-	"runtime"
-)
+import "os/exec"
 
 type vsCode struct{}
 
@@ -14,18 +10,11 @@ func NewVSCodeReporter() Reporter {
 }
 
 func (s *vsCode) Report(approved, received string) bool {
-	xs := []string{"-d", received, approved}
-	var programName string
-	switch runtime.GOOS {
-	case goosWindows:
-		if username, ok := os.LookupEnv("USERNAME"); ok {
-			programName = fmt.Sprintf("C:/Users/%s/AppData/Local/Programs/Microsoft VS Code/Code.exe", username)
-		}
-	case goosDarwin:
-		programName = "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
-	case goosLinux:
-		programName = "/usr/bin/code"
+	programName, err := exec.LookPath("code")
+	if err != nil {
+		return false
 	}
 
+	xs := []string{"-d", received, approved}
 	return launchProgram(programName, approved, xs...)
 }
