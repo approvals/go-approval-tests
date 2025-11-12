@@ -16,7 +16,7 @@ var (
 
 type approvalScript struct{}
 
-// Deprecated: NewAllFailingTestReporter copies move file command to your clipboard
+// Deprecated: instead run .approval_tests_temp/approve_all.py
 func NewReporterThatCreatesAnApprovalScript() Reporter {
 	initializeFile()
 	return &approvalScript{}
