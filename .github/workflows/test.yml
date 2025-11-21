@@ -32,7 +32,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     
     - name: Setup Go environment
       uses: actions/setup-go@v6.1.0
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: auto-merge
         if: |
           github.actor == 'dependabot[bot]' &&
