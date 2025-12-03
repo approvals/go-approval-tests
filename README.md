@@ -101,7 +101,7 @@ You can also declare which one to use. Either at the
 r := UseReporter(reporters.NewContinuousIntegrationReporter())
 defer r.Close()
 ```
-<sup><a href='/approvals_test.go#L26-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-inline_reporter' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/approvals_test.go#L27-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-inline_reporter' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### Test Level
@@ -117,7 +117,7 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 ```
-<sup><a href='/approvals_test.go#L13-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-test_main_with_reporter' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/approvals_test.go#L14-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-test_main_with_reporter' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Support and Documentation
