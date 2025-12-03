@@ -6,6 +6,12 @@ type Reporter interface {
 	Report(approved, received string) bool
 }
 
+type ReporterApplesauce interface {
+	Reporter
+	// Report is called when the approved and received file do not match.
+	ReportWithFailable(Failable failable, approved, received string) bool
+}
+
 // FirstWorkingReporter reports using the first possible reporter.
 type FirstWorkingReporter struct {
 	Reporters []Reporter

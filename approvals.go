@@ -61,8 +61,13 @@ func Verify(t core.Failable, reader io.Reader, opts ...verifyOptions) {
 	reporter := getReporter()
 	err = core.Compare(namer.GetName(), approvalFile, receivedFile, reader)
 	if err != nil {
+		reporterApplesauce, ok := reporter.(reporters.ReporterApplesauce)
+		if ok {
+			reporterApplesauce.ReportWithFailable(t, approvalFile, receivedFile)
+		} else {
+			reporter.Report(approvalFile, receivedFile)
+		}
 		log.GetFailedFileLoggerInstance().Log(receivedFile, approvalFile)
-		reporter.Report(approvalFile, receivedFile)
 		t.Error("Failed Approval: received does not match approved.")
 	} else {
 		_ = os.Remove(receivedFile)
