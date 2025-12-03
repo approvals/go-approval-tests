@@ -11,7 +11,7 @@ import (
 )
 
 func TestVerifyDoesNotAcceptSeveralVerifyOptions(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber1, _ := regexp.Compile("\\d{10}$")
 	opts1 := approvals.Options().WithRegexScrubber(scrubber1, "<time>")
 	opts2 := approvals.Options().WithRegexScrubber(scrubber1, "<time>")
@@ -25,7 +25,7 @@ func TestVerifyDoesNotAcceptSeveralVerifyOptions(t *testing.T) {
 }
 
 func TestVerifyMapWithRegexScrubber(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("\\d{10}$")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "<time>")
 
@@ -38,7 +38,7 @@ func TestVerifyMapWithRegexScrubber(t *testing.T) {
 }
 
 func TestVerifyMapWithScrubberAndExtension(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("\\d{10}$")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "<time>").ForFile().WithExtension(".customExt")
 
@@ -51,7 +51,7 @@ func TestVerifyMapWithScrubberAndExtension(t *testing.T) {
 }
 
 func TestVerifyArrayWithRegexScrubber(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("cat")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "person")
 
@@ -60,7 +60,7 @@ func TestVerifyArrayWithRegexScrubber(t *testing.T) {
 }
 
 func TestVerifyJSONBytesWithRegexScrubber(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("Hello")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "Hi")
 
@@ -69,7 +69,7 @@ func TestVerifyJSONBytesWithRegexScrubber(t *testing.T) {
 }
 
 func TestVerifyXMLBytesWithRegexScrubber(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("Hello")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "Hi")
 
@@ -78,7 +78,7 @@ func TestVerifyXMLBytesWithRegexScrubber(t *testing.T) {
 }
 
 func TestVerifyStringWithRegexScrubber(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("\\d{10}$")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "<now>")
 
@@ -87,7 +87,7 @@ func TestVerifyStringWithRegexScrubber(t *testing.T) {
 }
 
 func TestVerifyStringWithMultipleScrubbers(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber1, _ := regexp.Compile("\\d{10}$")
 	scrubber2, _ := regexp.Compile("time")
 
@@ -100,7 +100,7 @@ func TestVerifyStringWithMultipleScrubbers(t *testing.T) {
 }
 
 func TestVerifyAllWithRegexScrubber(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	scrubber, _ := regexp.Compile("Llewellyn")
 	opts := approvals.Options().WithRegexScrubber(scrubber, "Walken")
 
@@ -109,7 +109,7 @@ func TestVerifyAllWithRegexScrubber(t *testing.T) {
 }
 
 func TestScrubGuids(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	guids := []string{"2fd78d4a-ad49-447d-96a8-deda585a9aa5",
 		"2fd78d4a-1111-1111-1111-deda585a9aa5",
 		"2fd78d4a-3333-3333-3333-deda585a9aa5",

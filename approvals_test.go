@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -130,6 +131,14 @@ func TestVerifyBadJSONBytes(t *testing.T) {
 	t.Parallel()
 	jsonb := []byte("{ foo: \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	VerifyJSONBytes(t, jsonb)
+}
+
+func TestVerifyJSONBytesWithScrubbedIds(t *testing.T) {
+	t.Parallel()
+
+	scrubber := CreateJSONScrubber("id", regexp.MustCompile(`\d+`))
+	jsonb := []byte(`{ "items": [{ "id": 1 }, { "id": 2 }] }`)
+	VerifyJSONBytes(t, jsonb, Options().WithScrubber(scrubber))
 }
 
 func TestVerifyMap(t *testing.T) {

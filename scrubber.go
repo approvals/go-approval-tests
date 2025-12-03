@@ -1,6 +1,7 @@
 package approvals
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 )
@@ -34,6 +35,10 @@ func CreateRegexScrubberWithLabeler(regex *regexp.Regexp, replacer func(int) str
 		}
 		return regex.ReplaceAllStringFunc(s, replacefn)
 	}
+}
+
+func CreateJSONScrubber(label string, valueMatcher *regexp.Regexp) scrubber {
+	return CreateRegexScrubberWithLabeler(regexp.MustCompile(fmt.Sprintf(`"%s": \d+`, label)), func(n int) string { return fmt.Sprintf(`"%s": "<%s_%d>"`, label, label, n) })
 }
 
 // NoopScrubber is a scrubber that does nothing
