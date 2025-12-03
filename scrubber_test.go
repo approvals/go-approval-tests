@@ -37,6 +37,19 @@ func TestVerifyMapWithRegexScrubber(t *testing.T) {
 	approvals.VerifyMap(t, m, opts)
 }
 
+func TestVerifyMapWithScrubberAndExtension(t *testing.T) {
+    t.Parallel()
+	scrubber, _ := regexp.Compile("\\d{10}$")
+	opts := approvals.Options().WithRegexScrubber(scrubber, "<time>").ForFile().WithExtension(".customExt")
+
+	m := map[string]string{
+		"dog":  "bark",
+		"cat":  "meow",
+		"time": fmt.Sprint(time.Now().Unix()),
+	}
+	approvals.VerifyMap(t, m, opts)
+}
+
 func TestVerifyArrayWithRegexScrubber(t *testing.T) {
     t.Parallel()
 	scrubber, _ := regexp.Compile("cat")
