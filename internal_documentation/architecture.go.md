@@ -27,21 +27,21 @@ classDiagram
         +Report(approved string, received string) bool
     }
 
-    class verifyOptions {
+    class VerifyOptions {
         -fields map
         +ForFile() fileOptions
-        +WithScrubber(scrub scrubber) verifyOptions
-        +AddScrubber(scrubfn scrubber) verifyOptions
+        +WithScrubber(scrub scrubber) VerifyOptions
+        +AddScrubber(scrubfn scrubber) VerifyOptions
         +Scrub(reader io.Reader) io.Reader, error
     }
 
     class fileOptions {
         -fields map
-        +WithExtension(extensionWithDot string) verifyOptions
+        +WithExtension(extensionWithDot string) VerifyOptions
         +GetExtension() string
-        +WithNamer(namer ApprovalNamerCreator) verifyOptions
+        +WithNamer(namer ApprovalNamerCreator) VerifyOptions
         +GetNamer() ApprovalNamerCreator
-        +WithAdditionalInformation(info string) verifyOptions
+        +WithAdditionalInformation(info string) VerifyOptions
     }
 
     class scrubber {
@@ -118,15 +118,15 @@ classDiagram
 
     %% Relationships
     VerifyFunctions ..> Failable : uses
-    VerifyFunctions ..> verifyOptions : uses
+    VerifyFunctions ..> VerifyOptions : uses
     VerifyFunctions ..> ApprovalNamer : creates via
     VerifyFunctions ..> Reporter : uses
 
     CombinationApprovals ..> Failable : uses
     CombinationApprovals ..> VerifyFunctions : calls
 
-    verifyOptions --> fileOptions : creates
-    verifyOptions ..> scrubber : uses
+    VerifyOptions --> fileOptions : creates
+    VerifyOptions ..> scrubber : uses
     fileOptions ..> ApprovalNamer : creates
 
     FirstWorkingReporter ..|> Reporter : implements
@@ -151,7 +151,7 @@ classDiagram
 
 ### Configuration
 
-- **verifyOptions**: Main configuration object for verification operations
+- **VerifyOptions**: Main configuration object for verification operations
 - **fileOptions**: File-specific configuration options
 - **scrubber**: Function type for data sanitization/scrubbing
 
@@ -178,7 +178,7 @@ classDiagram
 ## Key Architectural Patterns
 
 1. **Interface-based Design**: Core functionality is defined through interfaces (Failable, ApprovalNamer, Reporter)
-2. **Options Pattern**: Flexible configuration through verifyOptions and fileOptions
+2. **Options Pattern**: Flexible configuration through VerifyOptions and fileOptions
 3. **Strategy Pattern**: Different reporting strategies through Reporter interface
 4. **Chain of Responsibility**: FirstWorkingReporter tries reporters in sequence
 5. **Template Method**: templatedCustomNamer uses templates for file naming

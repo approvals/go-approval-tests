@@ -27,7 +27,7 @@ var (
 //	VerifyWithExtension(t, strings.NewReader("Hello"), ".json")
 //
 // Deprecated: Please use Verify with the Options() fluent syntax.
-func VerifyWithExtension(t core.Failable, reader io.Reader, extWithDot string, opts ...verifyOptions) {
+func VerifyWithExtension(t core.Failable, reader io.Reader, extWithDot string, opts ...VerifyOptions) {
 	t.Helper()
 	Verify(t, reader, alwaysOption(opts).ForFile().WithExtension(extWithDot))
 }
@@ -35,14 +35,14 @@ func VerifyWithExtension(t core.Failable, reader io.Reader, extWithDot string, o
 // Verify Example:
 //
 //	Verify(t, strings.NewReader("Hello"))
-func Verify(t core.Failable, reader io.Reader, opts ...verifyOptions) {
+func Verify(t core.Failable, reader io.Reader, opts ...VerifyOptions) {
 	t.Helper()
 
 	if len(opts) > 1 {
 		panic("Please use fluent syntax for options, see documentation for more information")
 	}
 
-	var opt verifyOptions
+	var opt VerifyOptions
 	if len(opts) > 0 {
 		opt = opts[0]
 	}
@@ -71,7 +71,7 @@ func Verify(t core.Failable, reader io.Reader, opts ...verifyOptions) {
 
 // VerifyString stores the passed string into the received file and confirms
 // that it matches the approved local file. On failure, it will launch a reporter.
-func VerifyString(t core.Failable, s string, opts ...verifyOptions) {
+func VerifyString(t core.Failable, s string, opts ...VerifyOptions) {
 	t.Helper()
 	reader := strings.NewReader(s)
 	Verify(t, reader, opts...)
@@ -80,7 +80,7 @@ func VerifyString(t core.Failable, s string, opts ...verifyOptions) {
 // VerifyXMLStruct Example:
 //
 //	VerifyXMLStruct(t, xml)
-func VerifyXMLStruct(t core.Failable, obj interface{}, opts ...verifyOptions) {
+func VerifyXMLStruct(t core.Failable, obj interface{}, opts ...VerifyOptions) {
 	t.Helper()
 	options := alwaysOption(opts).ForFile().WithExtension(".xml")
 	xmlContent, err := xml.MarshalIndent(obj, "", "  ")
@@ -99,7 +99,7 @@ func VerifyXMLStruct(t core.Failable, obj interface{}, opts ...verifyOptions) {
 // VerifyXMLBytes Example:
 //
 //	VerifyXMLBytes(t, []byte("<Test/>"))
-func VerifyXMLBytes(t core.Failable, bs []byte, opts ...verifyOptions) {
+func VerifyXMLBytes(t core.Failable, bs []byte, opts ...VerifyOptions) {
 	t.Helper()
 	type node struct {
 		Attr     []xml.Attr
@@ -121,7 +121,7 @@ func VerifyXMLBytes(t core.Failable, bs []byte, opts ...verifyOptions) {
 // VerifyJSONStruct Example:
 //
 //	VerifyJSONStruct(t, json)
-func VerifyJSONStruct(t core.Failable, obj interface{}, opts ...verifyOptions) {
+func VerifyJSONStruct(t core.Failable, obj interface{}, opts ...VerifyOptions) {
 	t.Helper()
 	options := alwaysOption(opts).ForFile().WithExtension(".json")
 	jsonb, err := json.MarshalIndent(obj, "", "  ")
@@ -136,7 +136,7 @@ func VerifyJSONStruct(t core.Failable, obj interface{}, opts ...verifyOptions) {
 // VerifyJSONBytes Example:
 //
 //	VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
-func VerifyJSONBytes(t core.Failable, bs []byte, opts ...verifyOptions) {
+func VerifyJSONBytes(t core.Failable, bs []byte, opts ...VerifyOptions) {
 	t.Helper()
 	var obj map[string]interface{}
 	err := json.Unmarshal(bs, &obj)
@@ -151,7 +151,7 @@ func VerifyJSONBytes(t core.Failable, bs []byte, opts ...verifyOptions) {
 // VerifyMap Example:
 //
 //	VerifyMap(t, map[string][string] { "dog": "bark" })
-func VerifyMap(t core.Failable, m interface{}, opts ...verifyOptions) {
+func VerifyMap(t core.Failable, m interface{}, opts ...VerifyOptions) {
 	t.Helper()
 	outputText := utils.PrintMap(m)
 	VerifyString(t, outputText, opts...)
@@ -160,7 +160,7 @@ func VerifyMap(t core.Failable, m interface{}, opts ...verifyOptions) {
 // VerifyArray Example:
 //
 //	VerifyArray(t, []string{"dog", "cat"})
-func VerifyArray(t core.Failable, array interface{}, opts ...verifyOptions) {
+func VerifyArray(t core.Failable, array interface{}, opts ...VerifyOptions) {
 	t.Helper()
 	outputText := utils.PrintArray(array)
 	VerifyString(t, outputText, opts...)
@@ -169,7 +169,7 @@ func VerifyArray(t core.Failable, array interface{}, opts ...verifyOptions) {
 // VerifyAll Example:
 //
 //	VerifyAll(t, "uppercase", []string("dog", "cat"}, func(x interface{}) string { return strings.ToUpper(x.(string)) })
-func VerifyAll(t core.Failable, header string, collection interface{}, transform func(interface{}) string, opts ...verifyOptions) {
+func VerifyAll(t core.Failable, header string, collection interface{}, transform func(interface{}) string, opts ...VerifyOptions) {
 	t.Helper()
 	if len(header) != 0 {
 		header = fmt.Sprintf("%s\n\n\n", header)

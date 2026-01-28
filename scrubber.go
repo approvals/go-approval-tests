@@ -10,7 +10,7 @@ type scrubber func(s string) string
 
 // Deprecated: WithRegexScrubber allows you to 'scrub' dynamic data such as timestamps within your test input
 // and replace it with a static placeholder
-func (v verifyOptions) WithRegexScrubber(regex *regexp.Regexp, replacer string) verifyOptions {
+func (v VerifyOptions) WithRegexScrubber(regex *regexp.Regexp, replacer string) VerifyOptions {
 	return v.AddScrubber(func(s string) string {
 		return regex.ReplaceAllString(s, replacer)
 	})
