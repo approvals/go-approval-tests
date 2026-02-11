@@ -26,6 +26,21 @@ func (s *diffMergeMac) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
+type fileMergeMac struct{}
+
+func NewFileMergeMacReporter() Reporter {
+	return &fileMergeMac{}
+}
+
+func (s *fileMergeMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/Applications/Xcode.app/Contents/Applications/FileMerge.app/Contents/MacOS/FileMerge"
+	args := []string{"--nosplash", "-left", received, "-right", approved}
+	return launchProgram(programName, approved, args...)
+}
+
 type beyondCompareMac struct{}
 
 func NewBeyondCompareMacReporter() Reporter {
@@ -451,6 +466,7 @@ type diffToolOnMac struct{}
 func NewDiffToolOnMacReporter() Reporter {
 	return NewFirstWorkingReporter(
 		NewDiffMergeMacReporter(),
+		NewFileMergeMacReporter(),
 		NewBeyondCompareMacReporter(),
 		NewKaleidoscopeMacReporter(),
 		NewKaleidoscope3MacReporter(),
@@ -470,6 +486,7 @@ func (s *diffToolOnMac) Report(approved, received string) bool {
 	}
 	return NewFirstWorkingReporter(
 		NewDiffMergeMacReporter(),
+		NewFileMergeMacReporter(),
 		NewBeyondCompareMacReporter(),
 		NewKaleidoscopeMacReporter(),
 		NewKaleidoscope3MacReporter(),
