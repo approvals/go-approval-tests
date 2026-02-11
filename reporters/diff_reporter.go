@@ -16,14 +16,14 @@ func NewFrontLoadedReporter() Reporter {
 // NewDiffReporter creates the default diff reporter.
 func NewDiffReporter() Reporter {
 	return NewFirstWorkingReporter(
-		NewBeyondCompareReporter(),
 		NewIntelliJReporter(),
 		NewFileMergeReporter(),
-		NewVSCodeReporter(),
 		NewGoLandReporter(),
-		NewSublimeMergeReporter(),
 		NewRealDiffReporter(),
 		NewPrintSupportedDiffProgramsReporter(),
+		NewDiffToolOnMacReporter(),
+		NewDiffToolOnWindowsReporter(),
+		NewDiffToolOnLinuxReporter(),
 		NewQuietReporter(),
 	)
 }
