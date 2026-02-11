@@ -145,9 +145,8 @@ func (s *{struct_name}) Report(approved, received string) bool {{
 
 
 def main() -> None:
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_path = os.path.join(script_dir, "diff_reporters.csv")
-    repo_root = os.path.dirname(script_dir)
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    csv_path = os.path.join(repo_root, "DiffTools", "diff_reporters.csv")
     out_path = os.path.join(repo_root, "reporters", "diff_reporters_generated.go")
 
     rows = []

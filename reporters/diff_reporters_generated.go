@@ -401,6 +401,51 @@ func (s *diffCommandLineMac) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
+type sublimeMergeMac struct{}
+
+func NewSublimeMergeMacReporter() Reporter {
+	return &sublimeMergeMac{}
+}
+
+func (s *sublimeMergeMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge"
+	args := []string{"mergetool", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type sublimeMergeWindows struct{}
+
+func NewSublimeMergeWindowsReporter() Reporter {
+	return &sublimeMergeWindows{}
+}
+
+func (s *sublimeMergeWindows) Report(approved, received string) bool {
+	if runtime.GOOS != goosWindows {
+		return false
+	}
+	programName := expandProgramFiles("{ProgramFiles}Sublime Merge\\smerge.exe")
+	args := []string{"mergetool", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type sublimeMergeLinux struct{}
+
+func NewSublimeMergeLinuxReporter() Reporter {
+	return &sublimeMergeLinux{}
+}
+
+func (s *sublimeMergeLinux) Report(approved, received string) bool {
+	if runtime.GOOS != goosLinux {
+		return false
+	}
+	programName := "/usr/bin/smerge"
+	args := []string{"mergetool", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
 type diffToolOnMac struct{}
 
 func NewDiffToolOnMacReporter() Reporter {
@@ -415,6 +460,7 @@ func NewDiffToolOnMacReporter() Reporter {
 		NewVisualStudioCodeMacReporter(),
 		NewAraxisMergeMacReporter(),
 		NewDiffCommandLineMacReporter(),
+		NewSublimeMergeMacReporter(),
 	)
 }
 
@@ -433,6 +479,7 @@ func (s *diffToolOnMac) Report(approved, received string) bool {
 		NewVisualStudioCodeMacReporter(),
 		NewAraxisMergeMacReporter(),
 		NewDiffCommandLineMacReporter(),
+		NewSublimeMergeMacReporter(),
 	).Report(approved, received)
 }
 
@@ -452,6 +499,7 @@ func NewDiffToolOnWindowsReporter() Reporter {
 		NewCodeCompareWindowsReporter(),
 		NewKdiff3WindowsReporter(),
 		NewVisualStudioCodeWindowsReporter(),
+		NewSublimeMergeWindowsReporter(),
 	)
 }
 
@@ -472,6 +520,7 @@ func (s *diffToolOnWindows) Report(approved, received string) bool {
 		NewCodeCompareWindowsReporter(),
 		NewKdiff3WindowsReporter(),
 		NewVisualStudioCodeWindowsReporter(),
+		NewSublimeMergeWindowsReporter(),
 	).Report(approved, received)
 }
 
@@ -483,6 +532,7 @@ func NewDiffToolOnLinuxReporter() Reporter {
 		NewMeldMergeLinuxReporter(),
 		NewKdiff3LinuxReporter(),
 		NewDiffCommandLineLinuxReporter(),
+		NewSublimeMergeLinuxReporter(),
 	)
 }
 
@@ -495,6 +545,7 @@ func (s *diffToolOnLinux) Report(approved, received string) bool {
 		NewMeldMergeLinuxReporter(),
 		NewKdiff3LinuxReporter(),
 		NewDiffCommandLineLinuxReporter(),
+		NewSublimeMergeLinuxReporter(),
 	).Report(approved, received)
 }
 
@@ -597,6 +648,24 @@ func (s *kdiff3Group) Report(approved, received string) bool {
 		NewKdiff3MacReporter(),
 		NewKdiff3WindowsReporter(),
 		NewKdiff3LinuxReporter(),
+	).Report(approved, received)
+}
+
+type sublimeMergeGroup struct{}
+
+func NewSublimeMergeGroupReporter() Reporter {
+	return NewFirstWorkingReporter(
+		NewSublimeMergeMacReporter(),
+		NewSublimeMergeWindowsReporter(),
+		NewSublimeMergeLinuxReporter(),
+	)
+}
+
+func (s *sublimeMergeGroup) Report(approved, received string) bool {
+	return NewFirstWorkingReporter(
+		NewSublimeMergeMacReporter(),
+		NewSublimeMergeWindowsReporter(),
+		NewSublimeMergeLinuxReporter(),
 	).Report(approved, received)
 }
 
