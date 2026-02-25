@@ -12,11 +12,11 @@ type DateScrubber struct {
 }
 
 var (
-	customScrubbers []SupportedFormat
+	customScrubbers      []SupportedFormat
 	customScrubbersMutex sync.RWMutex
 )
 
-func NewDateScrubber(pattern string) scrubber {
+func NewDateScrubber(pattern string) Scrubber {
 	return CreateRegexScrubberWithLabeler(regexp.MustCompile(pattern), func(n int) string {
 		return fmt.Sprintf(`[Date%d]`, n)
 	})
@@ -71,7 +71,7 @@ func GetSupportedFormatsRegex() []string {
 //	      "No match found for %s.\n Feel free to add your date at https://github.com/approvals/ApprovalTests.Java/issues/112 \n Current supported formats are: %s",
 //	      formattedExample, Query.select(getSupportedFormats(), SupportedFormat::getRegex));
 //	}
-func GetDateScrubberFor(formattedExample string) (scrubber, error) {
+func GetDateScrubberFor(formattedExample string) (Scrubber, error) {
 	allFormats := getAllFormats()
 	for _, pattern := range allFormats {
 		scrubber := NewDateScrubber(pattern.Regex)
@@ -87,7 +87,7 @@ func GetDateScrubberFor(formattedExample string) (scrubber, error) {
 func getAllFormats() []SupportedFormat {
 	customScrubbersMutex.RLock()
 	defer customScrubbersMutex.RUnlock()
-	
+
 	allFormats := make([]SupportedFormat, 0, len(GetSupportedFormats())+len(customScrubbers))
 	allFormats = append(allFormats, GetSupportedFormats()...)
 	allFormats = append(allFormats, customScrubbers...)
@@ -108,24 +108,24 @@ func AddDateScrubber(example string, regex string, displayMessage ...bool) error
 	if len(displayMessage) > 0 {
 		showMessage = displayMessage[0]
 	}
-	
+
 	compiled, err := regexp.Compile(regex)
 	if err != nil {
 		return fmt.Errorf("invalid regex pattern: %w", err)
 	}
-	
+
 	if !compiled.MatchString(example) {
 		return fmt.Errorf("regex pattern '%s' does not match example '%s'", regex, example)
 	}
-	
+
 	customScrubbersMutex.Lock()
 	defer customScrubbersMutex.Unlock()
-	
+
 	customScrubbers = append(customScrubbers, SupportedFormat{
 		Regex:    regex,
 		Examples: []string{example},
 	})
-	
+
 	if showMessage {
 		fmt.Println("You are using a custom date scrubber. ")
 		fmt.Println("If you think the format you want to scrub would be useful for others,please add it to ")
@@ -134,7 +134,7 @@ func AddDateScrubber(example string, regex string, displayMessage ...bool) error
 		fmt.Println("To suppress this message, use")
 		fmt.Printf("AddDateScrubber(\"%s\", \"%s\", false)\n", example, regex)
 	}
-	
+
 	return nil
 }
 

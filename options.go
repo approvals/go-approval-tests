@@ -12,12 +12,12 @@ type VerifyOptions struct {
 	fields map[string]interface{}
 }
 
-type fileOptions struct {
+type FileOptions struct {
 	fields map[string]interface{}
 }
 
-func (v VerifyOptions) ForFile() fileOptions {
-	return fileOptions{fields: v.fields}
+func (v VerifyOptions) ForFile() FileOptions {
+	return FileOptions{fields: v.fields}
 }
 
 // Deprecated: Use `ForFile().WithExtension(extension)` instead.
@@ -30,16 +30,16 @@ func (v VerifyOptions) GetExtension() string {
 	return v.ForFile().GetExtension()
 }
 
-func (f fileOptions) GetExtension() string {
+func (f FileOptions) GetExtension() string {
 	ext := getField(f.fields, "extWithDot", ".txt")
 	return ext.(string)
 }
 
-func (f fileOptions) WithNamer(namer core.ApprovalNamerCreator) VerifyOptions {
+func (f FileOptions) WithNamer(namer core.ApprovalNamerCreator) VerifyOptions {
 	return NewVerifyOptions(f.fields, "namer", namer)
 }
 
-func (f fileOptions) GetNamer() core.ApprovalNamerCreator {
+func (f FileOptions) GetNamer() core.ApprovalNamerCreator {
 	ext := getField(f.fields, "namer", getApprovalNameCreator())
 	creator := ext.(core.ApprovalNamerCreator)
 
@@ -58,7 +58,7 @@ func (v VerifyOptions) getField(key string, defaultValue interface{}) interface{
 	return getField(v.fields, key, defaultValue)
 }
 
-func (f fileOptions) getField(key string, defaultValue interface{}) interface{} {
+func (f FileOptions) getField(key string, defaultValue interface{}) interface{} {
 	return getField(f.fields, key, defaultValue)
 }
 
@@ -78,18 +78,18 @@ func Options() VerifyOptions {
 }
 
 // WithScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
-func (v VerifyOptions) WithScrubber(scrub scrubber) VerifyOptions {
+func (v VerifyOptions) WithScrubber(scrub Scrubber) VerifyOptions {
 	return NewVerifyOptions(v.fields, "scrubber", scrub)
 }
 
 // AddScrubber allows you to 'scrub' data within your test input and replace it with a static placeholder
-func (v VerifyOptions) AddScrubber(scrubfn scrubber) VerifyOptions {
-	scrub := CreateMultiScrubber(v.getField("scrubber", CreateNoopScrubber()).(scrubber), scrubfn)
+func (v VerifyOptions) AddScrubber(scrubfn Scrubber) VerifyOptions {
+	scrub := CreateMultiScrubber(v.getField("scrubber", CreateNoopScrubber()).(Scrubber), scrubfn)
 	return v.WithScrubber(scrub)
 }
 
 // WithExtension overrides the default file extension (.txt) for approval files.
-func (f fileOptions) WithExtension(extensionWithDot string) VerifyOptions {
+func (f FileOptions) WithExtension(extensionWithDot string) VerifyOptions {
 	if !strings.HasPrefix(extensionWithDot, ".") {
 		extensionWithDot = "." + extensionWithDot
 	}
@@ -97,7 +97,7 @@ func (f fileOptions) WithExtension(extensionWithDot string) VerifyOptions {
 }
 
 // WithAdditionalInformation allows adding additional information to the file name for parameterized tests.
-func (f fileOptions) WithAdditionalInformation(info string) VerifyOptions {
+func (f FileOptions) WithAdditionalInformation(info string) VerifyOptions {
 	return NewVerifyOptions(f.fields, "additionalInformation", strings.ReplaceAll(info, " ", "_"))
 }
 
@@ -107,7 +107,7 @@ func (v VerifyOptions) Scrub(reader io.Reader) (io.Reader, error) {
 		return nil, err
 	}
 
-	scrub := v.getField("scrubber", CreateNoopScrubber()).(scrubber)
+	scrub := v.getField("scrubber", CreateNoopScrubber()).(Scrubber)
 	result := scrub(string(b))
 
 	return strings.NewReader(result), nil
