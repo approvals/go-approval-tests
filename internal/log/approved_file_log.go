@@ -1,6 +1,7 @@
 package log
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -33,12 +34,23 @@ func GetApprovedFileLoggerInstance() *approvedFileLog {
 	return instance
 }
 
+func checkForRunningSubsectionOfTests() bool {
+	runFlag := flag.Lookup("test.run")
+	return runFlag != nil && runFlag.Value.String() != ""
+}
+
 func (l approvedFileLog) initializeFile() {
 
 	InitializeTempDirectory()
 
+	fileFlags := os.O_RDWR | os.O_CREATE | os.O_TRUNC
+
+	if checkForRunningSubsectionOfTests() {
+		fileFlags = os.O_APPEND
+	}
+
 	// create the file with read/write permissions for the user
-	file, err := os.OpenFile(l.filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	file, err := os.OpenFile(l.filename, fileFlags, 0644)
 	if err != nil {
 		fmt.Println("Error creating file: ", err)
 		return
