@@ -138,7 +138,7 @@ func VerifyJSONStruct(t core.Failable, obj interface{}, opts ...VerifyOptions) {
 //	VerifyJSONBytes(t, []byte("{ \"Greeting\": \"Hello\" }"))
 func VerifyJSONBytes(t core.Failable, bs []byte, opts ...VerifyOptions) {
 	t.Helper()
-	var obj map[string]interface{}
+	var obj interface{}
 	err := json.Unmarshal(bs, &obj)
 	if err != nil {
 		message := fmt.Sprintf("error while parsing JSON\nerror:\n  %s\nJSON:\n  %s\n", err, string(bs))
