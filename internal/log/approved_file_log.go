@@ -34,9 +34,9 @@ func GetApprovedFileLoggerInstance() *approvedFileLog {
 	return instance
 }
 
-func checkForRunningSubsectionOfTests() bool {
+func isFullTestRun() bool {
 	runFlag := flag.Lookup("test.run")
-	return runFlag != nil && runFlag.Value.String() != ""
+	return runFlag == nil || runFlag.Value.String() == ""
 }
 
 func (l approvedFileLog) initializeFile() {
@@ -45,7 +45,7 @@ func (l approvedFileLog) initializeFile() {
 
 	fileFlags := os.O_RDWR | os.O_CREATE | os.O_TRUNC
 
-	if checkForRunningSubsectionOfTests() {
+	if !isFullTestRun() {
 		fileFlags = os.O_APPEND
 	}
 
