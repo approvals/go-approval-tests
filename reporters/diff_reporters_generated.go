@@ -386,36 +386,6 @@ func (s *kdiff3Linux) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
-type diffCommandLineLinux struct{}
-
-func NewDiffCommandLineLinuxReporter() Reporter {
-	return &diffCommandLineLinux{}
-}
-
-func (s *diffCommandLineLinux) Report(approved, received string) bool {
-	if runtime.GOOS != goosLinux {
-		return false
-	}
-	programName := "/usr/bin/diff"
-	args := []string{"-u", received, approved}
-	return launchProgram(programName, approved, args...)
-}
-
-type diffCommandLineMac struct{}
-
-func NewDiffCommandLineMacReporter() Reporter {
-	return &diffCommandLineMac{}
-}
-
-func (s *diffCommandLineMac) Report(approved, received string) bool {
-	if runtime.GOOS != goosDarwin {
-		return false
-	}
-	programName := "/usr/bin/diff"
-	args := []string{"-u", received, approved}
-	return launchProgram(programName, approved, args...)
-}
-
 type sublimeMergeMac struct{}
 
 func NewSublimeMergeMacReporter() Reporter {
@@ -461,6 +431,51 @@ func (s *sublimeMergeLinux) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
+type cursorMac struct{}
+
+func NewCursorMacReporter() Reporter {
+	return &cursorMac{}
+}
+
+func (s *cursorMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/Applications/Cursor.app/Contents/Resources/app/bin/code"
+	args := []string{"-d", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type diffCommandLineLinux struct{}
+
+func NewDiffCommandLineLinuxReporter() Reporter {
+	return &diffCommandLineLinux{}
+}
+
+func (s *diffCommandLineLinux) Report(approved, received string) bool {
+	if runtime.GOOS != goosLinux {
+		return false
+	}
+	programName := "/usr/bin/diff"
+	args := []string{"-u", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type diffCommandLineMac struct{}
+
+func NewDiffCommandLineMacReporter() Reporter {
+	return &diffCommandLineMac{}
+}
+
+func (s *diffCommandLineMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/usr/bin/diff"
+	args := []string{"-u", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
 type diffToolOnMac struct{}
 
 func NewDiffToolOnMacReporter() Reporter {
@@ -475,8 +490,9 @@ func NewDiffToolOnMacReporter() Reporter {
 		NewTkDiffMacReporter(),
 		NewVisualStudioCodeMacReporter(),
 		NewAraxisMergeMacReporter(),
-		NewDiffCommandLineMacReporter(),
 		NewSublimeMergeMacReporter(),
+		NewCursorMacReporter(),
+		NewDiffCommandLineMacReporter(),
 	)
 }
 
@@ -495,8 +511,9 @@ func (s *diffToolOnMac) Report(approved, received string) bool {
 		NewTkDiffMacReporter(),
 		NewVisualStudioCodeMacReporter(),
 		NewAraxisMergeMacReporter(),
-		NewDiffCommandLineMacReporter(),
 		NewSublimeMergeMacReporter(),
+		NewCursorMacReporter(),
+		NewDiffCommandLineMacReporter(),
 	).Report(approved, received)
 }
 
@@ -548,8 +565,8 @@ func NewDiffToolOnLinuxReporter() Reporter {
 		NewDiffMergeLinuxReporter(),
 		NewMeldMergeLinuxReporter(),
 		NewKdiff3LinuxReporter(),
-		NewDiffCommandLineLinuxReporter(),
 		NewSublimeMergeLinuxReporter(),
+		NewDiffCommandLineLinuxReporter(),
 	)
 }
 
@@ -561,8 +578,8 @@ func (s *diffToolOnLinux) Report(approved, received string) bool {
 		NewDiffMergeLinuxReporter(),
 		NewMeldMergeLinuxReporter(),
 		NewKdiff3LinuxReporter(),
-		NewDiffCommandLineLinuxReporter(),
 		NewSublimeMergeLinuxReporter(),
+		NewDiffCommandLineLinuxReporter(),
 	).Report(approved, received)
 }
 

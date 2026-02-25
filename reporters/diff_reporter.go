@@ -18,11 +18,11 @@ func NewDiffReporter() Reporter {
 	return NewFirstWorkingReporter(
 		NewIntelliJReporter(),
 		NewGoLandReporter(),
-		NewPrintSupportedDiffProgramsReporter(),
 		NewDiffToolOnMacReporter(),
 		NewDiffToolOnWindowsReporter(),
 		NewDiffToolOnLinuxReporter(),
 		NewQuietReporter(),
+		NewPrintSupportedDiffProgramsReporter(),
 	)
 }
 
