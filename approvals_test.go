@@ -144,18 +144,19 @@ func TestVerifyJSONBytesWithScrubbedIds(t *testing.T) {
 func TestVerifyJSONBytesAcceptsValidJSONTypes(t *testing.T) {
 	t.Parallel()
 	for _, tc := range []struct {
+		name string
 		json string
 	}{
-		{json: "[1, 2, 3]"},
-		{json: "{\"foo\": \"bar\"}"},
-		{json: "1"},
-		{json: "1.0"},
-		{json: "1.0e10"},
-		{json: "true"},
-		{json: "false"},
-		{json: "null"},
+		{name: "array", json: "[1, 2, 3]"},
+		{name: "object", json: "{\"foo\": \"bar\"}"},
+		{name: "number", json: "1"},
+		{name: "float", json: "1.0"},
+		{name: "exponential", json: "1.0e10"},
+		{name: "true", json: "true"},
+		{name: "false", json: "false"},
+		{name: "null", json: "null"},
 	} {
-		t.Run(tc.json, func(t *testing.T) {
+		t.Run(tc.name, func(t *testing.T) {
 			VerifyJSONBytes(t, []byte(tc.json))
 		})
 	}
