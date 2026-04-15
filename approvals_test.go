@@ -13,7 +13,7 @@ import (
 
 // begin-snippet: test_main_with_reporter
 func TestMain(m *testing.M) {
-	r := UseReporter(reporters.NewContinuousIntegrationReporter())
+	r := UseReporter(reporters.NewDiffReporter())
 	defer r.Close()
 
 	UseFolder("testdata")
@@ -148,6 +148,7 @@ func TestVerifyJSONBytesAcceptsValidJSONTypes(t *testing.T) {
 		json string
 	}{
 		{name: "array", json: "[1, 2, 3]"},
+		{name: "array with null", json: "[1, null, 3]"},
 		{name: "object", json: "{\"foo\": \"bar\"}"},
 		{name: "number", json: "1"},
 		{name: "float", json: "1.0"},
@@ -264,7 +265,12 @@ func TestVerifyAllCombinationsFor9(t *testing.T) {
 }
 
 func TestVerifyStringWithNonExistentFolder(t *testing.T) {
+	r := UseReporter(reporters.NewQuietReporter())
+	defer r.Close()
+
 	nonExistentDir := "testdata/nonexistent_subdir"
+	defer os.RemoveAll(nonExistentDir)
+
 	UseFolder(nonExistentDir)
 	defer UseFolder("testdata")
 
