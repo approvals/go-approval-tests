@@ -109,7 +109,7 @@ defer r.Close()
 <a id='snippet-test_main_with_reporter'></a>
 ```go
 func TestMain(m *testing.M) {
-	r := UseReporter(reporters.NewContinuousIntegrationReporter())
+	r := UseReporter(reporters.NewDiffReporter())
 	defer r.Close()
 
 	UseFolder("testdata")
