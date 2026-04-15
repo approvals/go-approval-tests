@@ -55,8 +55,8 @@ func Verify(t core.Failable, reader io.Reader, opts ...VerifyOptions) {
 	extWithDot := opt.ForFile().GetExtension()
 	namer := opt.ForFile().GetNamer()(t)
 
-	approvalFile := namer.GetApprovalFile(extWithDot)
-	receivedFile := namer.GetReceivedFile(extWithDot)
+	approvalFile := CurrentFileNameSanitizer(namer.GetApprovalFile(extWithDot))
+	receivedFile := CurrentFileNameSanitizer(namer.GetReceivedFile(extWithDot))
 
 	reporter := getReporter()
 	err = core.Compare(namer.GetName(), approvalFile, receivedFile, reader)
