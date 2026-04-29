@@ -239,8 +239,11 @@ func getReporter() reporters.Reporter {
 
 // UseFolder configures which folder to use to store approval files.
 // By default, the approval files will be stored at the same level as the code.
+// It returns the previous folder value, enabling easy cleanup with defer:
 //
-// The following examples shows how to use the idiomatic 'testdata' folder
+//	defer approvals.UseFolder(approvals.UseFolder("testdata"))
+//
+// The following example shows how to use the idiomatic 'testdata' folder
 // for all of your test cases in a package directory.
 //
 //	func TestMain(m *testing.M) {
@@ -248,6 +251,8 @@ func getReporter() reporters.Reporter {
 //
 //		os.Exit(m.Run())
 //	}
-func UseFolder(f string) {
+func UseFolder(f string) (previous string) {
+	previous = defaultFolder
 	defaultFolder = f
+	return
 }

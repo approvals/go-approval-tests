@@ -268,8 +268,7 @@ func TestVerifyStringWithNonExistentFolder(t *testing.T) {
 	nonExistentDir := "testdata/nonexistent_subdir"
 	defer os.RemoveAll(nonExistentDir)
 
-	UseFolder(nonExistentDir)
-	defer UseFolder("testdata")
+	defer UseFolder(UseFolder(nonExistentDir))
 
 	fakeT := NewTestFailableWithName("TestVerifyStringWithNonExistentFolder")
 	VerifyString(fakeT, "Hello from a missing folder!")
