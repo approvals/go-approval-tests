@@ -9,6 +9,7 @@
 
 ## How to
 
+-   [Configure Approval Tests](how_to/ConfigureApprovalTests.md)
 -   [Custom Namer](how_to/CustomNamer.md)
 -   [Parameterized Tests](how_to/ParameterizedTest.md)
 -   [Scrub Dates](how_to/ScrubDates.md)
