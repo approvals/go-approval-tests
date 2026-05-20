@@ -118,3 +118,66 @@ func TestScrubGuids(t *testing.T) {
 
 	approvals.VerifyAll(t, "guids", guids, func(x interface{}) string { return fmt.Sprintf("%v", x) }, approvals.Options().WithScrubber(approvals.CreateGuidScrubber()))
 }
+
+func TestScrubberInOptions(t *testing.T) {
+	t.Parallel()
+	// begin-snippet: scrubber_in_options
+	scrubber := approvals.CreateRegexScrubber(regexp.MustCompile(`\d+`), "<number>")
+	approvals.VerifyString(t, "order 123 has 456 items",
+		approvals.Options().WithScrubber(scrubber))
+	// end-snippet
+}
+
+func TestRegexScrubberReplace(t *testing.T) {
+	t.Parallel()
+	// begin-snippet: regex_scrubber_replace
+	scrubber := approvals.CreateRegexScrubber(regexp.MustCompile(`\d{4}-\d{2}-\d{2}`), "<date>")
+	result := scrubber("created on 2024-01-15, updated on 2024-03-20")
+	approvals.VerifyString(t, result)
+	// end-snippet
+}
+
+func TestRegexScrubberTrackingDuplicates(t *testing.T) {
+	t.Parallel()
+	// begin-snippet: regex_scrubber_tracking_duplicates
+	scrubber := approvals.CreateRegexScrubberWithLabeler(
+		regexp.MustCompile(`\d{4}-\d{2}-\d{2}`),
+		func(n int) string { return fmt.Sprintf("<date%d>", n) },
+	)
+	result := scrubber("created 2024-01-15, updated 2024-03-20, also 2024-01-15")
+	approvals.VerifyString(t, result)
+	// end-snippet
+}
+
+func TestCombiningScrubbers(t *testing.T) {
+	t.Parallel()
+	// begin-snippet: combining_scrubbers
+	scrubber := approvals.CreateMultiScrubber(
+		approvals.CreateRegexScrubber(regexp.MustCompile(`\d+\.\d+\.\d+\.\d+`), "<ip>"),
+		approvals.CreateGuidScrubber(),
+	)
+	result := scrubber("host 192.168.1.1 session 2fd78d4a-ad49-447d-96a8-deda585a9aa5")
+	approvals.VerifyString(t, result)
+	// end-snippet
+}
+
+func TestDeletingLines(t *testing.T) {
+	t.Parallel()
+	// begin-snippet: deleting_lines
+	deleteLine := func(regex *regexp.Regexp) approvals.Scrubber {
+		return func(s string) string {
+			lines := strings.Split(s, "\n")
+			var kept []string
+			for _, line := range lines {
+				if !regex.MatchString(line) {
+					kept = append(kept, line)
+				}
+			}
+			return strings.Join(kept, "\n")
+		}
+	}
+	scrubber := deleteLine(regexp.MustCompile(`^#`))
+	result := scrubber("# comment\ndata line\n# another comment\nmore data")
+	approvals.VerifyString(t, result)
+	// end-snippet
+}
