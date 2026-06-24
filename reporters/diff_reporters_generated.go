@@ -10,7 +10,6 @@ func expandProgramFiles(path string) string {
 	return strings.ReplaceAll(strings.Replace(path, "{ProgramFiles}", os.Getenv("ProgramFiles"), 1), "\\", "/")
 }
 
-
 type diffMergeMac struct{}
 
 func NewDiffMergeMacReporter() Reporter {
@@ -446,6 +445,21 @@ func (s *cursorMac) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
+type devinDesktopMac struct{}
+
+func NewDevinDesktopMacReporter() Reporter {
+	return &devinDesktopMac{}
+}
+
+func (s *devinDesktopMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/Applications/Devin.app/Contents/Resources/app/bin/devin-desktop"
+	args := []string{"-d", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
 type diffCommandLineLinux struct{}
 
 func NewDiffCommandLineLinuxReporter() Reporter {
@@ -476,6 +490,126 @@ func (s *diffCommandLineMac) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
+type deltaMac struct{}
+
+func NewDeltaMacReporter() Reporter {
+	return &deltaMac{}
+}
+
+func (s *deltaMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/opt/homebrew/bin/delta"
+	args := []string{"--paging=never", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type deltaIntelMac struct{}
+
+func NewDeltaIntelMacReporter() Reporter {
+	return &deltaIntelMac{}
+}
+
+func (s *deltaIntelMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/usr/local/bin/delta"
+	args := []string{"--paging=never", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type deltaWindows struct{}
+
+func NewDeltaWindowsReporter() Reporter {
+	return &deltaWindows{}
+}
+
+func (s *deltaWindows) Report(approved, received string) bool {
+	if runtime.GOOS != goosWindows {
+		return false
+	}
+	programName := expandProgramFiles("{ProgramFiles}delta\\delta.exe")
+	args := []string{"--paging=never", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type deltaLinux struct{}
+
+func NewDeltaLinuxReporter() Reporter {
+	return &deltaLinux{}
+}
+
+func (s *deltaLinux) Report(approved, received string) bool {
+	if runtime.GOOS != goosLinux {
+		return false
+	}
+	programName := "/usr/bin/delta"
+	args := []string{"--paging=never", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type zedMac struct{}
+
+func NewZedMacReporter() Reporter {
+	return &zedMac{}
+}
+
+func (s *zedMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/Applications/Zed.app/Contents/MacOS/cli"
+	args := []string{"--diff", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type zedCliMac struct{}
+
+func NewZedCliMacReporter() Reporter {
+	return &zedCliMac{}
+}
+
+func (s *zedCliMac) Report(approved, received string) bool {
+	if runtime.GOOS != goosDarwin {
+		return false
+	}
+	programName := "/usr/local/bin/zed"
+	args := []string{"--diff", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type zedWindows struct{}
+
+func NewZedWindowsReporter() Reporter {
+	return &zedWindows{}
+}
+
+func (s *zedWindows) Report(approved, received string) bool {
+	if runtime.GOOS != goosWindows {
+		return false
+	}
+	programName := expandProgramFiles("{ProgramFiles}Zed\\zed.exe")
+	args := []string{"--diff", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type zedLinux struct{}
+
+func NewZedLinuxReporter() Reporter {
+	return &zedLinux{}
+}
+
+func (s *zedLinux) Report(approved, received string) bool {
+	if runtime.GOOS != goosLinux {
+		return false
+	}
+	programName := "/usr/local/bin/zed"
+	args := []string{"--diff", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
 type diffToolOnMac struct{}
 
 func NewDiffToolOnMacReporter() Reporter {
@@ -492,7 +626,12 @@ func NewDiffToolOnMacReporter() Reporter {
 		NewAraxisMergeMacReporter(),
 		NewSublimeMergeMacReporter(),
 		NewCursorMacReporter(),
+		NewDevinDesktopMacReporter(),
 		NewDiffCommandLineMacReporter(),
+		NewDeltaMacReporter(),
+		NewDeltaIntelMacReporter(),
+		NewZedMacReporter(),
+		NewZedCliMacReporter(),
 	)
 }
 
@@ -513,7 +652,12 @@ func (s *diffToolOnMac) Report(approved, received string) bool {
 		NewAraxisMergeMacReporter(),
 		NewSublimeMergeMacReporter(),
 		NewCursorMacReporter(),
+		NewDevinDesktopMacReporter(),
 		NewDiffCommandLineMacReporter(),
+		NewDeltaMacReporter(),
+		NewDeltaIntelMacReporter(),
+		NewZedMacReporter(),
+		NewZedCliMacReporter(),
 	).Report(approved, received)
 }
 
@@ -534,6 +678,8 @@ func NewDiffToolOnWindowsReporter() Reporter {
 		NewKdiff3WindowsReporter(),
 		NewVisualStudioCodeWindowsReporter(),
 		NewSublimeMergeWindowsReporter(),
+		NewDeltaWindowsReporter(),
+		NewZedWindowsReporter(),
 	)
 }
 
@@ -555,6 +701,8 @@ func (s *diffToolOnWindows) Report(approved, received string) bool {
 		NewKdiff3WindowsReporter(),
 		NewVisualStudioCodeWindowsReporter(),
 		NewSublimeMergeWindowsReporter(),
+		NewDeltaWindowsReporter(),
+		NewZedWindowsReporter(),
 	).Report(approved, received)
 }
 
@@ -567,6 +715,8 @@ func NewDiffToolOnLinuxReporter() Reporter {
 		NewKdiff3LinuxReporter(),
 		NewSublimeMergeLinuxReporter(),
 		NewDiffCommandLineLinuxReporter(),
+		NewDeltaLinuxReporter(),
+		NewZedLinuxReporter(),
 	)
 }
 
@@ -580,6 +730,8 @@ func (s *diffToolOnLinux) Report(approved, received string) bool {
 		NewKdiff3LinuxReporter(),
 		NewSublimeMergeLinuxReporter(),
 		NewDiffCommandLineLinuxReporter(),
+		NewDeltaLinuxReporter(),
+		NewZedLinuxReporter(),
 	).Report(approved, received)
 }
 
@@ -616,6 +768,40 @@ func (s *beyondCompareGroup) Report(approved, received string) bool {
 		NewBeyondCompare3WindowsReporter(),
 		NewBeyondCompare4WindowsReporter(),
 		NewBeyondCompare5WindowsReporter(),
+	).Report(approved, received)
+}
+
+type deltaGroup struct{}
+
+func NewDeltaGroupReporter() Reporter {
+	return NewFirstWorkingReporter(
+		NewDeltaMacReporter(),
+		NewDeltaIntelMacReporter(),
+		NewDeltaWindowsReporter(),
+		NewDeltaLinuxReporter(),
+	)
+}
+
+func (s *deltaGroup) Report(approved, received string) bool {
+	return NewFirstWorkingReporter(
+		NewDeltaMacReporter(),
+		NewDeltaIntelMacReporter(),
+		NewDeltaWindowsReporter(),
+		NewDeltaLinuxReporter(),
+	).Report(approved, received)
+}
+
+type devinDesktopGroup struct{}
+
+func NewDevinDesktopGroupReporter() Reporter {
+	return NewFirstWorkingReporter(
+		NewDevinDesktopMacReporter(),
+	)
+}
+
+func (s *devinDesktopGroup) Report(approved, received string) bool {
+	return NewFirstWorkingReporter(
+		NewDevinDesktopMacReporter(),
 	).Report(approved, received)
 }
 
@@ -748,5 +934,25 @@ func (s *visualStudioCodeGroup) Report(approved, received string) bool {
 	return NewFirstWorkingReporter(
 		NewVisualStudioCodeMacReporter(),
 		NewVisualStudioCodeWindowsReporter(),
+	).Report(approved, received)
+}
+
+type zedGroup struct{}
+
+func NewZedGroupReporter() Reporter {
+	return NewFirstWorkingReporter(
+		NewZedMacReporter(),
+		NewZedCliMacReporter(),
+		NewZedWindowsReporter(),
+		NewZedLinuxReporter(),
+	)
+}
+
+func (s *zedGroup) Report(approved, received string) bool {
+	return NewFirstWorkingReporter(
+		NewZedMacReporter(),
+		NewZedCliMacReporter(),
+		NewZedWindowsReporter(),
+		NewZedLinuxReporter(),
 	).Report(approved, received)
 }

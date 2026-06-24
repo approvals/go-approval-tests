@@ -172,7 +172,6 @@ import (
 func expandProgramFiles(path string) string {
 	return strings.ReplaceAll(strings.Replace(path, "{ProgramFiles}", os.Getenv("ProgramFiles"), 1), "\\\\", "/")
 }
-
 ''')
 
     for row in rows:
