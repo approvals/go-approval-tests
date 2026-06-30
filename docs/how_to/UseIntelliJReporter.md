@@ -4,6 +4,8 @@
 
 The IntelliJ reporter automatically detects a running JetBrains IDE and uses it to display diffs when an approval test fails — no manual path configuration required.
 
+This reporter is the first candidate tried by the [default diff reporter](../reference/DiffReporter.md), so if a JetBrains IDE is running it will be used automatically without any extra configuration.
+
 ## Supported IDEs
 
 The reporter detects any of the following JetBrains IDEs if they are currently running:

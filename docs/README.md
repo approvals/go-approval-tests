@@ -17,7 +17,7 @@
 
 ## Reference
 
-- Coming Soon
+-   [Default Diff Reporter](reference/DiffReporter.md)
 
 ## Explanations
 
