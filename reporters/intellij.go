@@ -50,21 +50,18 @@ func findJetBrainsIDE() string {
 		if line == "" {
 			continue
 		}
-		// Extract just the executable path (first token)
-		path := strings.Fields(line)[0]
-		lower := strings.ToLower(path)
+		lower := strings.ToLower(line)
+		sep := "/"
+		if runtime.GOOS == goosWindows {
+			sep = "\\"
+		}
 		for _, keyword := range jetBrainsKeywords {
-			if !strings.Contains(lower, keyword) {
-				continue
-			}
-			sep := "/"
-			if runtime.GOOS == goosWindows {
-				sep = "\\"
-			}
-			if strings.HasSuffix(lower, "macos"+sep+keyword) ||
-				strings.Contains(lower, "bin"+sep+keyword) {
-				println("Found JetBrains IDE: " + path)
-				return path
+			for _, pattern := range []string{"macos" + sep + keyword, "bin" + sep + keyword} {
+				idx := strings.Index(lower, pattern)
+				if idx == -1 {
+					continue
+				}
+				return line[:idx+len(pattern)]
 			}
 		}
 	}
