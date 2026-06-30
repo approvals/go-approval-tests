@@ -13,6 +13,7 @@
 -   [Custom Namer](how_to/CustomNamer.md)
 -   [Parameterized Tests](how_to/ParameterizedTest.md)
 -   [Scrub Dates](how_to/ScrubDates.md)
+-   [Use the IntelliJ Reporter](how_to/UseIntelliJReporter.md)
 
 ## Reference
 
