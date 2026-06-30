@@ -16,6 +16,7 @@ func NewFrontLoadedReporter() Reporter {
 // NewDiffReporter creates the default diff reporter.
 func NewDiffReporter() Reporter {
 	return NewFirstWorkingReporter(
+		NewEnvironmentVariableReporter(),
 		NewIntelliJReporter(),
 		NewDiffToolOnMacReporter(),
 		NewDiffToolOnWindowsReporter(),

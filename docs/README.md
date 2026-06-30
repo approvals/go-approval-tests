@@ -14,6 +14,7 @@
 -   [Parameterized Tests](how_to/ParameterizedTest.md)
 -   [Scrub Dates](how_to/ScrubDates.md)
 -   [Use the IntelliJ Reporter](how_to/UseIntelliJReporter.md)
+-   [Use the Environment Variable Reporter](how_to/UseEnvironmentVariableReporter.md)
 
 ## Reference
 
