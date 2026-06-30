@@ -23,7 +23,11 @@ func NewIntelliJReporter() Reporter {
 func (s *intellij) Report(approved, received string) bool {
 	xs := []string{"diff", received, approved}
 	programName := findJetBrainsIDE()
-	return launchProgram(programName, approved, xs...)
+	if programName == "" {
+		return false
+	} else {
+		return launchProgram(programName, approved, xs...)
+	}
 }
 
 func findProcesses() ([]byte, error) {
@@ -34,6 +38,7 @@ func findProcesses() ([]byte, error) {
 }
 
 func findJetBrainsIDE() string {
+	println("Finding JetBrains IDE...")
 	out, err := findProcesses()
 	if err != nil {
 		return ""
@@ -58,6 +63,7 @@ func findJetBrainsIDE() string {
 			}
 			if strings.HasSuffix(lower, "macos"+sep+keyword) ||
 				strings.Contains(lower, "bin"+sep+keyword) {
+				println("Found JetBrains IDE: " + path)
 				return path
 			}
 		}

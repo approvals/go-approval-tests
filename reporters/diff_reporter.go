@@ -17,7 +17,6 @@ func NewFrontLoadedReporter() Reporter {
 func NewDiffReporter() Reporter {
 	return NewFirstWorkingReporter(
 		NewIntelliJReporter(),
-		NewGoLandReporter(),
 		NewDiffToolOnMacReporter(),
 		NewDiffToolOnWindowsReporter(),
 		NewDiffToolOnLinuxReporter(),
