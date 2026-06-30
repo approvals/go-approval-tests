@@ -1,6 +1,17 @@
 package reporters
 
-import "runtime"
+import (
+	"bufio"
+	"bytes"
+	"os/exec"
+	"runtime"
+	"strings"
+)
+
+var jetBrainsKeywords = []string{
+	"idea", "pycharm", "webstorm", "phpstorm", "goland",
+	"rider", "clion", "rubymine", "appcode", "datagrip",
+}
 
 type intellij struct{}
 
@@ -11,16 +22,45 @@ func NewIntelliJReporter() Reporter {
 
 func (s *intellij) Report(approved, received string) bool {
 	xs := []string{"diff", received, approved}
+	programName := findJetBrainsIDE()
+	return launchProgram(programName, approved, xs...)
+}
 
-	var programName string
-	switch runtime.GOOS {
-	case goosWindows:
-		programName = "C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2016/bin/idea.exe"
-	case goosDarwin:
-		programName = "/Applications/IntelliJ IDEA.app/Contents/MacOS/idea"
-	case goosLinux:
-		programName = "/usr/local/bin/idea"
+func findProcesses() ([]byte, error) {
+	if runtime.GOOS == goosWindows {
+		return exec.Command("wmic", "process", "get", "ExecutablePath").Output()
+	}
+	return exec.Command("ps", "-eo", "args").Output()
+}
+
+func findJetBrainsIDE() string {
+	out, err := findProcesses()
+	if err != nil {
+		return ""
 	}
 
-	return launchProgram(programName, approved, xs...)
+	scanner := bufio.NewScanner(bytes.NewReader(out))
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+		// Extract just the executable path (first token)
+		path := strings.Fields(line)[0]
+		lower := strings.ToLower(path)
+		for _, keyword := range jetBrainsKeywords {
+			if !strings.Contains(lower, keyword) {
+				continue
+			}
+			sep := "/"
+			if runtime.GOOS == goosWindows {
+				sep = "\\"
+			}
+			if strings.HasSuffix(lower, "macos"+sep+keyword) ||
+				strings.Contains(lower, "bin"+sep+keyword) {
+				return path
+			}
+		}
+	}
+	return ""
 }
