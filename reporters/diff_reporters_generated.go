@@ -445,6 +445,36 @@ func (s *cursorMac) Report(approved, received string) bool {
 	return launchProgram(programName, approved, args...)
 }
 
+type cursorWindows struct{}
+
+func NewCursorWindowsReporter() Reporter {
+	return &cursorWindows{}
+}
+
+func (s *cursorWindows) Report(approved, received string) bool {
+	if runtime.GOOS != goosWindows {
+		return false
+	}
+	programName := expandProgramFiles("{ProgramFiles}Cursor\\resources\\app\\bin\\cursor.exe")
+	args := []string{"-d", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type cursorLinux struct{}
+
+func NewCursorLinuxReporter() Reporter {
+	return &cursorLinux{}
+}
+
+func (s *cursorLinux) Report(approved, received string) bool {
+	if runtime.GOOS != goosLinux {
+		return false
+	}
+	programName := "/usr/local/bin/cursor"
+	args := []string{"-d", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
 type devinDesktopMac struct{}
 
 func NewDevinDesktopMacReporter() Reporter {
@@ -456,6 +486,36 @@ func (s *devinDesktopMac) Report(approved, received string) bool {
 		return false
 	}
 	programName := "/Applications/Devin.app/Contents/Resources/app/bin/devin-desktop"
+	args := []string{"-d", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type devinDesktopWindows struct{}
+
+func NewDevinDesktopWindowsReporter() Reporter {
+	return &devinDesktopWindows{}
+}
+
+func (s *devinDesktopWindows) Report(approved, received string) bool {
+	if runtime.GOOS != goosWindows {
+		return false
+	}
+	programName := expandProgramFiles("{ProgramFiles}Windsurf\\resources\\app\\bin\\devin-desktop.exe")
+	args := []string{"-d", received, approved}
+	return launchProgram(programName, approved, args...)
+}
+
+type devinDesktopLinux struct{}
+
+func NewDevinDesktopLinuxReporter() Reporter {
+	return &devinDesktopLinux{}
+}
+
+func (s *devinDesktopLinux) Report(approved, received string) bool {
+	if runtime.GOOS != goosLinux {
+		return false
+	}
+	programName := "/usr/bin/devin-desktop"
 	args := []string{"-d", received, approved}
 	return launchProgram(programName, approved, args...)
 }
@@ -678,6 +738,8 @@ func NewDiffToolOnWindowsReporter() Reporter {
 		NewKdiff3WindowsReporter(),
 		NewVisualStudioCodeWindowsReporter(),
 		NewSublimeMergeWindowsReporter(),
+		NewCursorWindowsReporter(),
+		NewDevinDesktopWindowsReporter(),
 		NewDeltaWindowsReporter(),
 		NewZedWindowsReporter(),
 	)
@@ -701,6 +763,8 @@ func (s *diffToolOnWindows) Report(approved, received string) bool {
 		NewKdiff3WindowsReporter(),
 		NewVisualStudioCodeWindowsReporter(),
 		NewSublimeMergeWindowsReporter(),
+		NewCursorWindowsReporter(),
+		NewDevinDesktopWindowsReporter(),
 		NewDeltaWindowsReporter(),
 		NewZedWindowsReporter(),
 	).Report(approved, received)
@@ -714,6 +778,8 @@ func NewDiffToolOnLinuxReporter() Reporter {
 		NewMeldMergeLinuxReporter(),
 		NewKdiff3LinuxReporter(),
 		NewSublimeMergeLinuxReporter(),
+		NewCursorLinuxReporter(),
+		NewDevinDesktopLinuxReporter(),
 		NewDiffCommandLineLinuxReporter(),
 		NewDeltaLinuxReporter(),
 		NewZedLinuxReporter(),
@@ -729,6 +795,8 @@ func (s *diffToolOnLinux) Report(approved, received string) bool {
 		NewMeldMergeLinuxReporter(),
 		NewKdiff3LinuxReporter(),
 		NewSublimeMergeLinuxReporter(),
+		NewCursorLinuxReporter(),
+		NewDevinDesktopLinuxReporter(),
 		NewDiffCommandLineLinuxReporter(),
 		NewDeltaLinuxReporter(),
 		NewZedLinuxReporter(),
@@ -771,6 +839,24 @@ func (s *beyondCompareGroup) Report(approved, received string) bool {
 	).Report(approved, received)
 }
 
+type cursorGroup struct{}
+
+func NewCursorGroupReporter() Reporter {
+	return NewFirstWorkingReporter(
+		NewCursorMacReporter(),
+		NewCursorWindowsReporter(),
+		NewCursorLinuxReporter(),
+	)
+}
+
+func (s *cursorGroup) Report(approved, received string) bool {
+	return NewFirstWorkingReporter(
+		NewCursorMacReporter(),
+		NewCursorWindowsReporter(),
+		NewCursorLinuxReporter(),
+	).Report(approved, received)
+}
+
 type deltaGroup struct{}
 
 func NewDeltaGroupReporter() Reporter {
@@ -796,12 +882,16 @@ type devinDesktopGroup struct{}
 func NewDevinDesktopGroupReporter() Reporter {
 	return NewFirstWorkingReporter(
 		NewDevinDesktopMacReporter(),
+		NewDevinDesktopWindowsReporter(),
+		NewDevinDesktopLinuxReporter(),
 	)
 }
 
 func (s *devinDesktopGroup) Report(approved, received string) bool {
 	return NewFirstWorkingReporter(
 		NewDevinDesktopMacReporter(),
+		NewDevinDesktopWindowsReporter(),
+		NewDevinDesktopLinuxReporter(),
 	).Report(approved, received)
 }
 
