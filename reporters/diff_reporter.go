@@ -9,6 +9,7 @@ import (
 // NewFrontLoadedReporter creates the default front loaded reporter.
 func NewFrontLoadedReporter() Reporter {
 	return NewFirstWorkingReporter(
+		NewAICodingAgentReporter(),
 		NewContinuousIntegrationReporter(),
 	)
 }

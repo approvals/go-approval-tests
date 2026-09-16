@@ -1,6 +1,7 @@
 package reporters
 
 func init() {
+	RegisterReporter("AICodingAgentReporter", NewAICodingAgentReporter)
 	RegisterReporter("AllFailingTestReporter", NewAllFailingTestReporter)
 	RegisterReporter("AraxisMergeGroupReporter", NewAraxisMergeGroupReporter)
 	RegisterReporter("AraxisMergeMacReporter", NewAraxisMergeMacReporter)
@@ -70,4 +71,6 @@ func init() {
 	RegisterReporter("ZedLinuxReporter", NewZedLinuxReporter)
 	RegisterReporter("ZedMacReporter", NewZedMacReporter)
 	RegisterReporter("ZedWindowsReporter", NewZedWindowsReporter)
+
+	// RegisterAdditionalParameters(type(&zedCliMac{}), []string{"--light","--file-style=emit")
 }
