@@ -56,7 +56,7 @@ func TestWithParameters(t *testing.T) {
 	}
 }
 ```
-<sup><a href='/parameters_test.go#L8-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-parameterized_test_with_additional_information' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/parameters_test.go#L8-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-parameterized_test_with_additional_information' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This code sample ensures that the approval files include the additional information for each parameter. For example:

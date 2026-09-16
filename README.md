@@ -31,7 +31,7 @@ ApprovalTests allows for easy testing of larger objects, strings and anything el
 <a id='snippet-hello_world'></a>
 ```go
 func TestHelloWorld(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	approvals.VerifyString(t, "Hello World!")
 }
 ```
@@ -65,7 +65,7 @@ VerifyJSONBytes - Simple Formatting for easy comparison. Also uses the .json fil
 <a id='snippet-verify_json'></a>
 ```go
 func TestVerifyJSON(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	approvals.VerifyJSONBytes(t, jsonb)
 }
