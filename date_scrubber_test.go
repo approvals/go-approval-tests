@@ -65,13 +65,13 @@ func TestSupportedFormats(t *testing.T) {
 
 func TestAddDateScrubber_ValidRegexAndExample(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
 	utils.RequireNoError(t, err)
-	
+
 	scrubber, err := approvals.GetDateScrubberFor("2024-Jan-01")
 	utils.RequireNoError(t, err)
-	
+
 	result := scrubber("Today is 2024-Jan-01")
 	expected := "Today is [Date1]"
 	if result != expected {
@@ -81,7 +81,7 @@ func TestAddDateScrubber_ValidRegexAndExample(t *testing.T) {
 
 func TestAddDateScrubber_InvalidRegex(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `[invalid`, false)
 	if err == nil || !strings.Contains(err.Error(), "invalid regex pattern") {
 		t.Errorf("Expected 'invalid regex pattern' error, got: %v", err)
@@ -90,7 +90,7 @@ func TestAddDateScrubber_InvalidRegex(t *testing.T) {
 
 func TestAddDateScrubber_RegexDoesNotMatchExample(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-\d{2}-\d{2}`, false)
 	if err == nil || !strings.Contains(err.Error(), "does not match example") {
 		t.Errorf("Expected 'does not match example' error, got: %v", err)
@@ -99,27 +99,27 @@ func TestAddDateScrubber_RegexDoesNotMatchExample(t *testing.T) {
 
 func TestAddDateScrubber_MessageDisplayDefault(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	console := approvals.NewConsoleOutput()
 	defer console.Close()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`)
 	utils.RequireNoError(t, err)
-	
+
 	console.VerifyOutput(t)
 }
 
 func TestAddDateScrubber_MessageDisplaySuppressed(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	console := approvals.NewConsoleOutput()
 	defer console.Close()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
 	utils.RequireNoError(t, err)
-	
+
 	output := console.GetOutput()
-	
+
 	if strings.Contains(output, "You are using a custom date scrubber") {
 		t.Errorf("Expected no message to be displayed, got: %s", output)
 	}
@@ -127,23 +127,23 @@ func TestAddDateScrubber_MessageDisplaySuppressed(t *testing.T) {
 
 func TestAddDateScrubber_CustomScrubbersIntegratedInScrubbing(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
 	utils.RequireNoError(t, err)
-	
+
 	err = approvals.AddDateScrubber("01/Jan/2024", `\d{2}/[A-Za-z]{3}/\d{4}`, false)
 	utils.RequireNoError(t, err)
-	
+
 	text := "Meeting on 2024-Feb-14 and conference on 15/Mar/2024"
 	scrubber1, err := approvals.GetDateScrubberFor("2023-Dec-25")
 	utils.RequireNoError(t, err)
-	
+
 	scrubber2, err := approvals.GetDateScrubberFor("01/Jan/2024")
 	utils.RequireNoError(t, err)
-	
+
 	result1 := scrubber1(text)
 	result2 := scrubber2(result1)
-	
+
 	expected := "Meeting on [Date1] and conference on [Date1]"
 	if result2 != expected {
 		t.Errorf("Expected %s, got %s", expected, result2)
@@ -152,15 +152,15 @@ func TestAddDateScrubber_CustomScrubbersIntegratedInScrubbing(t *testing.T) {
 
 func TestClearCustomDateScrubbers(t *testing.T) {
 	defer approvals.ClearCustomDateScrubbers()
-	
+
 	err := approvals.AddDateScrubber("2023-Dec-25", `\d{4}-[A-Za-z]{3}-\d{2}`, false)
 	utils.RequireNoError(t, err)
-	
+
 	_, err = approvals.GetDateScrubberFor("2024-Jan-01")
 	utils.RequireNoError(t, err)
-	
+
 	approvals.ClearCustomDateScrubbers()
-	
+
 	_, err = approvals.GetDateScrubberFor("2024-Jan-01")
 	if err == nil || !strings.Contains(err.Error(), "No match found") {
 		t.Errorf("Expected 'No match found' error, got: %v", err)

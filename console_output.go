@@ -87,7 +87,7 @@ func (c *ConsoleOutput) ensureClosed() {
 	c.stderrWriter.Close()
 	c.closed = true
 	c.mu.Unlock()
-	
+
 	c.wg.Wait()
 }
 
@@ -120,12 +120,12 @@ func (c *ConsoleOutput) VerifyAll(t core.Failable) {
 
 func (c *ConsoleOutput) Close() error {
 	c.ensureClosed()
-	
+
 	c.stdoutReader.Close()
 	c.stderrReader.Close()
-	
+
 	os.Stdout = c.originalStdout
 	os.Stderr = c.originalStderr
-	
+
 	return nil
 }

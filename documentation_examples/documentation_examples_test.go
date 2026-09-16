@@ -8,7 +8,7 @@ import (
 
 // begin-snippet: hello_world
 func TestHelloWorld(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	approvals.VerifyString(t, "Hello World!")
 }
 
@@ -16,7 +16,7 @@ func TestHelloWorld(t *testing.T) {
 
 // begin-snippet: verify_json
 func TestVerifyJSON(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	jsonb := []byte("{ \"foo\": \"bar\", \"age\": 42, \"bark\": \"woof\" }")
 	approvals.VerifyJSONBytes(t, jsonb)
 }

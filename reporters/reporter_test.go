@@ -25,7 +25,7 @@ func (s *testReporter) Report(approved, received string) bool {
 }
 
 func TestFirstWorkingReporter(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	a := newTestReporter(false)
 	b := newTestReporter(true)
 	c := newTestReporter(true)
@@ -39,7 +39,7 @@ func TestFirstWorkingReporter(t *testing.T) {
 }
 
 func TestMultiReporter(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	a := newTestReporter(true)
 	b := newTestReporter(true)
 
@@ -52,7 +52,7 @@ func TestMultiReporter(t *testing.T) {
 }
 
 func TestMultiReporterWithNoWorkingReporters(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 	a := newTestReporter(false)
 	b := newTestReporter(false)
 

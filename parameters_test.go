@@ -15,5 +15,5 @@ func TestWithParameters(t *testing.T) {
 		VerifyString(t, result, Options().ForFile().WithAdditionalInformation(value))
 	}
 }
-// end-snippet
 
+// end-snippet

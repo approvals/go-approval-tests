@@ -8,7 +8,7 @@ import (
 
 func TestCIReporter(t *testing.T) {
 	t.Setenv("CI", "true")
-	if !reporters.IsCI(){
+	if !reporters.IsCI() {
 		t.Error("expected IsCI to return true")
 	}
 }

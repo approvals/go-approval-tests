@@ -4,12 +4,15 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"testing"
 
 	approvals "github.com/approvals/go-approval-tests"
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
 )
+
+var windowsMoveCommand = regexp.MustCompile(`move /Y "([^"]+)" "([^"]+)"`)
 
 func TestSystemoutReporter_PrintsBothFiles(t *testing.T) {
 	defer approvals.UseFolder(approvals.UseFolder("testdata"))
@@ -30,5 +33,13 @@ func TestSystemoutReporter_PrintsBothFiles(t *testing.T) {
 	}
 
 	scrubTempDir := approvals.CreateRegexScrubber(regexp.MustCompile(regexp.QuoteMeta(dir)), "<dir>")
-	approvals.VerifyString(t, output, approvals.Options().AddScrubber(scrubTempDir))
+	// Windows prints `\` separators and `move /Y "src" "dst"`; fold both onto the POSIX
+	// rendering so one approved file covers every platform in the CI matrix.
+	scrubSeparators := func(s string) string { return strings.ReplaceAll(s, `\`, "/") }
+	scrubMoveCommand := func(s string) string { return windowsMoveCommand.ReplaceAllString(s, "mv $1 $2") }
+
+	approvals.VerifyString(t, output, approvals.Options().
+		AddScrubber(scrubTempDir).
+		AddScrubber(scrubSeparators).
+		AddScrubber(scrubMoveCommand))
 }
