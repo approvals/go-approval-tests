@@ -1,11 +1,17 @@
-approval files did not match
-approved: <dir>/sample.approved.txt
-received: <dir>/sample.received.txt
-Received content:
-hello world
-line 2
+# APPROVAL TEST FAILED
+    approved: <dir>/sample.approved.txt
+    received: <dir>/sample.received.txt
+    approve_with: mv <dir>/sample.received.txt <dir>/sample.approved.txt
 
-Approved content:
-hello world
-line two
+    ## APPROVED
+    ```.txt
+    hello world
+    line two
+    ```
 
+    ## RECEIVED
+    ```.txt
+    hello world
+    line 2
+    ```
+----------------------
