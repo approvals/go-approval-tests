@@ -14,16 +14,21 @@ func NewContinuousIntegrationReporter() Reporter {
 	return &continuousIntegration{}
 }
 
-func (s *continuousIntegration) Report(approved, received string) bool {
-	value, exists := os.LookupEnv("CI")
-
-	if exists {
+func IsCI() bool {
+	if value, exists := os.LookupEnv("CI"); exists {
 		ci, err := strconv.ParseBool(value)
-		if err == nil && ci {
-			systemout := NewSystemoutReporter()
-			return systemout.Report(approved, received)
+		if err == nil {
+			return ci
 		}
 	}
 
 	return false
+}
+
+func (s *continuousIntegration) Report(approved, received string) bool {
+	if !IsCI() {
+		return false
+	}
+
+	return NewSystemoutReporter().Report(approved, received)
 }

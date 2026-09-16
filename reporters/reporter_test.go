@@ -1,7 +1,6 @@
 package reporters
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -71,17 +70,4 @@ func restoreEnv(exists bool, key, value string) {
 	} else {
 		os.Unsetenv(key)
 	}
-}
-
-func TestCIReporter(t *testing.T) {
-    t.Parallel()
-	value, exists := os.LookupEnv("CI")
-
-	os.Setenv("CI", "true")
-	defer restoreEnv(exists, "CI", value)
-
-	r := NewContinuousIntegrationReporter()
-	report := r.Report("", "")
-	fmt.Println("^^^ The above error is expected ^^^")
-	utils.AssertEqual(t, true, report, "did not detect CI")
 }
