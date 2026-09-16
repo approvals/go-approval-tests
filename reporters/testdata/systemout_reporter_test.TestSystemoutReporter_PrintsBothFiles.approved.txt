@@ -1,0 +1,11 @@
+approval files did not match
+approved: <dir>/sample.approved.txt
+received: <dir>/sample.received.txt
+Received content:
+hello world
+line 2
+
+Approved content:
+hello world
+line two
+
