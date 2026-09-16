@@ -1,0 +1,13 @@
+=== APPROVAL TEST FAILED ===
+status: approval files did not match
+approved: <dir>/sample.approved.txt
+received: <dir>/sample.received.txt
+--- APPROVED ---
+hello world
+line two
+--- RECEIVED ---
+hello world
+line 2
+--- APPROVE WITH ---
+mv <dir>/sample.received.txt <dir>/sample.approved.txt
+=== END APPROVAL TEST FAILED ===
