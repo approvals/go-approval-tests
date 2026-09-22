@@ -2,6 +2,7 @@
     approved: <dir>/sample.approved.txt
     received: <dir>/sample.received.txt
     approve_with: mv <dir>/sample.received.txt <dir>/sample.approved.txt
+    approve_all: python3 <approval_tests_temp>/approve_all.py
 
     ## APPROVED
     ```.txt

@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	approvals "github.com/approvals/go-approval-tests"
+	"github.com/approvals/go-approval-tests/internal/log"
 	"github.com/approvals/go-approval-tests/reporters"
 	"github.com/approvals/go-approval-tests/utils"
 )
@@ -33,6 +34,7 @@ func TestSystemoutReporter_PrintsBothFiles(t *testing.T) {
 	}
 
 	scrubTempDir := approvals.CreateRegexScrubber(regexp.MustCompile(regexp.QuoteMeta(dir)), "<dir>")
+	scrubApprovalTempDir := approvals.CreateRegexScrubber(regexp.MustCompile(regexp.QuoteMeta(log.TempDirectory())), "<approval_tests_temp>")
 	// Windows prints `\` separators and `move /Y "src" "dst"`; fold both onto the POSIX
 	// rendering so one approved file covers every platform in the CI matrix.
 	scrubSeparators := func(s string) string { return strings.ReplaceAll(s, `\`, "/") }
@@ -40,6 +42,7 @@ func TestSystemoutReporter_PrintsBothFiles(t *testing.T) {
 
 	approvals.VerifyString(t, output, approvals.Options().
 		AddScrubber(scrubTempDir).
+		AddScrubber(scrubApprovalTempDir).
 		AddScrubber(scrubSeparators).
 		AddScrubber(scrubMoveCommand))
 }

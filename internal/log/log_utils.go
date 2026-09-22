@@ -1,21 +1,53 @@
 package log
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sync"
 )
 
 var dirOnce sync.Once
 
-const approvalTempdirectory = ".approval_tests_temp"
+const (
+	signpostDirectory = ".approval_tests_temp"
+	signpostFile      = "WHERE_ARE_MY_FILES.txt"
+	approveAllScript  = "approve_all.py"
+)
+
+var approvalTempdirectory = temporaryDirectoryOutsideTheModule()
+
+func TempDirectory() string {
+	return approvalTempdirectory
+}
+
+func ApproveAllCommand() string {
+	interpreter := "python3"
+	if runtime.GOOS == "windows" {
+		interpreter = "python"
+	}
+
+	return fmt.Sprintf("%s %s", interpreter, filepath.Join(approvalTempdirectory, approveAllScript))
+}
+
+func temporaryDirectoryOutsideTheModule() string {
+	packageDirectory, err := os.Getwd()
+	if err != nil {
+		packageDirectory = "unknown"
+	}
+
+	fingerprint := sha256.Sum256([]byte(packageDirectory))
+
+	return filepath.Join(os.TempDir(), "approval_tests", hex.EncodeToString(fingerprint[:])[:16])
+}
 
 func InitializeTempDirectory() {
 	dirOnce.Do(func() {
-		// create the file and setup the parent directory if needed
 		err := os.MkdirAll(approvalTempdirectory, os.ModePerm)
 		if err != nil {
 			fmt.Println("Error creating directory: ", err)
@@ -23,16 +55,47 @@ func InitializeTempDirectory() {
 			return
 		}
 
-		// create a .gitignore file containing *
-		file, err := os.OpenFile(approvalTempdirectory+"/.gitignore", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
-		if err != nil {
-			fmt.Println("Error creating file: ", err)
-
-			return
-		}
-		defer file.Close()
-		file.WriteString("*\n")
+		writeSignpost()
 	})
+}
+
+func writeSignpost() {
+	err := os.MkdirAll(signpostDirectory, os.ModePerm)
+	if err != nil {
+		fmt.Println("Error creating directory: ", err)
+
+		return
+	}
+
+	writeOnlyIfChanged(filepath.Join(signpostDirectory, ".gitignore"), "*\n")
+	writeOnlyIfChanged(filepath.Join(signpostDirectory, signpostFile), signpostText())
+}
+
+func signpostText() string {
+	return fmt.Sprintf(`Approval test logs and scripts live outside this repository, so that writing
+them does not invalidate the go test cache on every run.
+
+They are in:
+  %s
+
+To approve every failing test:
+  %s
+
+Any log or script still sitting next to this file was left behind by an older
+version of go-approval-tests and is safe to delete.
+`, approvalTempdirectory, ApproveAllCommand())
+}
+
+func writeOnlyIfChanged(filename, content string) {
+	existing, err := os.ReadFile(filename)
+	if err == nil && string(existing) == content {
+		return
+	}
+
+	err = os.WriteFile(filename, []byte(content), 0644)
+	if err != nil {
+		fmt.Println("Error creating file: ", err)
+	}
 }
 
 // DownloadScriptFromCommonRepoIfNeeded downloads a script from the ApprovalTests.CommonScripts

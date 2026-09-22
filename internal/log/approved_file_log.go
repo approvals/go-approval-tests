@@ -22,7 +22,7 @@ type approvedFileLog struct {
 func GetApprovedFileLoggerInstance() *approvedFileLog {
 	fileOnce.Do(func() {
 		instance = &approvedFileLog{
-			filename: approvalTempdirectory + "/.approved_files.log",
+			filename: filepath.Join(approvalTempdirectory, ".approved_files.log"),
 		}
 		instance.initializeFile()
 

@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/approvals/go-approval-tests/internal/log"
 	"github.com/approvals/go-approval-tests/utils"
 )
 
@@ -23,6 +24,7 @@ func (s *systemout) Report(approved, received string) bool {
 	fmt.Printf("    approved: %s\n", approvedFull)
 	fmt.Printf("    received: %s\n", receivedFull)
 	fmt.Printf("    approve_with: %s\n", getMoveCommandText(approved, received))
+	fmt.Printf("    approve_all: %s\n", log.ApproveAllCommand())
 
 	printFileContent("APPROVED", approvedFull)
 	printFileContent("RECEIVED", receivedFull)
