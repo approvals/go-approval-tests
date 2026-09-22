@@ -25,9 +25,7 @@ func Compare(name, approvalFile, receivedFile string, reader io.Reader) error {
 		return nil
 	}
 
-	// The received file is only written once the comparison has failed. Writing it on
-	// every run means `go test` sees a freshly modified file inside the module and
-	// refuses to cache the package's results. See issue #86.
+	// Only written on failure: an open entry for it busts the go test cache (issue #86).
 	if err := dumpReceivedTestResult(received, receivedFile); err != nil {
 		return err
 	}
