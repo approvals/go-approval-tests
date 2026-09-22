@@ -16,6 +16,7 @@ var (
 
 type failedFileLog struct {
 	filename string
+	initOnce sync.Once
 }
 
 func GetFailedFileLoggerInstance() *failedFileLog {
@@ -23,17 +24,12 @@ func GetFailedFileLoggerInstance() *failedFileLog {
 		failedInstance = &failedFileLog{
 			filename: approvalTempdirectory + "/.failed_comparison.log",
 		}
-		failedInstance.initializeFile()
-
-		// putting this in a go routine to avoid blocking
-		// the main thread while waiting for the file to be downloaded
-		go DownloadScriptFromCommonRepoIfNeeded("approve_all.py")
 	})
 
 	return failedInstance
 }
 
-func (l failedFileLog) initializeFile() {
+func (l *failedFileLog) initializeFile() {
 	InitializeTempDirectory()
 
 	// create the file with read/write permissions for the user
@@ -44,17 +40,18 @@ func (l failedFileLog) initializeFile() {
 	}
 
 	file.Close()
+
+	// putting this in a go routine to avoid blocking
+	// the main thread while waiting for the file to be downloaded
+	go DownloadScriptFromCommonRepoIfNeeded("approve_all.py")
 }
 
-func (l failedFileLog) Log(receivedFile, approvedFile string) {
+func (l *failedFileLog) Log(receivedFile, approvedFile string) {
+	l.initOnce.Do(l.initializeFile)
+
 	receivedFile, _ = filepath.Abs(receivedFile)
 	approvedFile, _ = filepath.Abs(approvedFile)
 
 	logEntry := fmt.Sprintf("%s -> %s\n", receivedFile, approvedFile)
 	utils.AppendToFile(l.filename, logEntry)
-}
-
-func Touch() {
-	// Similar to the Java implementation, this allows the static initializer to be called
-	GetFailedFileLoggerInstance()
 }

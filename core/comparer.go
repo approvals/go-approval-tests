@@ -12,35 +12,34 @@ import (
 
 func Compare(name, approvalFile, receivedFile string, reader io.Reader) error {
 	log.GetApprovedFileLoggerInstance().Log(approvalFile)
-	log.Touch()
-	received, err := writeText(reader, receivedFile)
+
+	received, err := readReceived(reader)
 	if err != nil {
 		return err
 	}
 
-	fh, err := os.Open(approvalFile)
-	if err != nil {
-		return err
-	}
-	defer fh.Close()
-
-	approved, err := io.ReadAll(fh)
-	if err != nil {
-		return err
-	}
-
-	received = normalizeLineEndings(received)
-	approved = normalizeLineEndings(approved)
+	approved, approvedErr := os.ReadFile(approvalFile)
 
 	// The two sides are identical, nothing more to do.
-	if bytes.Equal(received, approved) {
+	if approvedErr == nil && bytes.Equal(normalizeLineEndings(received), normalizeLineEndings(approved)) {
 		return nil
+	}
+
+	// The received file is only written once the comparison has failed. Writing it on
+	// every run means `go test` sees a freshly modified file inside the module and
+	// refuses to cache the package's results. See issue #86.
+	if err := dumpReceivedTestResult(received, receivedFile); err != nil {
+		return err
+	}
+
+	if approvedErr != nil {
+		return approvedErr
 	}
 
 	return fmt.Errorf("failed to approved %s", name)
 }
 
-func writeText(reader io.Reader, receivedFile string) ([]byte, error) {
+func readReceived(reader io.Reader) ([]byte, error) {
 	received, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -51,15 +50,11 @@ func writeText(reader io.Reader, receivedFile string) ([]byte, error) {
 		received = append(received, []byte("\n")...)
 	}
 
-	err = dumpReceivedTestResult(received, receivedFile)
-	if err != nil {
-		return nil, err
-	}
 	return received, nil
 }
 
 func normalizeLineEndings(bs []byte) []byte {
-	return bytes.Replace(bs, []byte("\r\n"), []byte("\n"), -1)
+	return bytes.ReplaceAll(bs, []byte("\r\n"), []byte("\n"))
 }
 
 func dumpReceivedTestResult(bs []byte, receivedFile string) error {

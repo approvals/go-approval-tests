@@ -5,10 +5,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"sync"
 
 	"github.com/approvals/go-approval-tests/utils"
 )
+
+// TrackApprovedFilesEnv opts into generating the .approved_files.log
+const TrackApprovedFilesEnv = "APPROVAL_TESTS_TRACK_APPROVED_FILES"
 
 var (
 	fileOnce sync.Once
@@ -17,13 +21,21 @@ var (
 
 type approvedFileLog struct {
 	filename string
+	enabled  bool
 }
 
 func GetApprovedFileLoggerInstance() *approvedFileLog {
 	fileOnce.Do(func() {
+		enabled, _ := strconv.ParseBool(os.Getenv(TrackApprovedFilesEnv))
 		instance = &approvedFileLog{
 			filename: approvalTempdirectory + "/.approved_files.log",
+			enabled:  enabled,
 		}
+
+		if !instance.enabled {
+			return
+		}
+
 		instance.initializeFile()
 
 		// putting this in a go routine to avoid blocking
@@ -61,6 +73,10 @@ func (l approvedFileLog) initializeFile() {
 }
 
 func (l approvedFileLog) Log(approvedFile string) {
+	if !l.enabled {
+		return
+	}
+
 	// get the absolute path of approvedFile
 	approvedFile, _ = filepath.Abs(approvedFile)
 
