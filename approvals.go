@@ -6,7 +6,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"os"
 	"reflect"
 	"strings"
 
@@ -64,8 +63,6 @@ func Verify(t core.Failable, reader io.Reader, opts ...VerifyOptions) {
 		log.GetFailedFileLoggerInstance().Log(receivedFile, approvalFile)
 		reporter.Report(approvalFile, receivedFile)
 		t.Error("Failed Approval: received does not match approved.")
-	} else {
-		_ = os.Remove(receivedFile)
 	}
 }
 

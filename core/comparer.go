@@ -13,34 +13,26 @@ import (
 func Compare(name, approvalFile, receivedFile string, reader io.Reader) error {
 	log.GetApprovedFileLoggerInstance().Log(approvalFile)
 	log.Touch()
-	received, err := writeText(reader, receivedFile)
+	received, err := readText(reader)
 	if err != nil {
 		return err
 	}
 
-	fh, err := os.Open(approvalFile)
-	if err != nil {
-		return err
-	}
-	defer fh.Close()
-
-	approved, err := io.ReadAll(fh)
-	if err != nil {
-		return err
-	}
-
-	received = normalizeLineEndings(received)
-	approved = normalizeLineEndings(approved)
-
-	// The two sides are identical, nothing more to do.
-	if bytes.Equal(received, approved) {
+	approved, err := os.ReadFile(approvalFile)
+	if err == nil && bytes.Equal(normalizeLineEndings(received), normalizeLineEndings(approved)) {
 		return nil
 	}
 
+	if werr := dumpReceivedTestResult(received, receivedFile); werr != nil {
+		return werr
+	}
+	if err != nil {
+		return err
+	}
 	return fmt.Errorf("failed to approved %s", name)
 }
 
-func writeText(reader io.Reader, receivedFile string) ([]byte, error) {
+func readText(reader io.Reader) ([]byte, error) {
 	received, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -49,11 +41,6 @@ func writeText(reader io.Reader, receivedFile string) ([]byte, error) {
 	// Add a newline to the end of the file if it doesn't exist
 	if len(received) > 0 && received[len(received)-1] != '\n' {
 		received = append(received, []byte("\n")...)
-	}
-
-	err = dumpReceivedTestResult(received, receivedFile)
-	if err != nil {
-		return nil, err
 	}
 	return received, nil
 }
