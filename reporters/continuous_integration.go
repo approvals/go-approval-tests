@@ -1,9 +1,6 @@
 package reporters
 
-import (
-	"os"
-	"strconv"
-)
+import "github.com/approvals/go-approval-tests/internal/log"
 
 type continuousIntegration struct{}
 
@@ -15,14 +12,7 @@ func NewContinuousIntegrationReporter() Reporter {
 }
 
 func IsCI() bool {
-	if value, exists := os.LookupEnv("CI"); exists {
-		ci, err := strconv.ParseBool(value)
-		if err == nil {
-			return ci
-		}
-	}
-
-	return false
+	return log.IsCI()
 }
 
 func (s *continuousIntegration) Report(approved, received string) bool {

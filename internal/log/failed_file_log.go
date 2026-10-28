@@ -11,19 +11,33 @@ import (
 
 var (
 	failedFileOnce sync.Once
-	failedInstance *failedFileLog
+	failedInstance FailedFileLogger
 )
+
+type FailedFileLogger interface {
+	Log(receivedFile, approvedFile string)
+}
 
 type failedFileLog struct {
 	filename string
 }
 
-func GetFailedFileLoggerInstance() *failedFileLog {
+type nullFailedFileLog struct{}
+
+func (nullFailedFileLog) Log(string, string) {}
+
+func GetFailedFileLoggerInstance() FailedFileLogger {
 	failedFileOnce.Do(func() {
-		failedInstance = &failedFileLog{
+		if IsCI() {
+			failedInstance = nullFailedFileLog{}
+			return
+		}
+
+		l := &failedFileLog{
 			filename: approvalTempdirectory + "/.failed_comparison.log",
 		}
-		failedInstance.initializeFile()
+		l.initializeFile()
+		failedInstance = l
 
 		// putting this in a go routine to avoid blocking
 		// the main thread while waiting for the file to be downloaded

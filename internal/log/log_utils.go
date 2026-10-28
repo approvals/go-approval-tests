@@ -6,12 +6,18 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"sync"
 )
 
 var dirOnce sync.Once
 
 const approvalTempdirectory = ".approval_tests_temp"
+
+func IsCI() bool {
+	ci, err := strconv.ParseBool(os.Getenv("CI"))
+	return err == nil && ci
+}
 
 func InitializeTempDirectory() {
 	dirOnce.Do(func() {

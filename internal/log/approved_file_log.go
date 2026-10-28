@@ -12,19 +12,33 @@ import (
 
 var (
 	fileOnce sync.Once
-	instance *approvedFileLog
+	instance ApprovedFileLogger
 )
+
+type ApprovedFileLogger interface {
+	Log(approvedFile string)
+}
 
 type approvedFileLog struct {
 	filename string
 }
 
-func GetApprovedFileLoggerInstance() *approvedFileLog {
+type nullApprovedFileLog struct{}
+
+func (nullApprovedFileLog) Log(string) {}
+
+func GetApprovedFileLoggerInstance() ApprovedFileLogger {
 	fileOnce.Do(func() {
-		instance = &approvedFileLog{
+		if IsCI() {
+			instance = nullApprovedFileLog{}
+			return
+		}
+
+		l := &approvedFileLog{
 			filename: approvalTempdirectory + "/.approved_files.log",
 		}
-		instance.initializeFile()
+		l.initializeFile()
+		instance = l
 
 		// putting this in a go routine to avoid blocking
 		// the main thread while waiting for the file to be downloaded
