@@ -2,6 +2,7 @@ name: Update markdown snippets
 
 on:
   push:
+    branches: [main]
   workflow_dispatch:
 
 # Cancel existing executions when new commits are pushed onto the branch
