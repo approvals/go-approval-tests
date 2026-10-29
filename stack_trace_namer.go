@@ -2,6 +2,8 @@ package approvals
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -52,6 +54,15 @@ func findFileName() (string, error) {
 
 	if lastFrame == nil {
 		return "", fmt.Errorf("approvals: could not find the last frame")
+	}
+
+	// -trimpath makes frame paths module-relative; go test runs in the package dir.
+	if !filepath.IsAbs(lastFrame.File) {
+		wd, err := os.Getwd()
+		if err != nil {
+			return "", err
+		}
+		return filepath.Join(wd, filepath.Base(lastFrame.File)), nil
 	}
 
 	return lastFrame.File, nil
